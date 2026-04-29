@@ -1338,234 +1338,462 @@ CIN: U52393TN2007PTC064830`
 ];
 
 // ══════════════════════════════════════════════════════════════════════
-//  MATCHING ENGINE
+//  SPECIFIC Q&A LAYER
+//  These are precise questions that need direct answers — checked FIRST
+//  before the topic matching engine runs. Prevents generic topic dumps.
 // ══════════════════════════════════════════════════════════════════════
-function findBestMatch(query) {
-  const q = query.toLowerCase().trim();
-  let best = null;
-  let bestScore = 0;
+const SPECIFIC_QA = [
+  {
+    triggers: ['sell and buy price different','buy and sell price different','sell price different','buy price different','why different price','price difference digital gold','digital gold price difference','why is the price','spread digital gold','gold buying selling different'],
+    title: 'Digital Gold Price Spread',
+    url: 'https://www.caratlane.com/caratlane-digital-gold',
+    answer: `Great question! The difference between the buying price and selling price of Digital Gold is called the "spread" — and it's completely normal across all gold platforms. Here's why:
 
-  for (const topic of KB) {
-    let score = 0;
-    for (const tag of topic.tags) {
-      if (q.includes(tag)) {
-        // Score = tag length × topic weight (longer = more specific = better)
-        score += tag.length * (topic.weight || 1);
-      }
-    }
-    if (score > bestScore) {
-      bestScore = score;
-      best = topic;
-    }
-  }
-  return bestScore > 0 ? best : null;
-}
+💰 When you BUY Digital Gold:
+You pay a slightly higher price — this covers transaction costs, vault storage, insurance, and the platform fee.
 
-// ── INTENT DETECTION ──────────────────────────────────────────────────
-// Detects what the customer is TRYING TO DO, not just what topic it is
-function detectIntent(query) {
-  const q = query.toLowerCase();
-  if (/\b(cancel|cancell|stop|exit|withdraw|opt out|opt-out|close|end|terminate)\b/.test(q)) return 'cancel';
-  if (/\b(refund|money back|cash back|get my money|want money|return money|give money back|get refund)\b/.test(q)) return 'refund';
-  if (/\b(return|send back|take back|give back|reject|not happy|don't want|dont want|unhappy|dissatisfied)\b/.test(q)) return 'return';
-  if (/\b(exchange|swap|replace|change my|switch|upgrade)\b/.test(q)) return 'exchange';
-  if (/\b(complain|complaint|issue|problem|damage|defect|broken|wrong|missing|not working|fault|upset|angry|frustrated)\b/.test(q)) return 'complaint';
-  if (/\b(how|what|tell me|explain|details|information|info|know about|understand|work)\b/.test(q)) return 'enquire';
-  if (/\b(redeem|use points|use my points|apply points|claim)\b/.test(q)) return 'redeem';
-  if (/\b(track|where is|status|update on|when will)\b/.test(q)) return 'track';
-  return 'enquire'; // default
-}
+💸 When you SELL Digital Gold:
+You receive a slightly lower price — this reflects processing, liquidity costs, and the buyback margin.
 
-// ── INTENT-AWARE CUSTOMER REPLIES ─────────────────────────────────────
-const INTENT_REPLIES = {
+📌 Key things to know:
+• Both prices are based on the live 24KT gold rate at the time of transaction
+• The spread is typically small and transparent — you can see both prices before confirming
+• CaratLane does not add hidden charges — the difference shown is the final price
+• Check live rates at: caratlane.com/gold-rate
 
-  treasure_chest: {
-    cancel: `Thank you for reaching out to us, and we're sorry to hear you'd like to cancel your Plan of Purchase (POP) / Treasure Chest scheme. 🙏
+This is standard practice across all digital gold and precious metal platforms — the price you see is always the price you pay or receive, with no surprises. 😊
 
-We completely understand that circumstances change, and we appreciate you letting us know.
-
-However, we'd like to gently inform you that as acknowledged at the time of enrolment, the Treasure Chest scheme is non-cancellable once you're enrolled. This applies to both the Icon and Edge plans.
-
-Your accumulated amount remains safe and can be redeemed in full against any jewellery purchase at any CaratLane store — there's no expiry on this benefit! 💛
-
-We'd love for you to explore our latest collections when you're ready. If there's anything else we can assist you with, or if you'd like to speak to someone from our team, please don't hesitate to call us at +91-44-42935000 (24x7).
-
-Is there anything else I can help you with today?`,
-
-    refund: `Thank you for getting in touch with us. We sincerely understand your concern and are sorry to hear you'd like a refund on your Treasure Chest scheme. 🙏
-
-We'd like to be transparent with you — as per the terms acknowledged at the time of enrolment, the Treasure Chest scheme (POP) does not offer a cash refund. The amount you've contributed is securely held and can only be redeemed against a jewellery purchase at CaratLane.
-
-We truly hope you'll find something you love from our wide collection when the time is right! 💛
-
-If you have any concerns or would like to speak with a senior team member, please call us at +91-44-42935000 (24x7) or email cs@caratlane.com — we're always here for you.
-
-Is there anything else I can assist you with?`,
-
-    enquire: `Thank you for your interest in our Treasure Chest Gold Savings Scheme! 💛 It's one of our most popular ways to save towards beautiful jewellery.
-
-Here's a quick overview:
-
-🔹 ICON Plan (Most Popular):
-Pay 9 monthly instalments and get the 10th month's value FREE as a discount on your jewellery purchase!
-
-🔸 EDGE Plan:
-Same 9+1 structure, with each instalment converted to gold units at that day's rate — so you benefit if gold prices rise!
-
-A few important things to know:
-• Once enrolled, the scheme cannot be cancelled for a cash refund
-• Your amount is redeemable only against jewellery purchase
-• Partial completion means no bonus applies
-
-Check your balance anytime on the CaratLane App → My Account 📱
-
-Would you like to know more or get enrolled? Visit caratlane.com/treasure-chest-gold-scheme or pop into any store! 🙏`
+Is there anything else I can help you with?`
   },
+  {
+    triggers: ['why is digital gold price higher','digital gold expensive','digital gold markup','why pay more for digital gold'],
+    title: 'Digital Gold Pricing',
+    url: 'https://www.caratlane.com/caratlane-digital-gold',
+    answer: `The buying price for Digital Gold is slightly higher than the raw market rate because it includes:
 
-  store_return: {
-    refund: `Thank you for reaching out to us, and we're genuinely sorry to hear you're not fully satisfied with your purchase. 💛
+• 💼 Secure vault storage fees
+• 🛡️ Insurance on your gold
+• ⚙️ Platform and transaction processing costs
+• ✅ Quality assurance (99.99% purity guarantee)
 
-We'd like to be honest with you — for jewellery purchased at our store, a cash refund is not part of our current policy. We completely understand how disappointing this may feel, and we sincerely apologise for any inconvenience.
+This is standard across all digital gold platforms. The price shown before you confirm is the final price — no hidden charges. 😊
 
-What we can absolutely offer you is a 15-Day Full Value Exchange — if you're within 15 days of your purchase, you can visit any CaratLane store and exchange your piece for any other design of equal or higher value, with no balance retained.
-
-To proceed, please bring:
-• Your jewellery in its original, unworn condition
-• Your original purchase invoice
-
-Our store team will ensure you're taken care of warmly. 🏪
-
-For any further assistance, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`,
-
-    return: `Thank you so much for reaching out, and we're sorry to hear you'd like to return your store purchase. 💛
-
-For in-store purchases, we offer a 15-Day Full Value Exchange — you can bring your piece to any CaratLane store within 15 days and exchange it for any design you love, with absolutely no balance retained.
-
-Please do carry your original invoice and ensure the jewellery is in its original, unworn condition when you visit.
-
-Unfortunately, a direct cash return is not available for store purchases — but we'd love to help you find something you'll truly cherish! 💎
-
-Any questions? Call us anytime at +91-44-42935000. Is there anything else I can assist you with?`
+Check live rates: caratlane.com/gold-rate`
   },
+  {
+    triggers: ['how many days to get refund','refund days','how long refund','refund timeline','when will i get my refund','refund processing time','days for refund'],
+    title: 'Refund Timeline',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    answer: `Once your returned item passes quality check (QC), refunds are processed within 5–7 business days. Here's the full timeline:
 
-  online_return: {
-    refund: `Thank you for reaching out! We're sorry to hear you'd like a refund, and we want to make this as easy as possible for you. 😊
+📦 Step 1: Raise return request on the app or website
+🚪 Step 2: Free doorstep pickup arranged by CaratLane
+🔬 Step 3: Quality inspection at our facility (2–3 working days)
+💳 Step 4: Refund initiated within 5–7 business days post QC approval
 
-For online orders within India, we offer a 15-Day Money-Back Guarantee — 100% of your invoice value, up to ₹2,00,000.
+The refund goes back to your original payment method (card/net banking/UPI). Cash-on-delivery orders receive refunds via bank transfer.
 
-To initiate your refund:
-1. Open the CaratLane app or visit caratlane.com
-2. Go to My Orders → select your order → tap "Return"
-3. We'll arrange a free doorstep pickup 🚪
-
-Once our team reviews the item, your refund will be processed within 5–7 business days.
-
-Please ensure the piece is in its original, unworn condition with packaging intact.
-
-Is there anything else I can help you with today? 🙏`,
-
-    return: `Thank you for getting in touch! We'd be happy to help you with your return. 😊
-
-For online India orders, our 15-Day Money-Back policy covers you with 100% of your invoice value (up to ₹2,00,000).
-
-Simply go to My Orders on the CaratLane app → select your order → tap "Return" and we'll take care of the rest, including a free pickup from your doorstep!
-
-Do note: the item should be in its original, unworn condition. Is there anything else I can assist you with? 🙏`
+Is there anything else I can help with? 😊`
   },
+  {
+    triggers: ['difference between icon and edge','icon vs edge','icon plan vs edge','which plan is better','icon or edge','compare plans','treasure chest plans difference'],
+    title: 'Treasure Chest — Icon vs Edge Plans',
+    url: 'https://www.caratlane.com/treasure-chest-gold-scheme',
+    answer: `Great question! Here's a clear comparison of the two Treasure Chest plans:
 
-  engraved: {
-    return: `Thank you for reaching out, and we completely understand your concern. 💛
+🔹 ICON PLAN (Most Popular):
+• Pay 9 fixed monthly instalments
+• Get 10th month's value FREE as jewellery discount
+• Simple and predictable — the benefit is fixed
+• Best for: Customers who want certainty and simplicity
 
-We're sorry to share that engraved and personalised pieces are crafted exclusively for you — and as such, they are not eligible for our standard return or 15-Day Exchange policy.
+🔸 EDGE PLAN:
+• Pay 9 monthly instalments
+• Each instalment is converted to gold units at that day's 24KT rate
+• Get 10th month FREE + gold value benefit
+• If gold price rises → your jewellery budget increases 📈
+• If gold price falls → your budget decreases (CaratLane not liable) 📉
+• Best for: Customers who want to benefit from gold price appreciation
 
-However, your piece is fully covered under our Lifetime Exchange Programme, which means you can visit any CaratLane store at any time — no expiry — and exchange it for a new design at the current metal and stone value.
+📌 Both plans: No cash refund, jewellery credit only. Cannot be cancelled once enrolled.
 
-We hope this helps! If you have any questions, please call us at +91-44-42935000 (24x7) or email cs@caratlane.com. Is there anything else I can assist you with? 🙏`,
-
-    refund: `Thank you for reaching out. We truly understand your concern, and we're sorry for any inconvenience. 💛
-
-Unfortunately, personalised and engraved pieces are not eligible for a cash refund or return, as they are made exclusively for you.
-
-What we can offer is our Lifetime Exchange Programme — no time limit, ever. You can bring your piece to any CaratLane store and exchange it for a new design at the current value of the metal and stones.
-
-For any further help, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`
+Recommend ICON for risk-averse customers, EDGE for those comfortable with gold rate fluctuation. 😊`
   },
+  {
+    triggers: ['what is xcl','what is xclusive','how does xclusive work','xclusive programme explained','xclusive loyalty','explain xclusive'],
+    title: 'xCLusive Programme',
+    url: 'https://www.caratlane.com/xclusive',
+    answer: `xCLusive is CaratLane's loyalty rewards programme. Here's a quick summary:
 
-  late_exchange: {
-    exchange: `Thank you for getting in touch! We understand you'd like to exchange your jewellery. 😊
+💛 1 xCLusive Point = ₹1
 
-While the 15-day window may have passed, your jewellery is still covered under our Lifetime Exchange Programme — no expiry, ever! ✨
+🏆 HOW TO EARN:
+• Complete your profile → ₹500 points instantly
+• Every prepaid order: 3%–20% back depending on product & tier
+• Write a product review within 30 days → ₹200 points
 
-Here's how it works:
-• Visit any CaratLane store at your convenience
-• We'll assess the current metal and stone value of your piece
-• You can exchange it for any new design you love!
+📊 TIERS: Regal (entry) → Imperial → Crown (higher = more points earned)
 
-For gold and platinum jewellery, you'll receive 100% of the current metal weight value. For diamond pieces, 100% of the current diamond value.
-
-Please carry your original invoice when you visit. Find your nearest store at caratlane.com/stores 🏪
-
-Is there anything else I can help you with today? 🙏`
-  },
-
-  xclusive: {
-    redeem: `Great — let's get your xCLusive Points redeemed! 😊
-
-Points can be redeemed in two ways:
-• 📱 On the CaratLane App: At checkout, select "xCLusive Points" as a payment method and enter the PIN from your SMS or email
-• 🏪 In-store: Our store team will help you apply the points at the time of billing — just have your CaratLane App open on your phone
-
-Please note: Points cannot be redeemed on the website (only on the app or in-store), and cannot be combined with a coupon code on the same order.
-
-To check your balance: App → More → My Account → My Offers 📱
-
-Is there anything else I can assist you with? 🙏`,
-
-    enquire: `Welcome to the xCLusive programme! ✨ Here's a quick summary:
-
-1 xCLusive Point = ₹1
-
-🏆 EARN on every prepaid purchase:
-• Studded jewellery: 3%–5% back (based on your tier)
-• Shaya jewellery: up to 20% back!
-• Complete your profile: ₹500 | Write a review: ₹200
-
-💰 REDEEM on the App or in-store (not on website)
+💰 HOW TO REDEEM:
+• On the CaratLane App at checkout, OR in-store
+• ❌ Not available on the website
 • Up to 20% of order value on studded jewellery
 
-Points are credited 15 days after delivery.
+⏰ Points are credited 15 days after delivery — not immediately.
 
-Check balance: App → More → My Account → My Offers 📱
+❌ Cannot use points + coupon code on the same order.
+
+Check balance: App → More → My Account → My Offers 📱`
+  },
+  {
+    triggers: ['what is oge','what is old gold exchange','how does old gold exchange work','oge explained','explain oge','gold exchange explained'],
+    title: 'Old Gold Exchange (OGE)',
+    url: 'https://www.caratlane.com/gold-exchange',
+    answer: `OGE (Old Gold Exchange) is CaratLane's programme where you can bring your old gold — any brand, any karat — and exchange it for brand new CaratLane jewellery. Here's how it works:
+
+🏪 Step 1: Visit any CaratLane store with your old gold + PAN card
+🔬 Step 2: Store uses a Karatmeter to check the purity and weight of your gold
+💰 Step 3: Exchange value is calculated at the prevailing gold rate
+💎 Step 4: Customer picks new CaratLane jewellery of equal or higher value
+
+✅ Any brand of gold accepted (10KT, 18KT, 22KT, 24KT)
+📄 PAN card is MANDATORY — no exceptions
+⚠️ Standard deductions apply: handling charges + de-alloying charges
+
+Customers typically get more than the standard market rate for their gold at CaratLane!`
+  },
+  {
+    triggers: ['what is treasure chest','what is pop','what is plan of purchase','treasure chest explained','pop explained'],
+    title: 'Treasure Chest Scheme',
+    url: 'https://www.caratlane.com/treasure-chest-gold-scheme',
+    answer: `Treasure Chest (previously called Plan of Purchase / POP) is CaratLane's Gold Savings Scheme. Here's how it works:
+
+💛 Pay 9 monthly instalments → Get the 10th month FREE as a jewellery discount!
+
+TWO PLANS:
+🔹 ICON: Fixed instalments, fixed benefit (10th month free)
+🔸 EDGE: Instalments converted to gold units at daily rate — benefit from gold price rise
+
+📌 Important rules:
+• ❌ Cannot be cancelled — amount is jewellery credit only, no cash refund
+• ❌ Partial completion = no benefit at all
+• ✅ No expiry on accumulated balance
+
+Check balance: CaratLane App → My Account`
+  },
+  {
+    triggers: ['can i use xcl points and coupon','points and coupon together','combine points coupon','use coupon and points','coupon with points','xcl and coupon','discount and points together'],
+    title: 'xCLusive Points + Coupon Codes',
+    url: 'https://www.caratlane.com/xclusive',
+    answer: `Unfortunately, xCLusive Points and coupon codes cannot be used together on the same order. 😔
+
+It's one or the other per transaction:
+• ✅ Use xCLusive Points OR a coupon code — not both simultaneously
+
+This is a current system limitation. Our suggestion would be to choose whichever gives a higher discount for that particular order.
+
+Is there anything else I can help you with? 😊`
+  },
+  {
+    triggers: ['can i return gold coin','gold coin return','gold coin refund','return gold coin','gold coin exchange','gold coin policy'],
+    title: 'Gold Coin Return/Exchange Policy',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    answer: `Gold Coins have a specific policy at CaratLane — different from jewellery:
+
+❌ NOT applicable on Gold Coins:
+• 15-Day Money-Back
+• 15-Day Exchange
+• Order Cancellation
+
+✅ WHAT IS available:
+• Lifetime Exchange: 100% of gold weight at prevailing gold rate
+• Lifetime Buyback: 100% of gold weight value minus an additional 3% deduction
+
+So while you cannot return or cancel a gold coin purchase, you can always exchange it or sell it back to CaratLane at any time. 😊`
+  },
+  {
+    triggers: ['what is tah','what is try at home','try at home explained','how does try at home work','tah explained','home trial explained'],
+    title: 'Try at Home (TAH)',
+    url: 'https://www.caratlane.com/frequently-asked-questions',
+    answer: `Try at Home (TAH) is CaratLane's free service where a consultant brings jewellery to your home or office so you can try before buying — no obligation to purchase! 🏡
+
+📋 HOW IT WORKS:
+1. Browse and shortlist up to 5 designs on caratlane.com
+2. Schedule a TAH appointment (select your city and time)
+3. Consultant visits your location with the pieces
+4. Try them on at your leisure
+5. If you love something, place an order right there — or don't! Zero pressure.
+
+✅ FREE of charge | India only | Up to 5 products
+📍 Available in 33 cities including Chennai, Mumbai, Delhi, Bangalore, Hyderabad and more`
+  },
+  {
+    triggers: ['shaya lifetime exchange','can i exchange shaya','shaya exchange policy','silver lifetime exchange','silver exchange policy'],
+    title: 'Shaya / Silver Exchange Policy',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    answer: `Shaya (Silver) jewellery has a slightly different policy compared to gold/diamond jewellery:
+
+✅ WHAT IS AVAILABLE for Shaya/Silver:
+• 15-Day Money-Back — available for both online orders AND store purchases
+• Shaya Diamond pieces: 15-day exchange eligible
+
+❌ WHAT IS NOT available for Shaya/Silver:
+• Lifetime Exchange — currently not available
+• Lifetime Buyback — currently not available
+
+So the key window for Shaya jewellery is the 15-day period from delivery. After that, no exchange or buyback is possible at this time.
+
+Is there anything else I can help with? 🙏`
+  },
+  {
+    triggers: ['how to track order','track my order','where is my order','order status','order tracking','track shipment','check order status'],
+    title: 'Order Tracking',
+    url: 'https://www.caratlane.com/trackorder',
+    answer: `You can track your CaratLane order easily! Here's how:
+
+📱 On the App: My Orders → Select your order → View tracking details
+💻 On the Website: caratlane.com/trackorder → Enter your Order ID
+
+🚚 India orders are shipped via Blue Dart, Speed Post, or Sequel — tracking updates in real time.
+🌍 International orders ship via FedEx, DHL, or UPS — tracking number shared via email/SMS.
+
+If your tracking hasn't updated in 48 hours, please contact us:
+📞 +91-44-42935000 (24x7) | 📧 cs@caratlane.com
+
+Is there anything else I can help you with? 😊`
+  },
+  {
+    triggers: ['what is hallmark','what is bis hallmark','bis hallmarked','hallmarking','is caratlane hallmarked','caratlane hallmark'],
+    title: 'BIS Hallmarking',
+    url: 'https://www.caratlane.com/terms-and-conditions',
+    answer: `All CaratLane jewellery above 2 grams is BIS (Bureau of Indian Standards) Hallmarked — this is a Government of India mandate for all jewellery retailers. 🇮🇳
+
+📌 What BIS Hallmarking means for customers:
+• The gold purity is certified and guaranteed (e.g., 18KT, 22KT)
+• The purity is tested at a government-approved testing centre
+• The hallmark stamp on the jewellery is your proof of authenticity
+• It protects consumers from receiving lower-purity gold
+
+CaratLane complies fully with BIS regulations. All pieces carry the hallmark stamp.
+
+Is there anything else I can help you with? 😊`
+  },
+  {
+    triggers: ['what documents needed','documents required','what do i need to bring','what to carry','required documents','documents for store visit'],
+    title: 'Documents Required',
+    url: 'https://www.caratlane.com/terms-and-conditions',
+    answer: `Here's what documents may be required depending on your visit:
+
+🏪 FOR IN-STORE PURCHASE ≥ ₹50,000:
+• Aadhaar card OR PAN card (any government-approved photo ID)
+
+🥇 FOR OLD GOLD EXCHANGE (OGE):
+• PAN card — MANDATORY regardless of transaction value
+
+📱 FOR DIGITAL GOLD / eGold:
+• KYC verification via Aadhaar/PAN on the CaratLane app
+
+🛒 FOR REGULAR PURCHASES BELOW ₹50,000:
+• No documents required
+
+Is there anything else I can help you with? 😊`
+  },
+  {
+    triggers: ['difference between return and exchange','return vs exchange','refund vs exchange','whats the difference return exchange','return or exchange'],
+    title: 'Return vs Exchange — Key Difference',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    answer: `Good question! Here's the key difference:
+
+💵 RETURN / MONEY-BACK:
+• You get your money back to the original payment source
+• Available for online India orders within 15 days, up to ₹2,00,000
+• NOT available for store purchases (exchange only)
+
+🔁 EXCHANGE:
+• You swap the jewellery for a new piece
+• 15-Day Exchange: Available for both online AND store orders (full value, no balance retained)
+• Lifetime Exchange: Available anytime — no expiry — at prevailing gold/stone rate
+
+📌 KEY RULE: Store purchases → Exchange only, never cash refund.
+Online purchases → Both return (money-back) AND exchange available within 15 days.
 
 Is there anything else I can help you with? 😊`
   }
+];
+
+// ══════════════════════════════════════════════════════════════════════
+//  SMART NLU ENGINE — 5-layer brain with conversation memory
+// ══════════════════════════════════════════════════════════════════════
+
+// ── CONVERSATION MEMORY ───────────────────────────────────────────────
+const CONVERSATION = { lastTopic: null, lastPrefix: null, turns: [] };
+function rememberTurn(query, topicId, prefix) {
+  CONVERSATION.lastTopic = topicId;
+  CONVERSATION.lastPrefix = prefix;
+  CONVERSATION.turns.push({ query, topicId });
+  if (CONVERSATION.turns.length > 5) CONVERSATION.turns.shift();
+}
+
+// ── FOLLOW-UP DETECTOR ────────────────────────────────────────────────
+function isFollowUp(query) {
+  const q = query.toLowerCase().trim();
+  const phrases = ['what about','and what','but what','so what','how about','what if','ok but','ok so','okay but','okay so','what does that mean','tell me more','more info','elaborate','clarify','not clear','how much','how many','how long','is it','does it','can i','will i','do i','should i','yes','no','okay','ok','sure','got it','i see','and then','after that','next step','what next','that means','what happens if','suppose i','so basically','meaning','in simple'];
+  return phrases.some(p => q.startsWith(p) || q === p) || (q.split(' ').length <= 5 && CONVERSATION.lastTopic !== null);
+}
+
+// ── TOPIC ALIAS MAP — broad natural language coverage ─────────────────
+const TOPIC_ALIASES = {
+  store_return:      ['store refund','store return','refund store','return store','bought at store','purchased at store','in store','store purchase','store bought','take back store','give back store','not happy with purchase','store order','cash refund','return earring','return ring','return necklace','return bracelet','refund earring','refund ring','want to return','want refund'],
+  online_return:     ['online return','online refund','money back','money-back','moneyback','15 day','15-day','return online','refund online','app return','website return','home delivery return','cancel online order','within 15 days','15 days return','15 day return','15 days policy','15 day policy','get my money back','online order refund'],
+  late_exchange:     ['after 15 days','after 20 days','after 30 days','after a month','past 15 days','beyond 15 days','late exchange','too late to return','months later','old purchase','already worn','worn jewellery','used jewellery','exchange old jewellery','exchange after'],
+  lifetime_exchange: ['lifetime exchange','lifetime','lte','lifetime buyback','buyback','buy back','exchange value','upgrade jewellery','upgrade jewelry','how much will i get','exchange gold value','exchange diamond value','anytime exchange','no expiry exchange','exchange anytime','forever exchange'],
+  engraved:          ['engrav','personalised','personalized','customised','customized','name on ring','engraving','custom piece','monogram','name engraved','personalised item','custom jewellery'],
+  shaya:             ['shaya','silver jewellery','silver jewelry','925 silver','sterling silver','shaya return','shaya exchange','silver return','silver exchange'],
+  xclusive:          ['xclusive','xcl','x-clusive','loyalty points','reward points','earn points','redeem points','points balance','discount points','tier regal','tier imperial','tier crown','cashback points','xcl points','how points','points programme','xclusivepoints','use my points','spend points','xcl tier','xcl balance','how many points','points earn','points redeem','point value'],
+  oge:               ['old gold','oge','gold exchange','old jewellery exchange','karatmeter','karat meter','bring my gold','existing gold','scrap gold','gold upgrade','sell old gold','exchange old gold','melt gold','gold purity','oge deduction','deduction oge','old gold deduction','gold exchange deduction','how much for my gold','what will i get for gold','gold value exchange'],
+  treasure_chest:    ['treasure chest','plan of purchase','pop scheme','pop plan','gold scheme','gold savings scheme','instalment plan','installment plan','monthly plan','icon plan','edge plan','9 months plan','10th month free','savings scheme','monthly gold savings','cancel pop','cancel treasure','cancel scheme','refund pop','refund treasure','pop refund','edge scheme','icon scheme','if i pay monthly','pay monthly jewellery','monthly jewellery savings','pop calculation','edge calculation','edge plan calculation','edge benefit','icon benefit','treasure chest calculation'],
+  digital_gold:      ['digital gold','egold','e-gold','24k gold online','buy gold online','online gold purchase','gold investment online','gold vault','99.99 gold','pure gold online','digital gold gift','gold gift card','egold price','sell price digital','buy price digital','price difference digital gold','digital gold sell','digital gold buy','spread gold','digital gold spread','why price different'],
+  postcards:         ['postcard','postcards','video message ring','personalised video','ring video','scan ring video','video gift','message with ring','video with ring','postcards feature','send video with ring'],
+  tah:               ['try at home','tah service','home trial jewellery','try-at-home','home visit jewellery','try before buy','home appointment jewellery','home service jewellery','trial at home','try at home service','jewellery at home','free home trial'],
+  shipping:          ['shipping policy','delivery policy','free shipping','courier service','dispatch','blue dart delivery','speed post delivery','track my order','order tracking','delivery time india','package tracking','delivery charges','shipping charges','when will order arrive','how long delivery'],
+  international:     ['international order','international shipping','ship outside india','ship abroad','deliver usa','deliver uk','deliver canada','deliver australia','deliver dubai','deliver singapore','foreign order','overseas order','nri purchase','international delivery','currency difference','dollar price','pound price','international return','international cancel'],
+  id_required:       ['pan card required','pan card needed','aadhaar required','aadhar needed','id proof','id required','identity proof jewellery','purchase above 50000','above 50k','id at store','document needed','kyc verification','government id','what id needed','documents needed'],
+  contact:           ['contact caratlane','call caratlane','caratlane phone','caratlane email','caratlane whatsapp','customer service number','helpline number','support number','escalate complaint','reach caratlane','speak to team','talk to agent','customer care','complaint number','email caratlane']
 };
 
-function getResponse(prefixType, rawQuery) {
-  const query = rawQuery.toLowerCase().trim();
-  const topic = findBestMatch(query);
+function findTopicByAlias(query) {
+  const q = query.toLowerCase().trim();
+  let best = null, bestScore = 0;
+  for (const [topicId, aliases] of Object.entries(TOPIC_ALIASES)) {
+    let score = 0;
+    for (const alias of aliases) {
+      if (q.includes(alias)) score += alias.split(' ').length * 4;
+    }
+    if (score > bestScore) { bestScore = score; best = topicId; }
+  }
+  return bestScore > 0 ? KB.find(t => t.id === best) || null : null;
+}
 
-  if (!topic) {
-    return {
-      text: `I couldn't find a specific answer for that in my knowledge base.\n\nHere's what I can help with:\n\n• Returns & Exchanges (15-day / store / online)\n• Lifetime Exchange & Buyback\n• Engraved / Personalised Items\n• Shaya / Silver Jewellery Policy\n• xCLusive Loyalty Points\n• Old Gold Exchange (OGE)\n• Treasure Chest / Gold Savings Scheme\n• Digital Gold (eGold)\n• Postcards (video messages on rings)\n• Try at Home (TAH)\n• Shipping Policy\n• International Orders\n• ID / PAN Card Requirements\n• Contact & Escalation\n\nTry rephrasing, or use:\n/customer — for customer-ready replies\n/policy — for exact policy references`,
-      chips: []
-    };
+// ── INTENT DETECTION ──────────────────────────────────────────────────
+function detectIntent(query) {
+  const q = query.toLowerCase();
+  if (/\b(cancel|cancell|stop|exit|withdraw|opt.?out|close|end|terminate|want to stop)\b/.test(q)) return 'cancel';
+  if (/\b(refund|money.?back|cash.?back|get.*money back|give.*money back|cash return)\b/.test(q)) return 'refund';
+  if (/\b(return|send.?back|take.?back|give.?back|don.?t want|unhappy|dissatisfied|not satisfied|not happy)\b/.test(q)) return 'return';
+  if (/\b(exchange|swap|replace|switch|upgrade|change.*jewellery|new piece|new design)\b/.test(q)) return 'exchange';
+  if (/\b(complain|complaint|damaged|defect|broken|wrong item|missing|not working|faulty|upset|angry|frustrated)\b/.test(q)) return 'complaint';
+  if (/\b(redeem|use.*points|apply.*points|claim.*points|spend.*points)\b/.test(q)) return 'redeem';
+  if (/\b(track|where.*order|order.*status|when.*deliver|where.*package)\b/.test(q)) return 'track';
+  if (/\b(calculate|how much|what.*amount|what.*value|if i pay|pay.*monthly|monthly.*pay|get.*reward|reward|benefit|returns)\b/.test(q)) return 'calculate';
+  if (/\b(deduction|deduct|charge|fee|cut|percentage|how much.*deduct|what.*cut|de-alloy)\b/.test(q)) return 'deduction';
+  if (/\b(eligible|qualify|can i|am i eligible|do i qualify|valid for|applicable to me)\b/.test(q)) return 'eligibility';
+  return 'enquire';
+}
+
+// ── CALCULATORS ───────────────────────────────────────────────────────
+function buildEdgeCalculation(query, topic) {
+  const q = query.toLowerCase();
+  const m = q.match(/(\d[\d,]*)\s*k?/);
+  let amt = 0;
+  if (m) { amt = parseInt(m[1].replace(/,/g,'')); if (q.includes('k') && amt < 1000) amt *= 1000; }
+  if (amt > 0) {
+    const fmt = n => n.toLocaleString('en-IN');
+    const total9 = amt*9, bonus = amt, total = total9+bonus;
+    return { text: `Here's exactly how the Treasure Chest EDGE Plan works with ₹${fmt(amt)}/month:\n\n💰 YOUR CONTRIBUTION:\n• 9 months × ₹${fmt(amt)} = ₹${fmt(total9)}\n• 10th month FREE = +₹${fmt(bonus)}\n• Minimum jewellery credit = ₹${fmt(total)}\n\n📈 THE EDGE BENEFIT:\nEach instalment is converted to gold units at that day's 24KT rate. If gold prices rise over 9 months, your final budget will be HIGHER than ₹${fmt(total)}.\n\n📉 THE RISK:\nIf gold prices fall, your budget will be lower. Rate fluctuation is borne by the customer.\n\n⚠️ IMPORTANT:\n• Cannot cancel — jewellery credit only, no cash refund\n• Must complete all 9 months to get the benefit\n• Partial completion = zero benefit\n\nIs there anything else I can help with? 😊`, chips: [{ label: topic.title, url: topic.url }] };
+  }
+  return { text: `Here's how the Treasure Chest EDGE Plan works:\n\n📊 FORMULA:\n• Pay 9 monthly instalments of your chosen amount\n• Each instalment converted to gold units at that day's 24KT gold rate\n• 10th month value added FREE\n• Redemption: Total gold units × current rate = jewellery budget\n\n💡 EXAMPLE (₹10,000/month):\n• 9 × ₹10,000 = ₹90,000 contributed + ₹10,000 free = ₹1,00,000 base\n• If gold rises 10% over 9 months → budget ≈ ₹1,10,000 ✅\n• If gold falls 10% → budget ≈ ₹90,000 ⚠️\n\n📌 No cash refund. Jewellery credit only. Must complete all 9 months.\n\nTell me your monthly amount and I'll calculate your exact numbers! 😊`, chips: [{ label: topic.title, url: topic.url }] };
+}
+
+function buildPointsCalculation(query, topic) {
+  const q = query.toLowerCase();
+  const m = q.match(/(\d[\d,]*)\s*k?/);
+  let amt = 0;
+  if (m) { amt = parseInt(m[1].replace(/,/g,'')); if (q.includes('k') && amt < 1000) amt *= 1000; }
+  if (amt > 0) {
+    const fmt = n => n.toLocaleString('en-IN');
+    return { text: `xCLusive Points you'd earn on a ₹${fmt(amt)} order:\n\n💎 STUDDED JEWELLERY (prepaid):\n• Regal tier → ${fmt(Math.floor(amt*0.03))} points (worth ₹${fmt(Math.floor(amt*0.03))})\n• Imperial tier → ${fmt(Math.floor(amt*0.04))} points\n• Crown tier → ${fmt(Math.floor(amt*0.05))} points\n\n✨ SHAYA JEWELLERY (prepaid):\n• Regal tier → ${fmt(Math.floor(amt*0.10))} points\n• Crown tier → ${fmt(Math.floor(amt*0.20))} points\n\n1 Point = ₹1 | Points credited 15 days after delivery\n\nIs there anything else I can help with? 😊`, chips: [{ label: topic.title, url: topic.url }] };
+  }
+  return { text: topic.customer, chips: [{ label: topic.title, url: topic.url }] };
+}
+
+// ── DEDUCTION ANSWERS ─────────────────────────────────────────────────
+function buildDeductionAnswer(topicId, topic) {
+  if (topicId === 'oge') {
+    return { text: `Here's the full breakdown of OGE deductions:\n\n📋 STANDARD DEDUCTIONS APPLIED:\n• De-alloying charges — separating gold from other metals in the alloy\n• Handling & processing charges — evaluation and exchange process\n\n⚠️ Deduction amount varies based on:\n• Karat / purity of your gold (lower purity = higher de-alloying cost)\n• Plain gold vs studded (stones must be removed)\n• Weight of the piece\n\n💡 IMPORTANT: Despite these deductions, CaratLane typically gives you MORE than a local goldsmith — rates are transparent via our certified Karatmeter machine.\n\n📄 PAN card is mandatory for all OGE transactions.\n\nFor exact value, visit any CaratLane store — the team will show you a full breakdown before you decide. 😊`, chips: [{ label: topic.title, url: topic.url }] };
+  }
+  if (topicId === 'lifetime_exchange') {
+    return { text: `Deductions for Lifetime Exchange & Buyback:\n\n🔁 LIFETIME EXCHANGE — What you receive:\n• Gold / Platinum: 100% of metal weight — NO deduction ✅\n• Diamond: 100% of current diamond value — NO deduction ✅\n• Natural/Synthetic Gemstone: 90% (10% deducted)\n• Polki / Uncut / Chakri: 75% (25% deducted)\n• Solitaires (loose): 90% (10% deducted)\n• Kundan / Glass stones: NIL\n\n💵 LIFETIME BUYBACK — Additional % deducted from exchange value:\n• Diamond jewellery: extra 10% deducted\n• Gold / Platinum / Gemstone: extra 3% deducted\n• Solitaires: extra 10% deducted\n\n⚠️ ALSO DEDUCTED from exchange value:\n• Any original purchase discount you received\n• xCLusive Points used in original purchase\n\nMax exchange value: ₹50 lakhs | Max buyback: ₹50 lakhs\n\nIs there anything else I can help with? 😊`, chips: [{ label: topic.title, url: topic.url }] };
+  }
+  return null;
+}
+
+// ── ANSWER BUILDER ────────────────────────────────────────────────────
+function buildAnswer(topicId, intent, query, prefix) {
+  const topic = KB.find(t => t.id === topicId);
+  if (!topic) return null;
+  if (intent === 'calculate') {
+    if (topicId === 'treasure_chest') return buildEdgeCalculation(query, topic);
+    if (topicId === 'xclusive') return buildPointsCalculation(query, topic);
+  }
+  if (intent === 'deduction') {
+    const da = buildDeductionAnswer(topicId, topic);
+    if (da) return da;
+  }
+  if (prefix === 'policy') return { text: topic.policy, chips: [{ label: topic.title, url: topic.url }] };
+  const ir = INTENT_REPLIES[topicId];
+  if (ir && ir[intent]) return { text: ir[intent], chips: [{ label: topic.title, url: topic.url }] };
+  return { text: topic.customer, chips: [{ label: topic.title, url: topic.url }] };
+}
+
+// ── FOLLOW-UP RESOLVER ────────────────────────────────────────────────
+function resolveFollowUp(query, prefix) {
+  const q = query.toLowerCase().trim();
+  const lt = CONVERSATION.lastTopic;
+  if (!lt) return null;
+  if (/document|need to bring|what.*need|carry|id|pan|aadhaar/.test(q)) return buildAnswer('id_required','enquire',query,prefix);
+  if (/contact|call|email|phone|reach|speak to|talk to/.test(q)) return buildAnswer('contact','enquire',query,prefix);
+  if (/store|nearest|where.*visit|find.*store|branch|outlet/.test(q)) return { text: `Find your nearest CaratLane store:\n🏪 caratlane.com/stores\n\nFor OGE stores with Karatmeter:\n🔬 caratlane.com/gold-exchange\n\nIs there anything else I can help with? 😊`, chips: [{label:'Store Locator',url:'https://www.caratlane.com/stores'}] };
+  if (/deduct|charge|fee|percentage|cut/.test(q)) return buildAnswer(lt,'deduction',query,prefix);
+  if (/how much|calculate|amount|value|reward|benefit|\d/.test(q)) return buildAnswer(lt,'calculate',query,prefix);
+  return buildAnswer(lt, detectIntent(query), query, prefix);
+}
+
+// ── MAIN BRAIN ────────────────────────────────────────────────────────
+function think(rawQuery, prefix) {
+  const query = rawQuery.trim();
+  const q = query.toLowerCase();
+
+  // Layer 1: Specific Q&A (exact questions)
+  for (const qa of SPECIFIC_QA) {
+    if (qa.triggers.some(t => q.includes(t))) {
+      rememberTurn(query, null, prefix);
+      return { text: qa.answer, chips: [{ label: qa.title, url: qa.url }] };
+    }
   }
 
-  // For /policy — always return policy text
-  if (prefixType === 'policy') {
-    return { text: topic.policy, chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+  // Layer 2: Follow-up with conversation memory
+  if (isFollowUp(query) && CONVERSATION.lastTopic) {
+    const fu = resolveFollowUp(query, prefix);
+    if (fu) { rememberTurn(query, CONVERSATION.lastTopic, prefix); return fu; }
   }
 
-  // For /customer or general — use intent-aware reply if available
-  const intent = detectIntent(query);
-  const intentReplies = INTENT_REPLIES[topic.id];
-  if (intentReplies && intentReplies[intent]) {
-    return { text: intentReplies[intent], chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+  // Layer 3: Topic alias matching
+  const topic = findTopicByAlias(query);
+  if (topic) {
+    const intent = detectIntent(query);
+    const answer = buildAnswer(topic.id, intent, query, prefix);
+    if (answer) { rememberTurn(query, topic.id, prefix); return answer; }
   }
 
-  // Fallback to default customer reply
-  return { text: topic.customer, chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+  // Layer 4: Context fallback
+  if (CONVERSATION.lastTopic) {
+    const answer = buildAnswer(CONVERSATION.lastTopic, detectIntent(query), query, prefix);
+    if (answer) return answer;
+  }
+
+  // Layer 5: Helpful fallback
+  rememberTurn(query, null, prefix);
+  return { text: `I want to give you the right answer, but I couldn't match that specific query.\n\nHere's what I can help with — try rephrasing around one of these:\n\n📦 Returns & Refunds — store return, online refund, 15-day policy\n🔁 Lifetime Exchange & Buyback\n✒️ Engraved / Personalised Items\n🥈 Shaya / Silver Jewellery\n⭐ xCLusive Points — earn, redeem, tiers, calculate\n🏅 Old Gold Exchange (OGE) — bring old gold, deductions\n💰 Treasure Chest / POP — Icon & Edge plans, calculator\n📱 Digital Gold (eGold) — buy 24K, price difference\n💌 Postcards — video messages with rings\n🏡 Try at Home (TAH)\n🚚 Shipping & Delivery\n🌍 International Orders\n🪪 ID / PAN Card requirements\n📞 Contact CaratLane\n\nTip: Try starting with /customer or /policy for better results!`, chips: [] };
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -1740,10 +1968,9 @@ function send(){
   showTyping();
   setTimeout(() => {
     hideTyping();
-    const effectiveType = type === 'general' ? 'customer' : type;
-    const {text, chips} = getResponse(effectiveType, query || raw);
+    const {text, chips} = think(query || raw, type);
     renderMsg('bot', type === 'general' ? 'general' : type, text, chips);
-  }, 600);
+  }, 650);
 }
 
 window.addEventListener('DOMContentLoaded', () => inpEl.focus());
