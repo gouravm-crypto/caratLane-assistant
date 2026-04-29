@@ -951,6 +951,186 @@ function findBestMatch(query) {
   return bestScore > 0 ? best : null;
 }
 
+// ── INTENT DETECTION ──────────────────────────────────────────────────
+// Detects what the customer is TRYING TO DO, not just what topic it is
+function detectIntent(query) {
+  const q = query.toLowerCase();
+  if (/\b(cancel|cancell|stop|exit|withdraw|opt out|opt-out|close|end|terminate)\b/.test(q)) return 'cancel';
+  if (/\b(refund|money back|cash back|get my money|want money|return money|give money back|get refund)\b/.test(q)) return 'refund';
+  if (/\b(return|send back|take back|give back|reject|not happy|don't want|dont want|unhappy|dissatisfied)\b/.test(q)) return 'return';
+  if (/\b(exchange|swap|replace|change my|switch|upgrade)\b/.test(q)) return 'exchange';
+  if (/\b(complain|complaint|issue|problem|damage|defect|broken|wrong|missing|not working|fault|upset|angry|frustrated)\b/.test(q)) return 'complaint';
+  if (/\b(how|what|tell me|explain|details|information|info|know about|understand|work)\b/.test(q)) return 'enquire';
+  if (/\b(redeem|use points|use my points|apply points|claim)\b/.test(q)) return 'redeem';
+  if (/\b(track|where is|status|update on|when will)\b/.test(q)) return 'track';
+  return 'enquire'; // default
+}
+
+// ── INTENT-AWARE CUSTOMER REPLIES ─────────────────────────────────────
+const INTENT_REPLIES = {
+
+  treasure_chest: {
+    cancel: `Thank you for reaching out to us, and we're sorry to hear you'd like to cancel your Plan of Purchase (POP) / Treasure Chest scheme. 🙏
+
+We completely understand that circumstances change, and we appreciate you letting us know.
+
+However, we'd like to gently inform you that as acknowledged at the time of enrolment, the Treasure Chest scheme is non-cancellable once you're enrolled. This applies to both the Icon and Edge plans.
+
+Your accumulated amount remains safe and can be redeemed in full against any jewellery purchase at any CaratLane store — there's no expiry on this benefit! 💛
+
+We'd love for you to explore our latest collections when you're ready. If there's anything else we can assist you with, or if you'd like to speak to someone from our team, please don't hesitate to call us at +91-44-42935000 (24x7).
+
+Is there anything else I can help you with today?`,
+
+    refund: `Thank you for getting in touch with us. We sincerely understand your concern and are sorry to hear you'd like a refund on your Treasure Chest scheme. 🙏
+
+We'd like to be transparent with you — as per the terms acknowledged at the time of enrolment, the Treasure Chest scheme (POP) does not offer a cash refund. The amount you've contributed is securely held and can only be redeemed against a jewellery purchase at CaratLane.
+
+We truly hope you'll find something you love from our wide collection when the time is right! 💛
+
+If you have any concerns or would like to speak with a senior team member, please call us at +91-44-42935000 (24x7) or email cs@caratlane.com — we're always here for you.
+
+Is there anything else I can assist you with?`,
+
+    enquire: `Thank you for your interest in our Treasure Chest Gold Savings Scheme! 💛 It's one of our most popular ways to save towards beautiful jewellery.
+
+Here's a quick overview:
+
+🔹 ICON Plan (Most Popular):
+Pay 9 monthly instalments and get the 10th month's value FREE as a discount on your jewellery purchase!
+
+🔸 EDGE Plan:
+Same 9+1 structure, with each instalment converted to gold units at that day's rate — so you benefit if gold prices rise!
+
+A few important things to know:
+• Once enrolled, the scheme cannot be cancelled for a cash refund
+• Your amount is redeemable only against jewellery purchase
+• Partial completion means no bonus applies
+
+Check your balance anytime on the CaratLane App → My Account 📱
+
+Would you like to know more or get enrolled? Visit caratlane.com/treasure-chest-gold-scheme or pop into any store! 🙏`
+  },
+
+  store_return: {
+    refund: `Thank you for reaching out to us, and we're genuinely sorry to hear you're not fully satisfied with your purchase. 💛
+
+We'd like to be honest with you — for jewellery purchased at our store, a cash refund is not part of our current policy. We completely understand how disappointing this may feel, and we sincerely apologise for any inconvenience.
+
+What we can absolutely offer you is a 15-Day Full Value Exchange — if you're within 15 days of your purchase, you can visit any CaratLane store and exchange your piece for any other design of equal or higher value, with no balance retained.
+
+To proceed, please bring:
+• Your jewellery in its original, unworn condition
+• Your original purchase invoice
+
+Our store team will ensure you're taken care of warmly. 🏪
+
+For any further assistance, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`,
+
+    return: `Thank you so much for reaching out, and we're sorry to hear you'd like to return your store purchase. 💛
+
+For in-store purchases, we offer a 15-Day Full Value Exchange — you can bring your piece to any CaratLane store within 15 days and exchange it for any design you love, with absolutely no balance retained.
+
+Please do carry your original invoice and ensure the jewellery is in its original, unworn condition when you visit.
+
+Unfortunately, a direct cash return is not available for store purchases — but we'd love to help you find something you'll truly cherish! 💎
+
+Any questions? Call us anytime at +91-44-42935000. Is there anything else I can assist you with?`
+  },
+
+  online_return: {
+    refund: `Thank you for reaching out! We're sorry to hear you'd like a refund, and we want to make this as easy as possible for you. 😊
+
+For online orders within India, we offer a 15-Day Money-Back Guarantee — 100% of your invoice value, up to ₹2,00,000.
+
+To initiate your refund:
+1. Open the CaratLane app or visit caratlane.com
+2. Go to My Orders → select your order → tap "Return"
+3. We'll arrange a free doorstep pickup 🚪
+
+Once our team reviews the item, your refund will be processed within 5–7 business days.
+
+Please ensure the piece is in its original, unworn condition with packaging intact.
+
+Is there anything else I can help you with today? 🙏`,
+
+    return: `Thank you for getting in touch! We'd be happy to help you with your return. 😊
+
+For online India orders, our 15-Day Money-Back policy covers you with 100% of your invoice value (up to ₹2,00,000).
+
+Simply go to My Orders on the CaratLane app → select your order → tap "Return" and we'll take care of the rest, including a free pickup from your doorstep!
+
+Do note: the item should be in its original, unworn condition. Is there anything else I can assist you with? 🙏`
+  },
+
+  engraved: {
+    return: `Thank you for reaching out, and we completely understand your concern. 💛
+
+We're sorry to share that engraved and personalised pieces are crafted exclusively for you — and as such, they are not eligible for our standard return or 15-Day Exchange policy.
+
+However, your piece is fully covered under our Lifetime Exchange Programme, which means you can visit any CaratLane store at any time — no expiry — and exchange it for a new design at the current metal and stone value.
+
+We hope this helps! If you have any questions, please call us at +91-44-42935000 (24x7) or email cs@caratlane.com. Is there anything else I can assist you with? 🙏`,
+
+    refund: `Thank you for reaching out. We truly understand your concern, and we're sorry for any inconvenience. 💛
+
+Unfortunately, personalised and engraved pieces are not eligible for a cash refund or return, as they are made exclusively for you.
+
+What we can offer is our Lifetime Exchange Programme — no time limit, ever. You can bring your piece to any CaratLane store and exchange it for a new design at the current value of the metal and stones.
+
+For any further help, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`
+  },
+
+  late_exchange: {
+    exchange: `Thank you for getting in touch! We understand you'd like to exchange your jewellery. 😊
+
+While the 15-day window may have passed, your jewellery is still covered under our Lifetime Exchange Programme — no expiry, ever! ✨
+
+Here's how it works:
+• Visit any CaratLane store at your convenience
+• We'll assess the current metal and stone value of your piece
+• You can exchange it for any new design you love!
+
+For gold and platinum jewellery, you'll receive 100% of the current metal weight value. For diamond pieces, 100% of the current diamond value.
+
+Please carry your original invoice when you visit. Find your nearest store at caratlane.com/stores 🏪
+
+Is there anything else I can help you with today? 🙏`
+  },
+
+  xclusive: {
+    redeem: `Great — let's get your xCLusive Points redeemed! 😊
+
+Points can be redeemed in two ways:
+• 📱 On the CaratLane App: At checkout, select "xCLusive Points" as a payment method and enter the PIN from your SMS or email
+• 🏪 In-store: Our store team will help you apply the points at the time of billing — just have your CaratLane App open on your phone
+
+Please note: Points cannot be redeemed on the website (only on the app or in-store), and cannot be combined with a coupon code on the same order.
+
+To check your balance: App → More → My Account → My Offers 📱
+
+Is there anything else I can assist you with? 🙏`,
+
+    enquire: `Welcome to the xCLusive programme! ✨ Here's a quick summary:
+
+1 xCLusive Point = ₹1
+
+🏆 EARN on every prepaid purchase:
+• Studded jewellery: 3%–5% back (based on your tier)
+• Shaya jewellery: up to 20% back!
+• Complete your profile: ₹500 | Write a review: ₹200
+
+💰 REDEEM on the App or in-store (not on website)
+• Up to 20% of order value on studded jewellery
+
+Points are credited 15 days after delivery.
+
+Check balance: App → More → My Account → My Offers 📱
+
+Is there anything else I can help you with? 😊`
+  }
+};
+
 function getResponse(prefixType, rawQuery) {
   const query = rawQuery.toLowerCase().trim();
   const topic = findBestMatch(query);
@@ -962,8 +1142,20 @@ function getResponse(prefixType, rawQuery) {
     };
   }
 
-  const text = prefixType === 'policy' ? topic.policy : topic.customer;
-  return { text, chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+  // For /policy — always return policy text
+  if (prefixType === 'policy') {
+    return { text: topic.policy, chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+  }
+
+  // For /customer or general — use intent-aware reply if available
+  const intent = detectIntent(query);
+  const intentReplies = INTENT_REPLIES[topic.id];
+  if (intentReplies && intentReplies[intent]) {
+    return { text: intentReplies[intent], chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+  }
+
+  // Fallback to default customer reply
+  return { text: topic.customer, chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
 }
 
 // ══════════════════════════════════════════════════════════════════════
