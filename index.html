@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CaratLane Assistant · Internal Tool</title>
 <style>
-/* ── THEME TOKENS ── */
 [data-theme="light"]{
   --bg:#f7f6f2;--surface:#ffffff;--nav:#1c2a3a;--nav2:#0f1c2a;
   --bdr:#e5e0d8;--bdr2:#d4cfc6;
@@ -21,140 +20,118 @@
   --sh2:0 6px 20px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.35);
 }
 :root{
-  --gold:#c8a846;--gold2:#e8c86a;--gold-bg:#fffbe6;
+  --gold:#c8a846;--gold2:#e8c86a;
   --g:#16a34a;--g-bg:#f0fdf4;
   --b:#2563eb;--b-bg:#eff6ff;
-  --o:#ea580c;--o-bg:#fff7ed;
-  --p:#7c3aed;--p-bg:#f5f3ff;
+  --amber:#92400e;--amber-bg:#fffbeb;
 }
-[data-theme="dark"]{
-  --gold-bg:#201e08;--g-bg:#081408;--b-bg:#08101e;--o-bg:#180e04;--p-bg:#100818;
-}
+[data-theme="dark"]{--g-bg:#071410;--b-bg:#07101e;--amber-bg:#140e04;}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;background:var(--bg);color:var(--txt);transition:background .25s,color .25s}
 
-/* ── HEADER ── */
-header{
-  height:58px;background:var(--nav2);
-  border-bottom:2px solid var(--gold);
-  display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;
-}
+/* HEADER */
+header{height:58px;background:var(--nav2);border-bottom:2px solid var(--gold);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
 .logo-box{width:34px;height:34px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-box svg{width:26px;height:26px}
 .brand-stack{display:flex;flex-direction:column;line-height:1}
 .brand-name{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff}
 .brand-sub{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-top:2px}
-.hdr-divider{width:1px;height:24px;background:rgba(255,255,255,.1)}
+.hdr-div{width:1px;height:24px;background:rgba(255,255,255,.1)}
 .hdr-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(200,168,70,.45);flex:1}
-.badge-internal{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1.5px solid rgba(200,168,70,.35);padding:4px 12px;border-radius:20px;background:rgba(200,168,70,.07)}
+.badge-emp{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1.5px solid rgba(200,168,70,.35);padding:4px 12px;border-radius:20px;background:rgba(200,168,70,.07)}
 .dm-btn{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);color:rgba(255,255,255,.6);padding:5px 13px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.8px;cursor:pointer;transition:all .2s;font-family:inherit}
 .dm-btn:hover{background:rgba(255,255,255,.14);color:#fff}
 
-/* ── LAYOUT ── */
+/* LAYOUT */
 .layout{display:flex;flex:1;overflow:hidden}
 
-/* ── SIDEBAR ── */
-.sidebar{
-  width:232px;background:var(--nav2);flex-shrink:0;
-  border-right:1px solid rgba(255,255,255,.06);
-  display:flex;flex-direction:column;overflow-y:auto;
-}
-.sb-section{padding:14px 12px 6px}
-.sb-section-lbl{
-  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(255,255,255,.22);margin-bottom:10px;display:flex;align-items:center;gap:8px;
-}
-.sb-section-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
-.pfx-card{border-radius:10px;padding:10px 12px;margin-bottom:5px;cursor:pointer;transition:all .18s;border:1px solid transparent}
-.pfx-card:hover{transform:translateX(4px)}
-.pfx-s{background:rgba(22,163,74,.09);border-color:rgba(22,163,74,.22)}
-.pfx-s:hover{background:rgba(22,163,74,.16)}
-.pfx-c{background:rgba(37,99,235,.09);border-color:rgba(37,99,235,.22)}
-.pfx-c:hover{background:rgba(37,99,235,.16)}
-.pfx-p{background:rgba(200,168,70,.09);border-color:rgba(200,168,70,.22)}
-.pfx-p:hover{background:rgba(200,168,70,.16)}
-.pfx-g{background:rgba(234,88,12,.09);border-color:rgba(234,88,12,.22)}
-.pfx-g:hover{background:rgba(234,88,12,.16)}
-.pfx-title{font-size:11px;font-weight:700;margin-bottom:1px}
-.pfx-s .pfx-title{color:#4ade80}
+/* SIDEBAR */
+.sidebar{width:232px;background:var(--nav2);flex-shrink:0;border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;overflow-y:auto;}
+.sb-sec{padding:14px 12px 6px}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sb-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
+
+/* PREFIX CARDS */
+.pfx{border-radius:10px;padding:10px 12px;margin-bottom:5px;cursor:pointer;transition:all .18s;border:1px solid transparent;position:relative}
+.pfx:hover{transform:translateX(4px)}
+.pfx-c{background:rgba(37,99,235,.09);border-color:rgba(37,99,235,.22)}.pfx-c:hover{background:rgba(37,99,235,.16)}
+.pfx-p{background:rgba(200,168,70,.09);border-color:rgba(200,168,70,.22)}.pfx-p:hover{background:rgba(200,168,70,.16)}
+/* Support — coming soon, muted */
+.pfx-s{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08);cursor:not-allowed;opacity:.55}
+.pfx-title{font-size:11px;font-weight:700;margin-bottom:1px;display:flex;align-items:center;gap:6px}
+.pfx-s .pfx-title{color:rgba(255,255,255,.4)}
 .pfx-c .pfx-title{color:#93c5fd}
 .pfx-p .pfx-title{color:var(--gold2)}
-.pfx-g .pfx-title{color:#fb923c}
 .pfx-desc{font-size:10px;color:rgba(255,255,255,.32);line-height:1.4}
+.soon-tag{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,200,50,.15);color:rgba(255,200,50,.7);border:1px solid rgba(255,200,50,.2);padding:1px 6px;border-radius:20px}
+
 .sb-div{height:1px;background:rgba(255,255,255,.06);margin:6px 12px}
-.q-btn{
-  width:100%;text-align:left;padding:7px 12px;border-radius:8px;
-  border:none;background:transparent;color:rgba(255,255,255,.4);font-size:11px;
-  cursor:pointer;transition:all .15s;font-family:inherit;
-  display:flex;align-items:center;gap:8px;margin-bottom:1px;
-}
+.q-btn{width:100%;text-align:left;padding:7px 12px;border-radius:8px;border:none;background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;transition:all .15s;font-family:inherit;display:flex;align-items:center;gap:8px;margin-bottom:1px;}
 .q-btn:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.72)}
 .q-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .sb-footer{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
 .sb-footer p{font-size:9px;color:rgba(255,255,255,.18);letter-spacing:.4px;line-height:1.8}
 .sb-footer strong{color:rgba(255,255,255,.3)}
 
-/* ── CHAT ── */
+/* CHAT */
 .chat{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
 .msgs::-webkit-scrollbar{width:4px}
 .msgs::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
 
-/* ── WELCOME ── */
-.welcome{margin:auto;padding:28px 20px;text-align:center;max-width:560px}
+/* WELCOME */
+.welcome{margin:auto;padding:28px 20px;text-align:center;max-width:580px}
 .wlc-icon{width:52px;height:52px;border-radius:12px;background:var(--nav2);border:2px solid rgba(200,168,70,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
 .wlc-title{font-size:24px;font-weight:700;font-family:Georgia,serif;margin-bottom:6px}
 .wlc-sub{font-size:13px;color:var(--txt3);line-height:1.75;margin-bottom:24px}
 .wlc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}
 .wlc-card{background:var(--surface);border:1px solid var(--bdr);border-radius:12px;padding:14px 15px;cursor:pointer;transition:all .2s}
 .wlc-card:hover{border-color:var(--gold);box-shadow:var(--sh2);transform:translateY(-2px)}
-.wlc-pfx{font-size:10px;font-weight:700;letter-spacing:.8px;margin-bottom:4px}
-.wlc-pfx.s{color:var(--g)}.wlc-pfx.c{color:var(--b)}.wlc-pfx.p{color:var(--gold)}.wlc-pfx.g{color:var(--o)}
+.wlc-card.soon{opacity:.5;cursor:not-allowed;pointer-events:none}
+.wlc-pfx{font-size:10px;font-weight:700;letter-spacing:.8px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.wlc-pfx.c{color:var(--b)}.wlc-pfx.p{color:var(--gold)}.wlc-pfx.s{color:var(--txt3)}
+.wlc-soon{font-size:8px;font-weight:700;letter-spacing:1px;background:rgba(200,168,70,.12);color:var(--gold);border:1px solid rgba(200,168,70,.25);padding:1px 6px;border-radius:20px}
 .wlc-txt{font-size:12px;color:var(--txt3);line-height:1.5}
+.beta-note{margin-top:16px;padding:10px 16px;background:rgba(200,168,70,.07);border:1px solid rgba(200,168,70,.2);border-radius:10px;font-size:11px;color:var(--txt3);line-height:1.6}
+.beta-note strong{color:var(--gold)}
 
-/* ── MESSAGES ── */
+/* MESSAGES */
 .msg{display:flex;gap:9px;animation:fadeUp .28s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 .msg.user{align-self:flex-end;flex-direction:row-reverse}
 .msg.bot{align-self:flex-start}
 .avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.msg.bot .avatar{background:var(--nav2);border:1.5px solid rgba(200,168,70,.38)}
-.msg.user .avatar{background:var(--nav);font-size:9px;font-weight:700;letter-spacing:.5px;color:rgba(255,255,255,.6)}
 .msg-body{display:flex;flex-direction:column;gap:4px;max-width:760px}
 .msg.user .msg-body{align-items:flex-end}
 .badge{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;padding:2px 9px;border-radius:20px;display:inline-block}
-.badge-support{background:var(--g-bg);color:#14532d}
 .badge-customer{background:var(--b-bg);color:#1e3a8a}
-.badge-policy{background:var(--gold-bg);color:#713f12}
-.badge-goldrate{background:var(--o-bg);color:#7c2d12}
-[data-theme="dark"] .badge-support{color:#4ade80}
+.badge-policy{background:#fffbe6;color:#713f12}
+.badge-soon{background:rgba(200,168,70,.1);color:var(--gold);border:1px solid rgba(200,168,70,.25)}
 [data-theme="dark"] .badge-customer{color:#93c5fd}
 [data-theme="dark"] .badge-policy{color:var(--gold2)}
-[data-theme="dark"] .badge-goldrate{color:#fb923c}
-.bubble{padding:11px 15px;border-radius:15px;font-size:13.5px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+[data-theme="dark"] .badge-soon{color:var(--gold2)}
+.bubble{padding:11px 15px;border-radius:15px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;word-break:break-word}
 .msg.bot .bubble{background:var(--surface);border:1px solid var(--bdr);border-bottom-left-radius:4px;box-shadow:var(--sh);color:var(--txt)}
 .msg.user .bubble{background:var(--nav);color:#fff;border-bottom-right-radius:4px}
-.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
 .chip{font-size:10px;font-weight:600;padding:3px 9px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt3);cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
 .chip:hover{border-color:var(--gold);color:var(--gold)}
 
-/* ── TYPING ── */
+/* TYPING */
 .typing-wrap{display:flex;gap:9px;align-items:center}
 .typing-bubble{padding:13px 17px;background:var(--surface);border:1px solid var(--bdr);border-radius:15px;border-bottom-left-radius:4px;display:flex;gap:5px;box-shadow:var(--sh)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--bdr2);animation:bounce 1.3s infinite}
 .dot:nth-child(2){animation-delay:.17s}.dot:nth-child(3){animation-delay:.34s}
 @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-6px);opacity:1}}
 
-/* ── INPUT ── */
+/* INPUT */
 .input-area{padding:14px 24px 18px;background:var(--bg);border-top:1px solid var(--bdr);flex-shrink:0}
 .input-box{display:flex;gap:10px;align-items:flex-end;background:var(--surface);border:1.5px solid var(--bdr2);border-radius:15px;padding:9px 13px;transition:border-color .2s;box-shadow:var(--sh)}
 .input-box:focus-within{border-color:var(--gold)}
 textarea{flex:1;border:none;outline:none;background:transparent;font-family:inherit;font-size:13.5px;color:var(--txt);resize:none;line-height:1.5;min-height:22px;max-height:110px;height:22px}
 textarea::placeholder{color:var(--txt3)}
 .send{width:36px;height:36px;border-radius:50%;border:none;background:var(--nav);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;align-self:flex-end}
-.send:hover:not(:disabled){background:var(--gold);transform:scale(1.06)}
-.send:disabled{opacity:.38;cursor:default}
+.send:hover{background:var(--gold);transform:scale(1.06)}
 .send svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .hint{font-size:10px;color:var(--txt3);text-align:center;margin-top:7px;letter-spacing:.2px}
 
@@ -165,7 +142,7 @@ textarea::placeholder{color:var(--txt3)}
 
 <header>
   <div class="logo-box">
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 40 40" width="26" height="26" fill="none">
       <polygon points="20,3 36,13 36,27 20,37 4,27 4,13" fill="#1c2a3a" stroke="#c8a846" stroke-width="1.8"/>
       <polygon points="20,9 30,15.5 30,24.5 20,31 10,24.5 10,15.5" fill="none" stroke="#c8a846" stroke-width=".7" opacity=".45"/>
       <line x1="20" y1="3" x2="20" y2="37" stroke="#c8a846" stroke-width=".6" opacity=".35"/>
@@ -178,73 +155,54 @@ textarea::placeholder{color:var(--txt3)}
     <div class="brand-name">CaratLane</div>
     <div class="brand-sub">A Tata Product</div>
   </div>
-  <div class="hdr-divider"></div>
+  <div class="hdr-div"></div>
   <div class="hdr-label">Internal Assistant &nbsp;·&nbsp; Beta</div>
-  <div class="badge-internal">Employee Only</div>
+  <div class="badge-emp">Employee Only</div>
   <button class="dm-btn" id="dmBtn" onclick="toggleDark()">🌙 Dark</button>
 </header>
 
 <div class="layout">
-
   <aside class="sidebar">
-    <div class="sb-section">
-      <div class="sb-section-lbl">Prefix Commands</div>
-      <div class="pfx-card pfx-s" onclick="setPrefix('/support ')">
-        <div class="pfx-title">/support</div>
-        <div class="pfx-desc">Internal process guide for employees</div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Prefix Commands</div>
+
+      <!-- Support — Coming Soon -->
+      <div class="pfx pfx-s" title="Coming soon in next version">
+        <div class="pfx-title">⚙ /support <span class="soon-tag">Coming Soon</span></div>
+        <div class="pfx-desc">Internal SOP guides for employees</div>
       </div>
-      <div class="pfx-card pfx-c" onclick="setPrefix('/customer ')">
-        <div class="pfx-title">/customer</div>
+
+      <!-- Customer — Live -->
+      <div class="pfx pfx-c" onclick="setPrefix('/customer ')">
+        <div class="pfx-title">💬 /customer</div>
         <div class="pfx-desc">Draft professional customer reply</div>
       </div>
-      <div class="pfx-card pfx-p" onclick="setPrefix('/policy ')">
-        <div class="pfx-title">/policy</div>
+
+      <!-- Policy — Live -->
+      <div class="pfx pfx-p" onclick="setPrefix('/policy ')">
+        <div class="pfx-title">📋 /policy</div>
         <div class="pfx-desc">Policy answer with links & references</div>
-      </div>
-      <div class="pfx-card pfx-g" onclick="setPrefix('/goldrate ')">
-        <div class="pfx-title">/goldrate</div>
-        <div class="pfx-desc">Gold rate & scheme queries</div>
       </div>
     </div>
 
     <div class="sb-div"></div>
 
-    <div class="sb-section">
-      <div class="sb-section-lbl">Quick Questions</div>
-      <button class="q-btn" onclick="quickAsk('/support How do I process a return request?')">
-        <span class="q-dot" style="background:#4ade80"></span>How to process a return?
-      </button>
-      <button class="q-btn" onclick="quickAsk('/customer Customer wants to exchange after 20 days')">
-        <span class="q-dot" style="background:#93c5fd"></span>Customer exchange request
-      </button>
-      <button class="q-btn" onclick="quickAsk('/policy What is the lifetime exchange policy for diamonds?')">
-        <span class="q-dot" style="background:#e8c86a"></span>Diamond lifetime exchange
-      </button>
-      <button class="q-btn" onclick="quickAsk('/support How does xCLusive points program work?')">
-        <span class="q-dot" style="background:#4ade80"></span>xCLusive points explained
-      </button>
-      <button class="q-btn" onclick="quickAsk('/policy What ID is needed for purchases above 50000?')">
-        <span class="q-dot" style="background:#e8c86a"></span>ID for large purchases
-      </button>
-      <button class="q-btn" onclick="quickAsk('/support How does Old Gold Exchange work at store?')">
-        <span class="q-dot" style="background:#4ade80"></span>Old Gold Exchange process
-      </button>
-      <button class="q-btn" onclick="quickAsk('/customer Customer asking about Treasure Chest scheme benefits')">
-        <span class="q-dot" style="background:#93c5fd"></span>Treasure Chest enquiry
-      </button>
-      <button class="q-btn" onclick="quickAsk('/goldrate How is OGE exchange value calculated?')">
-        <span class="q-dot" style="background:#fb923c"></span>OGE value calculation
-      </button>
-      <button class="q-btn" onclick="quickAsk('/policy Can engraved items be returned?')">
-        <span class="q-dot" style="background:#e8c86a"></span>Engraved item return policy
-      </button>
-      <button class="q-btn" onclick="quickAsk('/support How does Postcards feature work?')">
-        <span class="q-dot" style="background:#4ade80"></span>Postcards feature guide
-      </button>
+    <div class="sb-sec">
+      <div class="sb-lbl">Quick Questions</div>
+      <button class="q-btn" onclick="quickAsk('/customer A customer wants to return earrings purchased at our store')"><span class="q-dot" style="background:#93c5fd"></span>Store earring return request</button>
+      <button class="q-btn" onclick="quickAsk('/customer Customer asking for refund on online order after 10 days')"><span class="q-dot" style="background:#93c5fd"></span>Online refund after 10 days</button>
+      <button class="q-btn" onclick="quickAsk('/customer Customer wants to exchange after 20 days of purchase')"><span class="q-dot" style="background:#93c5fd"></span>Exchange after 20 days</button>
+      <button class="q-btn" onclick="quickAsk('/policy What is the lifetime exchange policy for diamonds?')"><span class="q-dot" style="background:#e8c86a"></span>Diamond lifetime exchange</button>
+      <button class="q-btn" onclick="quickAsk('/policy What ID is needed for purchases above 50000?')"><span class="q-dot" style="background:#e8c86a"></span>ID for large purchases</button>
+      <button class="q-btn" onclick="quickAsk('/policy How does Old Gold Exchange work?')"><span class="q-dot" style="background:#e8c86a"></span>Old Gold Exchange policy</button>
+      <button class="q-btn" onclick="quickAsk('/customer Customer asking about Treasure Chest scheme benefits')"><span class="q-dot" style="background:#93c5fd"></span>Treasure Chest enquiry</button>
+      <button class="q-btn" onclick="quickAsk('/policy Can engraved items be returned?')"><span class="q-dot" style="background:#e8c86a"></span>Engraved item return policy</button>
+      <button class="q-btn" onclick="quickAsk('/customer Customer asking about xCLusive points')"><span class="q-dot" style="background:#93c5fd"></span>xCLusive points explained</button>
+      <button class="q-btn" onclick="quickAsk('/policy What is the shipping policy?')"><span class="q-dot" style="background:#e8c86a"></span>Shipping policy</button>
     </div>
 
     <div class="sb-footer">
-      <p><strong>CaratLane Internal Tool</strong><br>For employee use only<br>Not for customer-facing use<br>Powered by Claude AI</p>
+      <p><strong>CaratLane Internal Tool</strong><br>Beta v1.0 · Employee use only<br>/support coming in v2.0<br>Powered by policy matching</p>
     </div>
   </aside>
 
@@ -258,433 +216,765 @@ textarea::placeholder{color:var(--txt3)}
           </svg>
         </div>
         <div class="wlc-title">CaratLane Assistant</div>
-        <div class="wlc-sub">Your internal knowledge base for all CaratLane policies, SOPs and customer responses. Use a prefix command for best results, or just ask anything.</div>
+        <div class="wlc-sub">Your internal knowledge base for all CaratLane policies and customer responses. Use a prefix command for best results, or just ask anything.</div>
         <div class="wlc-grid">
-          <div class="wlc-card" onclick="setPrefix('/support ')">
-            <div class="wlc-pfx s">⚙ /support — Internal</div>
-            <div class="wlc-txt">Step-by-step process guides for employees. Uses internal terminology.</div>
+          <div class="wlc-card soon">
+            <div class="wlc-pfx s">⚙ /support &nbsp;<span class="wlc-soon">Coming Soon</span></div>
+            <div class="wlc-txt">Step-by-step internal SOP guides for employees. Launching in v2.0.</div>
           </div>
           <div class="wlc-card" onclick="setPrefix('/customer ')">
-            <div class="wlc-pfx c">💬 /customer — Reply</div>
-            <div class="wlc-txt">Professional, warm reply ready to send directly to a customer.</div>
+            <div class="wlc-pfx c">💬 /customer — Live ✓</div>
+            <div class="wlc-txt">Empathetic, policy-accurate reply ready to send directly to a customer.</div>
           </div>
           <div class="wlc-card" onclick="setPrefix('/policy ')">
-            <div class="wlc-pfx p">📋 /policy — Reference</div>
-            <div class="wlc-txt">Exact policy details with source links and section references.</div>
+            <div class="wlc-pfx p">📋 /policy — Live ✓</div>
+            <div class="wlc-txt">Exact policy details with source links. Covers returns, OGE, Digital Gold, Treasure Chest and more.</div>
           </div>
-          <div class="wlc-card" onclick="setPrefix('/goldrate ')">
-            <div class="wlc-pfx g">✦ /goldrate — Schemes</div>
-            <div class="wlc-txt">Gold rate info, OGE, Treasure Chest, Digital Gold queries.</div>
+          <div class="wlc-card" onclick="setPrefix('')">
+            <div class="wlc-pfx" style="color:var(--txt3)">💬 General — Just Ask</div>
+            <div class="wlc-txt">No prefix needed. Just type your question and get an answer.</div>
           </div>
+        </div>
+        <div class="beta-note">
+          <strong>Beta Notice:</strong> This is a pilot version for management review. <strong>/support</strong> (internal SOP module) is coming in the next version. Please use <strong>/customer</strong> and <strong>/policy</strong> for now and share feedback with the QA team.
         </div>
       </div>
     </div>
 
     <div class="input-area">
       <div class="input-box">
-        <textarea id="inp" placeholder="Type /support, /customer, /policy, /goldrate + your question… or just ask" onkeydown="onKey(event)" oninput="resize(this)"></textarea>
-        <button class="send" id="sendBtn" onclick="send()">
+        <textarea id="inp" placeholder="Try: /customer a customer wants a refund on store earrings… or /policy lifetime exchange" onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+        <button class="send" onclick="send()">
           <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </div>
-      <div class="hint">Internal use only · Based on official CaratLane policies · For critical decisions always verify with your team lead</div>
+      <div class="hint">Beta v1.0 · Based on official CaratLane policies · Always verify critical decisions with your team lead</div>
     </div>
   </div>
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════
-//  KNOWLEDGE BASE — extracted from official CaratLane sources
-// ════════════════════════════════════════════════════════════
-const KB = `
-=============================================================
-CARATLANE INTERNAL KNOWLEDGE BASE
-Source: Official CaratLane website — April 2026
-=============================================================
+// ══════════════════════════════════════════════════════════════════════
+//  KNOWLEDGE BASE — Policy-accurate, scenario-aware responses
+//  Each topic has: tags (for matching), customer reply, policy reference
+// ══════════════════════════════════════════════════════════════════════
+const KB = [
 
-=============================================================
-1. RETURNS & EXCHANGES POLICY
-URL: https://www.caratlane.com/returns-exchanges
-=============================================================
+  // ── 1. STORE PURCHASE RETURN / REFUND ──────────────────────────────
+  {
+    id: 'store_return',
+    title: 'Store Purchase — Return / Refund Request',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['store refund','refund store','bought at store','purchased at store','store purchase','in store purchase','store order','cash refund store','store bought','bought in store','refund earring','refund ring','refund necklace','refund bracelet','store return'],
+    weight: 10, // high weight — very specific scenario
+    customer: `Thank you so much for reaching out to us, and we truly value your trust in CaratLane. 💛
 
-15-DAY MONEY-BACK (Online India orders):
-- Diamond/Gemstone Studded / Gold / Platinum: 100% invoice value up to ₹2,00,000
-- USA & Canada: up to $1,500
-- NOT available: Australia, UK, Singapore, Dubai and all other international countries
-- Store & Try-at-Home (TAH): 15-Day FULL VALUE EXCHANGE with NO balance retained (better than online!)
-- NOT applicable on engraved or personalised products
+We completely understand your concern, and we're sorry to hear you're not fully satisfied with your purchase.
 
-LIFETIME EXCHANGE — Applicable Values:
-- Gold / Platinum: 100% metal weight at prevailing metal rate
-- Diamond: 100% prevailing diamond value
-- Natural/Synthetic Gemstone: 90% prevailing gemstone value
-- Glass/Simulant Gemstone / Kundan: NIL (zero value)
-- Preset Solitaire: 100% prevailing solitaire value
-- Polki / Uncut / Chakri: 75% prevailing stone value
-- Solitaires (loose diamonds): 90% prevailing solitaire rate
-- Silver / Shaya Jewellery: NO Lifetime Exchange currently
-- Gold Coins: 100% gold weight at prevailing rate
-- Max exchange value: ₹50 lakhs (₹10 lakhs for solitaires)
-- NOT applicable on international orders
-- Any original discount on metal/stone is DEDUCTED from exchange value
-- xCLusive Points used during purchase are DEDUCTED from exchange value
+For jewellery purchased at our store, here's what we can offer:
 
-LIFETIME BUYBACK (additional % deducted from LTE value):
-- Diamond Jewellery: 10% additional deducted
-- Plain Gold / Platinum / Gemstone: 3% additional deducted
-- Studded Solitaire Mount: 10% additional deducted
-- Unstudded Solitaire Mount: 3% additional deducted
-- Solitaires (loose): 10% additional deducted
-- Gold Coins: 3% additional deducted
-- Max buyback value: ₹50 lakhs
-- NOT available for Shaya/Silver or international orders
+✨ 15-Day Exchange: If you're within 15 days of purchase, you're eligible for a full-value exchange at any CaratLane store — with no balance retained. You can exchange for any design of equal or higher value.
 
-NOT RETURNABLE / NOT EXCHANGEABLE:
-- Engraved or personalised products (no return, no 15-day exchange)
-- All international orders (no returns or exchanges accepted)
-- Shaya / Silver: No Lifetime Exchange or Buyback
+📌 Please note: A cash refund is not available for in-store purchases, as our policy covers exchanges rather than monetary refunds for store orders.
 
-GOLD COINS:
-- 15-Day Money-Back / Exchange / Cancellation: NOT APPLICABLE
-- Lifetime Exchange: 100% gold weight value
-- Lifetime Buyback: Additional 3% deducted from LTE
+To proceed with the exchange, please visit your nearest CaratLane store with:
+• The original jewellery in its original condition
+• Your purchase invoice / order receipt
 
-=============================================================
-2. SHIPPING POLICY
-URL: https://www.caratlane.com/customer-service/shipping-policy
-=============================================================
-- FREE shipping on all India orders, fully insured
-- Customers must inspect package before signing for receipt
-- India shipping via: Sequel, Speed Post, Blue Dart
-- International shipping via: UPS, FedEx, DHL
-- International shipping charges added at time of order booking
-- Free gift packaging available on all orders
+Our store team will be happy to assist you in finding something you'll love! 🏪
 
-=============================================================
-3. TERMS & CONDITIONS (KEY POINTS)
-URL: https://www.caratlane.com/terms-and-conditions
-=============================================================
-- All designs above 2 grams are BIS hallmarked (government mandate)
-- Aadhaar OR PAN card required for any in-store purchase above ₹50,000
-- Consumer purchase consent captured via digital audit log at point of sale
+If you have any further questions, feel free to call us at +91-44-42935000 (24x7) or write to cs@caratlane.com.`,
+    policy: `STORE PURCHASE RETURN / REFUND POLICY
 
-CONTACT DETAILS:
-- Phone (24x7 all days): +91-44-42935000
-- WhatsApp: +91-73580-65888
-- Customer Service: cs@caratlane.com
-- General Enquiries: contactus@caratlane.com
-- International Sales: internationalsales@caratlane.com
-- Corporate / B2B: b2b@caratlane.com
-- HR / Careers: careers@caratlane.com
+AT STORE (In-store purchases):
+• 15-Day FULL VALUE EXCHANGE — no cash refund, no balance retained
+• Exchange at any CaratLane store within 15 days of purchase
+• Customer can exchange for same or higher value product
+• ❌ Cash/monetary refund NOT available for store purchases
 
-Registered Office: CaratLane Trading Pvt Ltd, 6th Floor, Olympia Cyberspace, Guindy, Chennai, Tamil Nadu 600032. CIN: U52393TN2007PTC064830
+ONLINE ORDERS (for reference):
+• 15-Day Money-Back: available for online India orders up to ₹2,00,000
+• Not applicable at store for online orders placed on caratlane.us or US outlets
 
-=============================================================
-4. FREQUENTLY ASKED QUESTIONS
-URL: https://www.caratlane.com/frequently-asked-questions
-=============================================================
+NOT APPLICABLE ON:
+• Engraved or personalised products
+• International orders
+• Products showing signs of wear or without original condition
 
-INTERNATIONAL:
-Q: Do you ship outside India?
-A: Yes — USA, UK, Canada, Australia, Dubai, Singapore. For other countries, contact internationalsales@caratlane.com
-Q: Are custom duties charged on delivery?
-A: No. Custom duties are included in the product price. Nothing extra on delivery.
-Q: Can an international shopper deliver to India?
-A: Yes. Change shipping country to India and pay in INR.
-Q: Is international shipping insured?
-A: Yes, insured and shipped via FedEx, DHL, UPS.
-Q: Can I return/exchange an international order?
-A: No. Returns and exchanges are not accepted on international orders.
-Q: Can I cancel after the order has shipped internationally?
-A: No. Once shipped from India, cancellation is not possible. Contact internationalsales@caratlane.com
-Q: Can gift cards be used for international orders?
-A: No. Gift cards are only valid for India delivery orders.
-Q: Why is local currency price higher than INR?
-A: Local price includes applicable duties, taxes, and forex charges.
+📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
 
-PAYMENTS:
-Q: Is ID required at store?
-A: Yes — Aadhaar or PAN card required for purchases over ₹50,000.
+  // ── 2. ONLINE RETURN / MONEY BACK ─────────────────────────────────
+  {
+    id: 'online_return',
+    title: 'Online Order — Return / Money Back',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['return online','online return','money back','money-back','refund online','online order refund','15 day return','15-day return','return policy','refund policy','send back','cancel order','return request','initiate return','online refund','get refund'],
+    weight: 8,
+    customer: `Thank you for contacting CaratLane! We appreciate your patience. 😊
 
-TRY AT HOME (TAH):
-Q: What is Try at Home?
-A: Free service to try CaratLane designs at home/office with no obligation to buy.
-Q: Is it available outside India? A: No, India only.
-Q: Which cities have TAH?
-A: Ahmedabad, Ambala, Bangalore, Bhubaneswar, Bokaro, Chandigarh, Chennai, Cuttack, Delhi, Dehradun, Gandhinagar, Gurgaon, Guwahati, Haridwar, Hazaribagh, Hyderabad, Indore, Jaipur, Kanpur, Kolkata, Lucknow, Ludhiana, Meerut, Mumbai, Nagpur, Patna, Pathankot, Pune, Rajkot, Ranchi, Sonipat, Vapi, Vellore
-Q: How many products can be tried? A: Up to 5. For more, call +91-44-42935000.
-Q: Is it free? A: Yes, completely free, no obligation.
-Q: Can I order during TAH? A: Yes, the TAH consultant can place order on the spot.
+Regarding your return request, here's what you need to know:
 
-=============================================================
-5. xCLUSIVE LOYALTY PROGRAM
-URL: https://www.caratlane.com/xclusive
-=============================================================
+For online orders placed within India, we offer a 15-Day Money-Back Guarantee:
+• You'll receive 100% of your invoice value as a refund
+• This applies to orders up to ₹2,00,000
 
-WHAT IS IT: Earn discount points on every purchase. 1 xCLusive Point = ₹1
+To initiate your return:
+1. Log in to the CaratLane app or website
+2. Go to My Orders → Select your order → Tap "Return"
+3. Our team will arrange a free pickup from your doorstep
 
-HOW TO EARN:
-1. Complete profile → earn ₹500 points (verify mobile number required; all fields except anniversary & profession mandatory)
-2. Every prepaid order (credit/debit/netbanking/UPI):
-   - Studded Jewellery: Regal 3% / Imperial 4% / Crown 5%
-   - Unstudded Jewellery (on making charges): Regal 3% / Imperial 4% / Crown 5%
-   - Shaya Jewellery: Regal 10% / Imperial 15% / Crown 20%
-3. Product review within 30 days of purchase → ₹200 bonus points
+Please ensure the item is:
+• In its original, unworn condition
+• With original packaging and certificate
 
-TIER SYSTEM: Regal (entry level) → Imperial → Crown (highest earn rate)
+Once our quality team reviews the returned item, your refund will be processed within 5–7 business days. 🙏
 
-HOW TO REDEEM (App or in-store ONLY — website does NOT support redemption):
-- App: Checkout → Select "xCLusive Points" as payment → Enter PIN from email/SMS
-- Store: Store team assists; customer must have CaratLane App installed
+Need help? Call us at +91-44-42935000 (24x7) or reach us on WhatsApp at +91-73580-65888.`,
+    policy: `15-DAY MONEY-BACK POLICY (Online India Orders)
+
+ELIGIBLE:
+• Diamond/Gemstone/Gold/Platinum jewellery: 100% invoice value, up to ₹2,00,000
+• USA & Canada orders: up to $1,500
+
+NOT ELIGIBLE:
+• Orders above ₹2,00,000 (exchange only, no money-back)
+• International orders (Australia, UK, Singapore, Dubai, others)
+• Engraved / personalised products
+• Loose diamonds above ₹2 lakh (Lifetime Exchange or Buyback only)
+
+STORE / TAH ORDERS:
+• 15-Day Full Value Exchange only (not money-back) — no balance retained
+
+📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
+
+  // ── 3. EXCHANGE AFTER 15 DAYS / LATE EXCHANGE ─────────────────────
+  {
+    id: 'late_exchange',
+    title: 'Exchange / Return After 15 Days',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['after 15 days','after 20 days','after 30 days','after a month','beyond 15','past 15','exchange after','months later','late exchange','too late','already 15','15 days passed','days passed','expired 15','old purchase'],
+    weight: 9,
+    customer: `Thank you for reaching out to us! We completely understand. 😊
+
+While the 15-Day Money-Back and Exchange window has passed, we're glad to let you know that your jewellery is still covered under our **Lifetime Exchange Programme** — no expiry, ever!
+
+Here's how it works:
+• You can walk into any CaratLane store at any time
+• Your piece will be evaluated at the current metal and stone rate
+• You'll receive the full prevailing value to exchange for any new design you love ✨
+
+For gold and platinum jewellery, you'll receive 100% of the current metal weight value. For diamond pieces, you receive 100% of the current diamond value.
+
+Please do carry your original purchase invoice when you visit the store. Our team will be happy to assist you!
+
+Find your nearest store: caratlane.com/stores
+Any questions? Call us at +91-44-42935000 (24x7) 🙏`,
+    policy: `EXCHANGE / RETURN AFTER 15 DAYS
+
+15-Day window has expired → Lifetime Exchange applies
+
+LIFETIME EXCHANGE VALUES:
+• Gold / Platinum: 100% metal weight at prevailing rate
+• Diamond: 100% prevailing diamond value
+• Natural/Synthetic Gemstone: 90% prevailing gemstone value
+• Glass/Simulant Gemstone / Kundan: NIL
+• Preset Solitaire: 100% prevailing solitaire value
+• Polki / Uncut / Chakri: 75% prevailing stone value
+• Solitaires (loose): 90% prevailing solitaire rate
+• Max value: ₹50 lakhs (₹10 lakhs for solitaires)
+
+NOT eligible for Lifetime Exchange: Shaya/Silver jewellery, international orders
+
+DEDUCTIONS:
+• Any original purchase discount → deducted from exchange value
+• xCLusive Points used → deducted from exchange value
+
+📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
+
+  // ── 4. LIFETIME EXCHANGE & BUYBACK ───────────────────────────────
+  {
+    id: 'lifetime_exchange',
+    title: 'Lifetime Exchange & Buyback',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['lifetime exchange','lte','lifetime','buyback','buy back','lifetime buyback','upgrade jewellery','upgrade jewelry','exchange value','prevailing rate','diamond exchange value','gold exchange value','exchange old jewellery'],
+    weight: 7,
+    customer: `Great news — CaratLane offers a Lifetime Exchange on all your jewellery! ✨ No expiry date, ever.
+
+Here's what your piece is worth when you exchange:
+
+💛 Gold / Platinum: 100% of current metal weight value
+💎 Diamond pieces: 100% of current diamond value
+💎 Gemstone pieces: 90% of current gemstone value
+
+Simply visit any CaratLane store with your jewellery and invoice. Our team will calculate the value on the spot and help you pick a gorgeous new design!
+
+We also offer a Lifetime Buyback if you prefer cash — with a small additional deduction (typically 3–10% depending on the product type).
+
+Please note: If your original purchase had any discount applied, or if you redeemed xCLusive Points, those amounts will be adjusted in the exchange value.
+
+Any questions? We're available 24x7 at +91-44-42935000. 🙏`,
+    policy: `LIFETIME EXCHANGE & BUYBACK POLICY
+
+LIFETIME EXCHANGE VALUES:
+• Gold / Platinum: 100% metal weight at prevailing rate
+• Diamond: 100% prevailing diamond value
+• Natural/Synthetic Gemstone: 90%
+• Glass/Simulant Gemstone / Kundan: NIL
+• Preset Solitaire: 100% prevailing solitaire value
+• Polki / Uncut / Chakri: 75%
+• Solitaires (loose): 90%
+• Gold Coins: 100%
+• Max: ₹50 lakhs (₹10 lakhs for solitaires)
+
+LIFETIME BUYBACK (extra % deducted from LTE):
+• Diamond Jewellery: 10% extra deducted
+• Plain Gold/Platinum/Gemstone: 3% extra
+• Gold Coins: 3% extra
+• Max buyback: ₹50 lakhs
+
+NOT AVAILABLE FOR: Shaya/Silver, international orders
+DEDUCTIONS: Original discounts + xCLusive Points used = deducted
+
+📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
+
+  // ── 5. ENGRAVED / PERSONALISED ────────────────────────────────────
+  {
+    id: 'engraved',
+    title: 'Engraved / Personalised Items Policy',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['engrav','personalised','personalized','customised','customized','name on','engraving','custom piece','custom ring','custom order','personalised return','engraved return','personalised refund'],
+    weight: 8,
+    customer: `Thank you for reaching out, and we completely understand your concern. 💛
+
+We're sorry to share that engraved and personalised pieces are crafted exclusively for you — and as such, they are not eligible for our standard 15-Day Return or Exchange policy.
+
+However, your piece is still covered under our Lifetime Exchange Programme! This means you can bring it to any CaratLane store at any time and exchange it for a new design at the current metal and stone value — with no time limit.
+
+We hope this gives you the flexibility you need. If you'd like to explore your options, please visit your nearest store or reach us at:
+📞 +91-44-42935000 (24x7)
+📧 cs@caratlane.com
+
+We're here to help! 🙏`,
+    policy: `ENGRAVED / PERSONALISED ITEMS POLICY
+
+NOT ELIGIBLE FOR:
+• 15-Day Money-Back (online)
+• 15-Day Exchange (store or online)
+• Any form of return or cancellation
+
+ELIGIBLE FOR:
+• Lifetime Exchange (prevailing metal/stone value)
+• Lifetime Buyback (with standard deductions)
+
+Applies to: name engravings, custom text, monograms, personalised designs
+
+📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
+
+  // ── 6. SHAYA / SILVER RETURN ──────────────────────────────────────
+  {
+    id: 'shaya',
+    title: 'Shaya / Silver Jewellery Policy',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['shaya','silver','silver jewellery','silver jewelry','shaya return','shaya exchange','silver return','shaya refund','silver diamond','shaya diamond'],
+    weight: 9,
+    customer: `Thank you for reaching out about your Shaya purchase! 😊
+
+Here's how our policy works for Shaya jewellery:
+
+✅ 15-Day Money-Back & Exchange: Available for both online orders and store purchases — 100% of invoice value.
+
+✅ Shaya Diamond pieces: Eligible for 15-day exchange at store or online.
+
+Please note: Shaya jewellery is currently not eligible for our standard Lifetime Exchange or Buyback programme. The 15-day window is the key period to make any changes.
+
+To proceed, please visit your nearest store or initiate a return on the CaratLane app within 15 days of delivery.
+
+We're here to help! Call us at +91-44-42935000 anytime. 🙏`,
+    policy: `SHAYA / SILVER JEWELLERY POLICY
+
+15-DAY MONEY-BACK & EXCHANGE:
+• ✅ Applicable on BOTH online orders AND store purchases
+• Shaya Diamonds: 15-day exchange eligible (store or online)
+
+LIFETIME EXCHANGE / BUYBACK:
+• ❌ Currently NOT available for Shaya or Silver jewellery
+
+📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
+
+  // ── 7. xCLUSIVE POINTS ────────────────────────────────────────────
+  {
+    id: 'xclusive',
+    title: 'xCLusive Loyalty Program',
+    url: 'https://www.caratlane.com/xclusive',
+    tags: ['xclusive','xcl','x-clusive','loyalty points','reward points','earn points','redeem points','points balance','cashback','discount points','tier','regal','imperial','crown','points expire','xclusivepoints','xcl points','gift card xcl'],
+    weight: 7,
+    customer: `Welcome to the CaratLane xCLusive programme! ✨ Here's everything you need to know:
+
+🏆 EARNING POINTS (1 Point = ₹1):
+• Complete your CaratLane profile → earn ₹500 instantly!
+• Every prepaid purchase earns you points:
+  - Studded jewellery: 3%–5% back (based on your tier)
+  - Shaya jewellery: 10%–20% back!
+• Write a product review within 30 days → earn ₹200 bonus points
+
+📊 TIERS: Regal → Imperial → Crown (higher tier = more points earned)
+
+💰 REDEEMING POINTS:
+• Use on the CaratLane App at checkout, or at any store
+• Up to 20% of your order value on studded jewellery
+• Points are credited 15 days after delivery
+
+📍 CHECK YOUR BALANCE: App → More → My Account → My Offers
+
+Please note: Points cannot be combined with coupon codes, and are not earned on cash-on-delivery orders. 😊`,
+    policy: `xCLUSIVE LOYALTY PROGRAMME POLICY
+
+1 xCLusive Point = ₹1
+
+EARN RATES (prepaid orders only):
+• Studded Jewellery: Regal 3% / Imperial 4% / Crown 5%
+• Unstudded Jewellery (on making charges): Regal 3% / Imperial 4% / Crown 5%
+• Shaya Jewellery: Regal 10% / Imperial 15% / Crown 20%
+• Complete profile: ₹500 | Product review (30 days): ₹200
 
 REDEMPTION LIMITS:
-- Studded Jewellery: up to 20% of order value
-- Preset Jewellery: up to 10% of order value
-- Unstudded Jewellery: up to 10% OR 500 points (whichever is higher)
-- Shaya Jewellery: up to 20% OR 500 points (whichever is higher)
+• Studded: up to 20% | Preset: up to 10%
+• Unstudded: up to 10% or 500 pts (whichever higher)
+• Shaya: up to 20% or 500 pts (whichever higher)
 
-CANNOT EARN OR REDEEM ON:
-- Mounts, Gift Cards, 22kt plain gold jewellery, gold coins, silver coins, articles, international orders
+❌ CANNOT EARN/REDEEM ON: Mounts, Gift Cards, 22kt plain gold, gold coins, silver coins, international orders
 
-IMPORTANT RULES:
-- Points credited 15 DAYS after delivery (not immediately)
-- No points if item returned under 15-Day Money-Back
-- Cannot combine xCLusive points with a coupon code on same order
-- Points balance: App → More (bottom) → My Account → My Offers
-- xCLusive Points used in original purchase are deducted from Lifetime Exchange value
+RULES:
+• Points credited 15 days after delivery
+• No points if item returned under 15-Day Money-Back
+• Cannot combine with coupon codes
+• Redeemable on App or in-store ONLY (not on website)
+• Points used in original purchase = deducted from Lifetime Exchange value
 
-=============================================================
-6. DIGITAL GOLD (eGold)
-URL: https://www.caratlane.com/caratlane-digital-gold
-=============================================================
-- Buy 24K 99.99% pure gold online starting from as low as ₹10
-- No hidden charges. Each gram bought is backed by real gold in secured vaults
-- 100% guaranteed buyback
-- KYC required to use Digital Gold features
-- Redeem at 330+ CaratLane stores across India or online
-- Sell back anytime via app/website; proceeds to bank account
-- Free delivery on jewellery purchased via eGold redemption
-- NOT a financial product. It is a method to purchase gold for personal needs.
+📎 Source: https://www.caratlane.com/xclusive`
+  },
 
-DIGITAL GOLD GIFT CARD:
-URL: https://www.caratlane.com/caratlane-digital-gold/gift-card
-- Gift cards valued between ₹2,000 and ₹50,000
-- Sent to buyer's registered mobile number and email ID
-- Recipient claims and converts to digital gold balance
-- NOT redeemable for international orders
+  // ── 8. OLD GOLD EXCHANGE (OGE) ────────────────────────────────────
+  {
+    id: 'oge',
+    title: 'Old Gold Exchange (OGE)',
+    url: 'https://www.caratlane.com/gold-exchange',
+    tags: ['old gold','oge','gold exchange','old jewellery','old jewelry','karatmeter','karat meter','exchange old gold','bring gold','existing gold','scrap gold','previous gold','gold purity check','gold upgrade','my gold','selling old gold'],
+    weight: 8,
+    customer: `What a wonderful decision — upgrading your gold to beautiful new jewellery! 💛
 
-=============================================================
-7. OLD GOLD EXCHANGE — OGE
-URL: https://www.caratlane.com/gold-exchange
-=============================================================
+Here's how our Old Gold Exchange works:
 
-PROCESS (4 steps):
-Step 1: Customer visits any CaratLane store with old gold + PAN card
-Step 2: Store checks purity and weight using Karatmeter machine
-Step 3: Exchange value calculated at prevailing gold price (customer gets EXTRA above standard market rate)
-Step 4: Customer picks new CaratLane jewellery design
+1. 🏪 Visit any CaratLane store with your old gold jewellery
+2. 🔬 Our team will check the purity and weight of your gold using our Karatmeter — a precise, certified machine
+3. 💰 We calculate your exchange value at the current gold rate — and you'll get MORE than the standard market rate!
+4. 💎 Simply pick your favourite new CaratLane design!
 
-KEY POINTS:
-- PAN card is MANDATORY for OGE
-- Available only at physical CaratLane stores
-- Any brand of old gold accepted, any karat (10KT, 18KT, 22KT, 24KT)
-- Standard deductions: handling charges + de-alloying charges
-- Karatmeter stores: check caratlane.com/gold-exchange for nearest store
-- Also referred to as: Gold Exchange / Old Gold Exchange / OGE
+Before you visit, please keep in mind:
+• 📄 PAN card is required — please carry it
+• We accept gold of any brand and any karat (10KT, 18KT, 22KT, 24KT)
 
-=============================================================
-8. TREASURE CHEST / GOLD SAVINGS SCHEME
-URL: https://www.caratlane.com/treasure-chest-gold-scheme
-Previously called: CaratLane POP / Plan of Purchase
-=============================================================
+Find your nearest store with Karatmeter: caratlane.com/gold-exchange 🏪`,
+    policy: `OLD GOLD EXCHANGE (OGE) POLICY
+Also referred to as: Gold Exchange / OGE
 
-TWO PLANS:
+PROCESS:
+1. Customer visits CaratLane store with old gold + PAN card
+2. Karatmeter checks purity & weight at store
+3. Exchange value at prevailing gold price (extra value given above standard market rate)
+4. Customer selects new CaratLane jewellery
 
-ICON Plan (Most Popular):
-- Pay 9 monthly instalments → Get 10th month FREE as jewellery discount
-- Redeem after completing 10th month only
-- Fixed instalment value, simple benefit
+REQUIREMENTS:
+• PAN card: MANDATORY for all OGE transactions
+• In-store only — not available online
+• Any brand, any karat of gold accepted
 
-EDGE Plan:
-- Pay 9 instalments → Get 10th month FREE + Gold Value benefit
-- Each instalment converted to gold units at that day's 24KT rate
-- Final jewellery budget = total accumulated gold units × redemption day rate
-- If gold rate rises = customer benefits. If gold falls = customer bears the difference
-- CaratLane NOT liable for gold rate fluctuation losses
+DEDUCTIONS: Handling charges + de-alloying charges apply
 
-CANCELLATION / REFUND POLICY (VERY IMPORTANT):
-- Plans CANNOT be cancelled
-- Money redeemable ONLY against jewellery purchase — no cash refund
-- No refund via cheque / cash / online transfer under any circumstances
-- Partial completion (not finishing all 9 months) = zero benefit/discount
-- Tell customers clearly: this is a jewellery commitment scheme, NOT a savings deposit
+Find stores with Karatmeter: https://www.caratlane.com/gold-exchange
 
-How to start: caratlane.com/treasure-chest-gold-scheme or call store
-Check balance: CaratLane App → My Account
+📎 Source: https://www.caratlane.com/gold-exchange`
+  },
 
-=============================================================
-9. POSTCARDS FEATURE
-URL: https://www.caratlane.com/postcards
-=============================================================
-- Send personalised video messages on ring gifts
-- ONLY available via CaratLane App (not on website)
-- Available for rings only
+  // ── 9. TREASURE CHEST / POP ───────────────────────────────────────
+  {
+    id: 'treasure_chest',
+    title: 'Treasure Chest / Gold Savings Scheme',
+    url: 'https://www.caratlane.com/treasure-chest-gold-scheme',
+    tags: ['treasure chest','plan of purchase','pop','gold scheme','gold savings','instalment','installment','monthly plan','icon plan','edge plan','9 months','10th month','savings scheme','monthly gold','treasure chest cancel','pop cancel','scheme refund'],
+    weight: 8,
+    customer: `Thank you for your interest in our Treasure Chest Gold Savings Scheme! 💛 It's one of our most popular ways to save for jewellery.
 
-FOR THE GIFTER:
-1. Purchase a ring at store or online
-2. Open CaratLane App → My Orders → Add a Video
-3. Record video message, add recipient details, schedule delivery
-4. Note: Video message delivered AFTER the physical order is received by recipient
+Here's a simple overview:
 
-FOR THE RECEIVER:
-1. Open/install CaratLane App
-2. Wear the ring → Scan with the app camera
-3. Watch the personalised video message (can replay anytime by scanning again)
+🔹 ICON Plan (Most Popular):
+Pay 9 monthly instalments and get the 10th month FREE as a discount on your jewellery purchase. Simple, fixed, and rewarding!
 
-If missed adding video at order time: Still addable from My Orders section in app before delivery
+🔸 EDGE Plan:
+Same 9+1 structure, with an added benefit — each instalment is converted to gold units at that day's gold rate. If gold prices rise, your buying power increases too!
 
-=============================================================
-10. CONTACT & ESCALATION
-=============================================================
-Phone (24x7): +91-44-42935000
+📌 Important things to know:
+• Once enrolled, the plan cannot be cancelled for a cash refund
+• The amount is redeemable only against jewellery — not withdrawable as cash
+• If you stop before completing 9 months, no bonus or discount will be applied
+• For EDGE plan: if gold rates fall, the customer bears the difference (CaratLane is not liable for rate changes)
+
+Check your balance anytime on the CaratLane App → My Account 📱
+
+To know more or enrol: caratlane.com/treasure-chest-gold-scheme or visit any store! 🙏`,
+    policy: `TREASURE CHEST / GOLD SAVINGS SCHEME POLICY
+Previously known as: Plan of Purchase / POP
+
+ICON PLAN: Pay 9 instalments → 10th month FREE as jewellery discount
+EDGE PLAN: Pay 9 instalments → 10th FREE + gold unit value (each instalment = gold units at that day's 24KT rate; final value = accumulated units × redemption day rate)
+
+CANCELLATION/REFUND POLICY:
+• ❌ Plans CANNOT be cancelled
+• ❌ No cash refund — not by cheque, cash, or bank transfer — under any circumstance
+• ✅ Redeemable ONLY against jewellery purchase
+• Partial completion = ZERO benefit or discount
+• Gold rate fluctuation loss (EDGE plan): borne by customer; CaratLane not liable
+
+Balance check: CaratLane App → My Account
+
+📎 Source: https://www.caratlane.com/treasure-chest-gold-scheme`
+  },
+
+  // ── 10. DIGITAL GOLD ──────────────────────────────────────────────
+  {
+    id: 'digital_gold',
+    title: 'Digital Gold (eGold)',
+    url: 'https://www.caratlane.com/caratlane-digital-gold',
+    tags: ['digital gold','egold','e-gold','24k gold online','buy gold online','online gold','gold investment','gold vault','pure gold','digital gold gift','gold gift card','gold balance','24kt pure'],
+    weight: 7,
+    customer: `CaratLane Digital Gold is a safe and smart way to invest in pure gold! ✨
+
+Here's everything you need to know:
+
+🥇 What is it?
+24-Karat pure gold (99.99% purity) that you can buy online starting from just ₹10 — no storage hassles, no hidden charges. Your gold is stored in secured vaults.
+
+💛 What can you do with it?
+• Accumulate gold anytime, in any amount
+• Sell it back whenever you want — proceeds straight to your bank account
+• Exchange it for beautiful CaratLane jewellery at any of our 330+ stores or online!
+
+🎁 Gold Gift Cards also available:
+Gift gold worth ₹2,000 to ₹50,000 to someone special — they can claim it and convert to digital gold.
+
+To get started, complete your KYC on the CaratLane app. Do reach out if you need any help! 😊`,
+    policy: `DIGITAL GOLD (eGold) POLICY
+
+• 24K 99.99% pure gold — buy from ₹10 minimum
+• Stored in secured partner vaults — no carrying cost
+• NOT a financial product; it is a method to purchase/store gold
+• KYC verification required to activate
+• 100% guaranteed buyback
+• Redeemable at 330+ CaratLane stores or online
+• Sell back anytime via app/website (to bank account)
+• Free delivery on jewellery bought via eGold redemption
+• ❌ Not redeemable for international orders
+
+GIFT CARD:
+• Value range: ₹2,000 – ₹50,000
+• Sent to buyer's registered mobile & email
+• Recipient claims and converts to digital gold balance
+• ❌ Not valid for international delivery orders
+
+📎 Source: https://www.caratlane.com/caratlane-digital-gold`
+  },
+
+  // ── 11. POSTCARDS ─────────────────────────────────────────────────
+  {
+    id: 'postcards',
+    title: 'Postcards — Video Message on Rings',
+    url: 'https://www.caratlane.com/postcards',
+    tags: ['postcard','postcards','video message','personalised video','ring video','scan ring','video with ring','video gift','message with ring','gift video','add video','my orders video'],
+    weight: 8,
+    customer: `How beautiful — a personalised video with a ring! 💌 Let me explain how CaratLane Postcards works:
+
+For you (the gifter):
+1. Purchase a ring at any CaratLane store or online
+2. Open the CaratLane App → My Orders → Tap your order → "Add a Video"
+3. Record your heartfelt message, add the recipient's details, and schedule it
+4. Your video will be delivered to the recipient after they receive the ring ✨
+
+For the lucky recipient:
+1. Open the CaratLane App
+2. Wear the ring and scan it with the app
+3. Watch your personalised message — and replay it anytime by scanning again! 💖
+
+📌 Available for rings only, via the CaratLane App (not on website)
+📌 If you missed adding the video at order time — no worries! You can add it from My Orders anytime before delivery.`,
+    policy: `POSTCARDS FEATURE POLICY
+
+AVAILABILITY: CaratLane App only | Rings only | Not available on website
+
+GIFTER PROCESS:
+1. Place ring order (store or online)
+2. App → My Orders → Add a Video
+3. Record, add recipient details, schedule delivery
+4. Note: Video delivered AFTER physical ring is received by recipient
+
+RECEIVER PROCESS:
+1. Install CaratLane App
+2. Scan ring → watch video (can replay anytime by scanning again)
+
+• Can be added after order placement anytime before delivery
+• App required for both gifter and receiver
+
+📎 Source: https://www.caratlane.com/postcards`
+  },
+
+  // ── 12. TRY AT HOME ───────────────────────────────────────────────
+  {
+    id: 'tah',
+    title: 'Try at Home (TAH)',
+    url: 'https://www.caratlane.com/frequently-asked-questions',
+    tags: ['try at home','tah','home trial','try-at-home','home visit','try before','home appointment','home service','trial at home','home try','visit home','try jewellery home'],
+    weight: 7,
+    customer: `Great news — CaratLane's Try at Home service is completely FREE! 🏡
+
+Here's how it works:
+1. Browse CaratLane and shortlist up to 5 designs you love
+2. Schedule a Try at Home appointment at a time that suits you
+3. Our consultant brings the pieces to your home or office
+4. Try them on at your leisure — zero pressure to buy!
+5. If you love something, our consultant can place the order right then and there 💎
+
+📍 Available in 30+ cities across India including Chennai, Mumbai, Delhi, Bangalore, Hyderabad, Pune, Kolkata and more.
+
+Please note: This service is available within India only, and is free of charge with no purchase obligation.
+
+To schedule, visit caratlane.com or call us at +91-44-42935000! 😊`,
+    policy: `TRY AT HOME (TAH) POLICY
+
+• Free service — no charges, no purchase obligation
+• India only (not available internationally)
+• Up to 5 products per visit
+• For more than 5: call +91-44-42935000
+• Orders can be placed on the spot with TAH consultant
+• TAH exchange policy: 15-Day Full Value Exchange, no balance retained
+
+AVAILABLE CITIES (33):
+Ahmedabad, Ambala, Bangalore, Bhubaneswar, Bokaro, Chandigarh, Chennai, Cuttack, Delhi, Dehradun, Gandhinagar, Gurgaon, Guwahati, Haridwar, Hazaribagh, Hyderabad, Indore, Jaipur, Kanpur, Kolkata, Lucknow, Ludhiana, Meerut, Mumbai, Nagpur, Patna, Pathankot, Pune, Rajkot, Ranchi, Sonipat, Vapi, Vellore
+
+📎 Source: https://www.caratlane.com/frequently-asked-questions`
+  },
+
+  // ── 13. SHIPPING ──────────────────────────────────────────────────
+  {
+    id: 'shipping',
+    title: 'Shipping Policy',
+    url: 'https://www.caratlane.com/customer-service/shipping-policy',
+    tags: ['shipping','delivery','deliver','free shipping','courier','dispatch','shipped','bluedart','blue dart','speed post','track','tracking','when will i get','delivery time','package','how long delivery','delivery charge','shipping charge','delivery days'],
+    weight: 6,
+    customer: `Great news — CaratLane offers FREE shipping on all orders within India! 🎉
+
+Your order is fully insured and will be carefully delivered via trusted carriers like Blue Dart or Speed Post. You can track your order anytime through the CaratLane app or website at caratlane.com/trackorder.
+
+For international orders (USA, UK, Canada, Australia, Dubai, Singapore):
+• We ship via FedEx, DHL, or UPS
+• Shipping charges are calculated at checkout
+• All customs duties are already included in the product price — no surprise charges on delivery!
+
+📌 Please inspect your package carefully before signing for receipt. If anything looks tampered with, please contact us immediately.
+
+Any questions? We're available 24x7 at +91-44-42935000 or cs@caratlane.com. 🙏`,
+    policy: `SHIPPING POLICY
+
+INDIA ORDERS:
+• FREE shipping on ALL India orders
+• Fully insured shipments
+• Carriers: Sequel, Speed Post, Blue Dart
+• Customers must inspect packaging before signing receipt
+• Free gift packaging on all orders
+
+INTERNATIONAL ORDERS:
+• Ships to: USA, UK, Canada, Australia, Dubai, Singapore
+• Carriers: UPS, FedEx, DHL
+• Shipping charges: applied at order booking
+• Custom duties: INCLUDED in product price — nothing extra at delivery
+
+Track order: https://www.caratlane.com/trackorder
+
+📎 Source: https://www.caratlane.com/customer-service/shipping-policy`
+  },
+
+  // ── 14. INTERNATIONAL ORDERS ──────────────────────────────────────
+  {
+    id: 'international',
+    title: 'International Orders',
+    url: 'https://www.caratlane.com/frequently-asked-questions',
+    tags: ['international','outside india','abroad','usa','uk','canada','australia','dubai','singapore','ship outside','overseas','foreign','international order','international shipping','international return','international cancel','other country','nri'],
+    weight: 7,
+    customer: `Thank you for reaching out about your international order! 🌏
+
+Here's what you need to know:
+
+✅ We ship to USA, UK, Canada, Australia, Dubai, and Singapore via FedEx, DHL, and UPS. All shipments are fully insured.
+
+💰 Custom duties are already included in the product price — you won't pay anything extra on delivery.
+
+📌 Important to note:
+• Returns and exchanges are not available for international orders
+• Once an order has been shipped from India, cancellation is not possible
+• Gift cards cannot be used for international orders
+
+For personalised help with your international order, please contact our dedicated team:
+📧 internationalsales@caratlane.com
+
+We'll do our best to assist you! 😊`,
+    policy: `INTERNATIONAL ORDER POLICY
+
+DESTINATIONS: USA, UK, Canada, Australia, Dubai, Singapore
+Other countries: contact internationalsales@caratlane.com
+
+NOT AVAILABLE FOR INTERNATIONAL ORDERS:
+• ❌ 15-Day Money-Back or Exchange
+• ❌ Returns or exchanges of any kind
+• ❌ Order cancellation after shipment
+• ❌ Gift card redemption
+• ❌ xCLusive Points (earning or redemption)
+
+INCLUDED:
+• ✅ Custom duties (in product price — nothing extra on delivery)
+• ✅ Full shipment insurance via FedEx/DHL/UPS
+
+Contact: internationalsales@caratlane.com
+
+📎 Source: https://www.caratlane.com/frequently-asked-questions`
+  },
+
+  // ── 15. ID / PAN CARD ─────────────────────────────────────────────
+  {
+    id: 'id_required',
+    title: 'ID / PAN Card Requirements',
+    url: 'https://www.caratlane.com/terms-and-conditions',
+    tags: ['pan card','pan','aadhaar','aadhar','id proof','id required','identity proof','above 50000','50000','50k','large purchase','id at store','id needed','government id','document required','kyc'],
+    weight: 8,
+    customer: `Thank you for checking with us! 😊
+
+As per government regulations applicable to all jewellery retailers in India, we are required to verify identity for purchases above ₹50,000:
+
+📄 Required document: Aadhaar card OR PAN card (any government-approved ID)
+
+This is a standard regulatory requirement and helps protect your transaction. Our store team will request this at the time of billing.
+
+For Old Gold Exchange (OGE) transactions, PAN card is required regardless of the purchase value.
+
+Please do carry one of these documents when visiting us. Thank you for your understanding! 🙏`,
+    policy: `ID / DOCUMENTATION REQUIREMENTS
+
+IN-STORE PURCHASE ≥ ₹50,000:
+• Government ID mandatory: Aadhaar card OR PAN card
+• Regulatory requirement — no exceptions
+
+OLD GOLD EXCHANGE (OGE):
+• PAN card mandatory for ALL OGE transactions (regardless of value)
+
+DIGITAL GOLD:
+• KYC required (Aadhaar/PAN) to activate Digital Gold account
+
+BIS HALLMARKING:
+• All CaratLane designs above 2 grams: BIS hallmarked (government mandate)
+
+📎 Source: https://www.caratlane.com/terms-and-conditions`
+  },
+
+  // ── 16. CONTACT & ESCALATION ──────────────────────────────────────
+  {
+    id: 'contact',
+    title: 'Contact CaratLane',
+    url: 'https://www.caratlane.com/frequently-asked-questions',
+    tags: ['contact','call','phone number','email','whatsapp','customer service','helpline','support number','escalate','complaint','reach out','contact number','cs@','contactus','how to contact','speak to someone','talk to agent'],
+    weight: 6,
+    customer: `We're always here to help! Here's how you can reach our team:
+
+📞 Phone: +91-44-42935000 (24x7, all days — including weekends and holidays!)
+💬 WhatsApp: +91-73580-65888
+📧 Email: cs@caratlane.com
+
+For international queries: internationalsales@caratlane.com
+For corporate/B2B: b2b@caratlane.com
+
+You can also:
+🏪 Find a store near you: caratlane.com/stores
+📦 Track your order: caratlane.com/trackorder
+
+We look forward to assisting you! 😊`,
+    policy: `CONTACT DETAILS
+
+Customer Service (24x7 all days): +91-44-42935000
 WhatsApp: +91-73580-65888
-Customer Service: cs@caratlane.com
+Customer Service Email: cs@caratlane.com
 General: contactus@caratlane.com
-International: internationalsales@caratlane.com
+International Sales: internationalsales@caratlane.com
 Corporate/B2B: b2b@caratlane.com
+HR/Careers: careers@caratlane.com
+
 Store Locator: https://www.caratlane.com/stores
-Track Order: https://www.caratlane.com/trackorder
-Gold Rate Today: https://www.caratlane.com/gold-rate
+Order Tracking: https://www.caratlane.com/trackorder
 
-=============================================================
-QUICK REFERENCE
-=============================================================
-15-DAY RETURN: Online India only | Up to ₹2L | No personalised items
-STORE 15-DAY: Full value exchange, no balance — BETTER than online return
-LIFETIME EXCHANGE: All jewellery except Shaya/international | Max ₹50L
-LIFETIME BUYBACK: Diamond/gold only | Not Shaya/international | Max ₹50L
-ID AT STORE: Aadhaar or PAN for purchases above ₹50,000
-SHIPPING: Free & insured in India | International via UPS/FedEx/DHL
-xCLUSIVE: 1 pt = ₹1 | Prepaid orders only | Redeemable on App or in-store ONLY
-DIGITAL GOLD: 24K pure | From ₹10 | Redeemable at any CaratLane outlet | KYC needed
-OGE: At store only | PAN card mandatory | Karatmeter purity check | Any brand
-TREASURE CHEST: 9+1 scheme | NO cash refund ever | Jewellery credit only
-POSTCARDS: Video messages on rings | CaratLane App only
-TAH: Free home try-on | India only, 33+ cities | Up to 5 products
-`;
-
-// ════════════════════════════════════════════════════════════
-//  SOURCE URL MAP
-// ════════════════════════════════════════════════════════════
-const SOURCE_MAP = [
-  {keys:['return','exchange','money-back','buyback','lifetime'],label:'Returns & Exchanges Policy',url:'https://www.caratlane.com/returns-exchanges'},
-  {keys:['shipping','delivery','insured','blue dart'],label:'Shipping Policy',url:'https://www.caratlane.com/customer-service/shipping-policy'},
-  {keys:['terms','condition','hallmark','bis','pan card','aadhaar','id proof'],label:'Terms & Conditions',url:'https://www.caratlane.com/terms-and-conditions'},
-  {keys:['xclusive','xcl','loyalty','points','redeem','tier','regal','imperial','crown'],label:'xCLusive Program',url:'https://www.caratlane.com/xclusive'},
-  {keys:['digital gold','egold','e-gold','24k','24kt gold','vault','karat pure'],label:'Digital Gold',url:'https://www.caratlane.com/caratlane-digital-gold'},
-  {keys:['gift card','egold gift','gold gift'],label:'Gold Gift Card',url:'https://www.caratlane.com/caratlane-digital-gold/gift-card'},
-  {keys:['old gold','oge','gold exchange','karatmeter','exchange program'],label:'Old Gold Exchange',url:'https://www.caratlane.com/gold-exchange'},
-  {keys:['treasure chest','plan of purchase','pop','gold scheme','instalment','icon plan','edge plan'],label:'Treasure Chest Scheme',url:'https://www.caratlane.com/treasure-chest-gold-scheme'},
-  {keys:['postcard','video message','scan ring','ring video'],label:'Postcards Feature',url:'https://www.caratlane.com/postcards'},
-  {keys:['try at home','tah','home trial','try-at-home'],label:'Try at Home',url:'https://www.caratlane.com/frequently-asked-questions'},
-  {keys:['faq','frequently','question'],label:'FAQs',url:'https://www.caratlane.com/frequently-asked-questions'},
-  {keys:['gold rate','gold price','22kt rate','18kt rate'],label:'Gold Rate Today',url:'https://www.caratlane.com/gold-rate'},
-  {keys:['xclusive'],label:'xCLusive Loyalty',url:'https://www.caratlane.com/xclusive'},
+Registered Office: CaratLane Trading Pvt Ltd, 6th Floor, Olympia Cyberspace, Guindy, Chennai, Tamil Nadu 600032
+CIN: U52393TN2007PTC064830`
+  }
 ];
 
-function getSourceChips(text){
-  const lower = text.toLowerCase();
-  const seen = new Set();
-  const found = [];
-  for(const s of SOURCE_MAP){
-    if(s.keys.some(k => lower.includes(k)) && !seen.has(s.url)){
-      seen.add(s.url);
-      found.push({label:s.label, url:s.url});
-      if(found.length >= 3) break;
+// ══════════════════════════════════════════════════════════════════════
+//  MATCHING ENGINE
+// ══════════════════════════════════════════════════════════════════════
+function findBestMatch(query) {
+  const q = query.toLowerCase().trim();
+  let best = null;
+  let bestScore = 0;
+
+  for (const topic of KB) {
+    let score = 0;
+    for (const tag of topic.tags) {
+      if (q.includes(tag)) {
+        // Score = tag length × topic weight (longer = more specific = better)
+        score += tag.length * (topic.weight || 1);
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = topic;
     }
   }
-  return found;
+  return bestScore > 0 ? best : null;
 }
 
-// ════════════════════════════════════════════════════════════
-//  PREFIX SYSTEM PROMPTS
-// ════════════════════════════════════════════════════════════
-const BASE_SYS = `You are CaratLane's internal AI assistant for all customer-facing employees — both online CX agents and in-store staff.
-CaratLane is a Tata jewellery brand. Use the knowledge base below to answer accurately.
+function getResponse(prefixType, rawQuery) {
+  const query = rawQuery.toLowerCase().trim();
+  const topic = findBestMatch(query);
 
-KNOWLEDGE BASE:
-${KB}`;
+  if (!topic) {
+    return {
+      text: `I couldn't find a specific answer for that in my knowledge base.\n\nHere's what I can help with:\n\n• Returns & Exchanges (15-day / store / online)\n• Lifetime Exchange & Buyback\n• Engraved / Personalised Items\n• Shaya / Silver Jewellery Policy\n• xCLusive Loyalty Points\n• Old Gold Exchange (OGE)\n• Treasure Chest / Gold Savings Scheme\n• Digital Gold (eGold)\n• Postcards (video messages on rings)\n• Try at Home (TAH)\n• Shipping Policy\n• International Orders\n• ID / PAN Card Requirements\n• Contact & Escalation\n\nTry rephrasing, or use:\n/customer — for customer-ready replies\n/policy — for exact policy references`,
+      chips: []
+    };
+  }
 
-const PREFIX_PROMPTS = {
-  support: `${BASE_SYS}
+  const text = prefixType === 'policy' ? topic.policy : topic.customer;
+  return { text, chips: [{ label: '↗ ' + topic.title, url: topic.url }] };
+}
 
-MODE: /support — INTERNAL EMPLOYEE GUIDE
-- You are talking to a CaratLane employee, not a customer
-- Write clear numbered steps for processes; use bullet points for policy details
-- Use internal terms where appropriate (TAH, OGE, LTE, QC, POS)
-- Be precise with percentages, rupee limits, conditions, and exceptions
-- Highlight important warnings or exceptions in CAPS or with emphasis
-- Always add: "Source: [link]" at the end
-- Keep it practical and action-oriented`,
-
-  customer: `${BASE_SYS}
-
-MODE: /customer — CUSTOMER-FACING REPLY
-- Write a message the employee can send DIRECTLY to the customer
-- Tone: warm, empathetic, professional — befitting a premium jewellery brand
-- NEVER use internal jargon: no "POS", "QC queue", "LTE", "TAH", "OGE", "CX", "SAP"
-- Say "our team" not "CX agent"; say "our store" not "store staff"
-- Lead with empathy if the query involves a complaint or disappointment
-- Be specific about timelines and next steps — vague answers frustrate customers
-- Close warmly (e.g., "Do feel free to reach out if you need anything further")
-- Do NOT add source links — this is for the customer
-- Keep concise but complete`,
-
-  policy: `${BASE_SYS}
-
-MODE: /policy — OFFICIAL POLICY REFERENCE
-- Answer strictly from official CaratLane policy (from the knowledge base)
-- Specify which product category / order type / geography the policy applies to
-- Call out key conditions, exceptions, rupee limits, and time windows clearly
-- Format: Policy Detail → Key Conditions/Exceptions → Source Link
-- End with exact source URL
-- If multiple policies apply, cover each clearly`,
-
-  goldrate: `${BASE_SYS}
-
-MODE: /goldrate — GOLD & SCHEME QUERIES
-- Answer gold rate questions, OGE calculations, Treasure Chest, Digital Gold, scheme comparisons
-- For OGE: explain karatage, standard deductions, PAN requirement
-- For Treasure Chest: clearly contrast ICON vs EDGE, and stress the strict no-refund policy
-- For Digital Gold: 24K purity, vault storage, KYC, redemption options
-- For live current gold rate: always direct to https://www.caratlane.com/gold-rate
-- Include relevant source links at end`,
-
-  general: `${BASE_SYS}
-
-MODE: GENERAL QUERY
-- Answer helpfully using the knowledge base
-- If query matches a specific prefix, mention that prefix at the start for better formatting next time
-- Be accurate and concise
-- Include source links where helpful`,
-};
-
-// ════════════════════════════════════════════════════════════
-//  APP STATE
-// ════════════════════════════════════════════════════════════
-let history = [];
-let busy = false;
+// ══════════════════════════════════════════════════════════════════════
+//  UI
+// ══════════════════════════════════════════════════════════════════════
 const msgsEl = document.getElementById('msgs');
 const inpEl = document.getElementById('inp');
-const sendBtnEl = document.getElementById('sendBtn');
 const welcomeEl = document.getElementById('welcome');
 
-// ════════════════════════════════════════════════════════════
-//  DARK MODE
-// ════════════════════════════════════════════════════════════
 (function(){
-  const saved = localStorage.getItem('cl-theme');
-  if(saved === 'dark'){
+  if(localStorage.getItem('cl-theme') === 'dark'){
     document.documentElement.setAttribute('data-theme','dark');
     document.getElementById('dmBtn').textContent = '☀️ Light';
   }
@@ -695,18 +985,6 @@ function toggleDark(){
   document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
   document.getElementById('dmBtn').textContent = dark ? '🌙 Dark' : '☀️ Light';
   localStorage.setItem('cl-theme', dark ? 'light' : 'dark');
-}
-
-// ════════════════════════════════════════════════════════════
-//  HELPERS
-// ════════════════════════════════════════════════════════════
-function detectPrefix(text){
-  const t = text.trim();
-  if(/^\/support\s*/i.test(t)) return {type:'support', query:t.replace(/^\/support\s*/i,'').trim()};
-  if(/^\/customer\s*/i.test(t)) return {type:'customer', query:t.replace(/^\/customer\s*/i,'').trim()};
-  if(/^\/policy\s*/i.test(t)) return {type:'policy', query:t.replace(/^\/policy\s*/i,'').trim()};
-  if(/^\/goldrate\s*/i.test(t)) return {type:'goldrate', query:t.replace(/^\/goldrate\s*/i,'').trim()};
-  return {type:'general', query:t};
 }
 
 function resize(el){
@@ -734,9 +1012,14 @@ function removeWelcome(){
   if(welcomeEl && welcomeEl.parentNode) welcomeEl.remove();
 }
 
-// ════════════════════════════════════════════════════════════
-//  RENDER MESSAGE
-// ════════════════════════════════════════════════════════════
+function botAvatar(){
+  const av = document.createElement('div');
+  av.className = 'avatar';
+  av.style.cssText = 'background:var(--nav2);border:1.5px solid rgba(200,168,70,.38);flex-shrink:0';
+  av.innerHTML = `<svg viewBox="0 0 40 40" width="16" height="16" fill="none"><polygon points="20,3 36,13 36,27 20,37 4,27 4,13" fill="none" stroke="#c8a846" stroke-width="2.2"/><circle cx="20" cy="20" r="3.5" fill="#c8a846"/></svg>`;
+  return av;
+}
+
 function renderMsg(role, prefixType, text, chips){
   removeWelcome();
   const wrap = document.createElement('div');
@@ -745,18 +1028,20 @@ function renderMsg(role, prefixType, text, chips){
   const av = document.createElement('div');
   av.className = 'avatar';
   if(role === 'bot'){
+    av.style.cssText = 'background:var(--nav2);border:1.5px solid rgba(200,168,70,.38);flex-shrink:0';
     av.innerHTML = `<svg viewBox="0 0 40 40" width="16" height="16" fill="none"><polygon points="20,3 36,13 36,27 20,37 4,27 4,13" fill="none" stroke="#c8a846" stroke-width="2.2"/><circle cx="20" cy="20" r="3.5" fill="#c8a846"/></svg>`;
   } else {
+    av.style.cssText = 'background:var(--nav);font-size:9px;font-weight:700;letter-spacing:.5px;color:rgba(255,255,255,.6);flex-shrink:0';
     av.textContent = 'YOU';
   }
 
   const body = document.createElement('div');
   body.className = 'msg-body';
 
-  if(role === 'bot' && prefixType && prefixType !== 'general'){
+  if(role === 'bot' && prefixType){
     const lbl = document.createElement('span');
     lbl.className = `badge badge-${prefixType}`;
-    lbl.textContent = {support:'⚙ /support',customer:'💬 /customer',policy:'📋 /policy',goldrate:'✦ /goldrate'}[prefixType];
+    lbl.textContent = prefixType === 'customer' ? '💬 /customer' : prefixType === 'policy' ? '📋 /policy' : prefixType === 'soon' ? '⚙ /support — Coming Soon' : '💬 General';
     body.appendChild(lbl);
   }
 
@@ -774,7 +1059,7 @@ function renderMsg(role, prefixType, text, chips){
       a.href = c.url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.textContent = '↗ ' + c.label;
+      a.textContent = c.label;
       row.appendChild(a);
     });
     body.appendChild(row);
@@ -791,15 +1076,10 @@ function showTyping(){
   const wrap = document.createElement('div');
   wrap.id = 'typing';
   wrap.className = 'typing-wrap';
-  const av = document.createElement('div');
-  av.className = 'avatar';
-  av.style.background = 'var(--nav2)';
-  av.style.border = '1.5px solid rgba(200,168,70,.38)';
-  av.innerHTML = `<svg viewBox="0 0 40 40" width="16" height="16" fill="none"><polygon points="20,3 36,13 36,27 20,37 4,27 4,13" fill="none" stroke="#c8a846" stroke-width="2.2"/><circle cx="20" cy="20" r="3.5" fill="#c8a846"/></svg>`;
+  wrap.appendChild(botAvatar());
   const b = document.createElement('div');
   b.className = 'typing-bubble';
   b.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-  wrap.appendChild(av);
   wrap.appendChild(b);
   msgsEl.appendChild(wrap);
   msgsEl.scrollTop = msgsEl.scrollHeight;
@@ -810,58 +1090,44 @@ function hideTyping(){
   if(t) t.remove();
 }
 
-// ════════════════════════════════════════════════════════════
-//  SEND
-// ════════════════════════════════════════════════════════════
-async function send(){
+function detectPrefix(text){
+  const t = text.trim();
+  if(/^\/support\b/i.test(t)) return {type:'support', query:t.replace(/^\/support\s*/i,'').trim()};
+  if(/^\/customer\b/i.test(t)) return {type:'customer', query:t.replace(/^\/customer\s*/i,'').trim()};
+  if(/^\/policy\b/i.test(t)) return {type:'policy', query:t.replace(/^\/policy\s*/i,'').trim()};
+  return {type:'general', query:t};
+}
+
+function send(){
   const raw = inpEl.value.trim();
-  if(!raw || busy) return;
+  if(!raw) return;
 
   const {type, query} = detectPrefix(raw);
   inpEl.value = '';
   resize(inpEl);
-  busy = true;
-  sendBtnEl.disabled = true;
 
   renderMsg('user', null, raw, []);
-  showTyping();
 
-  const userContent = type === 'general' ? query : `[/${type.toUpperCase()}] ${query || raw}`;
-  history.push({role:'user', content: userContent});
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: PREFIX_PROMPTS[type] || PREFIX_PROMPTS.general,
-        messages: history
-      })
-    });
-
-    const data = await res.json();
-    const reply = data?.content?.[0]?.text || 'Sorry, I could not generate a response. Please try again.';
-
-    history.push({role:'assistant', content: reply});
-
-    // Clean [Source: url] tags from visible text
-    const clean = reply.replace(/\[?Source:\s*https?:\/\/\S+\]?/gi,'').trim();
-    const chips = getSourceChips(reply + ' ' + raw);
-
-    hideTyping();
-    renderMsg('bot', type, clean, chips);
-
-  } catch(err){
-    hideTyping();
-    renderMsg('bot','general','Connection error. Please check your network and try again.',[]);
-    history.pop();
+  // /support — coming soon
+  if(type === 'support'){
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      renderMsg('bot', 'soon',
+        `The /support module is coming in v2.0 of this tool! 🚧\n\nThis feature will provide step-by-step internal SOP guides for employees — covering return processing, store procedures, escalation flows and more.\n\nFor now, please use:\n💬 /customer — to draft a customer-facing reply\n📋 /policy — to look up exact policy details\n\nThank you for your patience as we build this out! 🙏`,
+        []
+      );
+    }, 500);
+    return;
   }
 
-  busy = false;
-  sendBtnEl.disabled = false;
-  inpEl.focus();
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    const effectiveType = type === 'general' ? 'customer' : type;
+    const {text, chips} = getResponse(effectiveType, query || raw);
+    renderMsg('bot', type === 'general' ? 'general' : type, text, chips);
+  }, 600);
 }
 
 window.addEventListener('DOMContentLoaded', () => inpEl.focus());
