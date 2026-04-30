@@ -1641,25 +1641,168 @@ function isFollowUp(query) {
   return phrases.some(p => q.startsWith(p) || q === p) || (q.split(' ').length <= 5 && CONVERSATION.lastTopic !== null);
 }
 
+
+// ── INTENT-SPECIFIC CUSTOMER REPLIES ─────────────────────────────────
+const INTENT_REPLIES = {
+  treasure_chest: {
+    cancel: `Thank you for reaching out to us, and we're sorry to hear you'd like to cancel your Treasure Chest / POP scheme. 🙏\n\nWe completely understand that circumstances change, and we appreciate you letting us know.\n\nHowever, we'd like to gently inform you that as acknowledged at the time of enrolment, the Treasure Chest scheme is non-cancellable once enrolled. This applies to both the Icon and Edge plans.\n\nYour accumulated amount remains safe and can be redeemed in full against any jewellery purchase at any CaratLane store — there's no expiry on this benefit! 💛\n\nIf there's anything else we can assist you with, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`,
+    refund: `Thank you for getting in touch. We sincerely understand your concern. 🙏\n\nWe'd like to be transparent — as per the terms acknowledged at enrolment, the Treasure Chest scheme does not offer a cash refund. The amount you've contributed is securely held and can only be redeemed against a jewellery purchase at CaratLane.\n\nWe truly hope you'll find something you love from our collection! 💛\n\nIf you'd like to speak with a senior team member, please call +91-44-42935000 (24x7) or email cs@caratlane.com. Is there anything else I can help with?`,
+    enquire: `Thank you for your interest in our Treasure Chest Gold Savings Scheme! 💛 It's one of our most popular ways to save towards jewellery.\n\nHere's a quick overview:\n\n🔹 ICON Plan (Most Popular):\nPay 9 monthly instalments and get the 10th month's value FREE as a discount on your jewellery purchase!\n\n🔸 EDGE Plan:\nSame 9+1 structure, with each instalment converted to gold units at that day's rate — so you benefit if gold prices rise!\n\nA few important things to know:\n• Once enrolled, the scheme cannot be cancelled for a cash refund\n• Your amount is redeemable only against jewellery purchase\n• Partial completion means no bonus applies\n\nCheck your balance anytime: CaratLane App → My Account 📱\n\nWould you like to know more? Visit caratlane.com/treasure-chest-gold-scheme or pop into any store! 🙏`
+  },
+  store_return: {
+    refund: `Thank you for reaching out to us, and we're genuinely sorry to hear you're not fully satisfied with your purchase. 💛\n\nWe'd like to be honest with you — for jewellery purchased at our store, a cash refund is not part of our current policy. We completely understand how disappointing this may feel, and we sincerely apologise for any inconvenience.\n\nWhat we can absolutely offer you is a 15-Day Full Value Exchange — if you're within 15 days of your purchase, you can visit any CaratLane store and exchange your piece for any other design of equal or higher value, with no balance retained.\n\nTo proceed, please bring:\n• Your jewellery in its original, unworn condition\n• Your original purchase invoice\n\nFor any further assistance, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`,
+    return: `Thank you so much for reaching out, and we're sorry to hear you'd like to return your store purchase. 💛\n\nFor in-store purchases, we offer a 15-Day Full Value Exchange — you can bring your piece to any CaratLane store within 15 days and exchange it for any design you love, with absolutely no balance retained.\n\nPlease carry your original invoice and ensure the jewellery is in its original, unworn condition when you visit.\n\nUnfortunately, a direct cash return is not available for store purchases — but we'd love to help you find something you'll truly cherish! 💎\n\nAny questions? Call us anytime at +91-44-42935000. Is there anything else I can assist you with?`
+  },
+  online_return: {
+    refund: `Thank you for reaching out! We're sorry to hear you'd like a refund, and we want to make this as easy as possible for you. 😊\n\nFor online orders within India, we offer a 15-Day Money-Back Guarantee — 100% of your invoice value, up to ₹2,00,000.\n\nTo initiate your refund:\n1. Open the CaratLane app or visit caratlane.com\n2. Go to My Orders → select your order → tap "Return"\n3. We'll arrange a free doorstep pickup 🚪\n\nOnce our team reviews the item, your refund will be processed within 5–7 business days.\n\nPlease ensure the piece is in its original, unworn condition with packaging intact.\n\nIs there anything else I can help you with today? 🙏`,
+    return: `Thank you for getting in touch! We'd be happy to help you with your return. 😊\n\nFor online India orders, our 15-Day Money-Back policy covers you with 100% of your invoice value (up to ₹2,00,000).\n\nSimply go to My Orders on the CaratLane app → select your order → tap "Return" and we'll take care of the rest, including a free pickup from your doorstep!\n\nDo note: the item should be in its original, unworn condition. Is there anything else I can assist you with? 🙏`
+  },
+  engraved: {
+    return: `Thank you for reaching out, and we completely understand your concern. 💛\n\nWe're sorry to share that engraved and personalised pieces are crafted exclusively for you — and as such, they are not eligible for our standard return or 15-Day Exchange policy.\n\nHowever, your piece is fully covered under our Lifetime Exchange Programme, which means you can visit any CaratLane store at any time — no expiry — and exchange it for a new design at the current metal and stone value.\n\nFor any questions, please call us at +91-44-42935000 (24x7) or email cs@caratlane.com. Is there anything else I can assist you with? 🙏`,
+    refund: `Thank you for reaching out. We truly understand your concern, and we're sorry for any inconvenience. 💛\n\nUnfortunately, personalised and engraved pieces are not eligible for a cash refund or return, as they are made exclusively for you.\n\nWhat we can offer is our Lifetime Exchange Programme — no time limit, ever. You can bring your piece to any CaratLane store and exchange it for a new design at the current value of the metal and stones.\n\nFor any further help, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`
+  },
+  late_exchange: {
+    exchange: `Thank you for getting in touch! We understand you'd like to exchange your jewellery. 😊\n\nWhile the 15-day window may have passed, your jewellery is still covered under our Lifetime Exchange Programme — no expiry, ever! ✨\n\nHere's how it works:\n• Visit any CaratLane store at your convenience\n• We'll assess the current metal and stone value of your piece\n• You can exchange it for any new design you love!\n\nFor gold and platinum jewellery, you'll receive 100% of the current metal weight value. For diamond pieces, 100% of the current diamond value.\n\nPlease carry your original invoice when you visit. Find your nearest store at caratlane.com/stores 🏪\n\nIs there anything else I can help you with today? 🙏`,
+    refund: `Thank you for reaching out. 😊\n\nAs the 15-day return window has passed, a cash refund is unfortunately no longer available.\n\nHowever, your jewellery is covered under our Lifetime Exchange Programme — with no expiry! You can visit any CaratLane store anytime and exchange your piece for a new design at the current gold and stone value.\n\nWould you like help finding your nearest store? caratlane.com/stores\n\nIs there anything else I can assist you with? 🙏`
+  },
+  xclusive: {
+    redeem: `Great — let's get your xCLusive Points redeemed! 😊\n\nPoints can be redeemed in two ways:\n• 📱 On the CaratLane App: At checkout, select "xCLusive Points" as payment and enter the PIN from your SMS or email\n• 🏪 In-store: Our store team will help you apply the points — just have your CaratLane App open on your phone\n\nPlease note: Points cannot be redeemed on the website (only app or in-store), and cannot be combined with a coupon code on the same order.\n\nTo check your balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can assist you with? 🙏`,
+    enquire: `Welcome to the xCLusive programme! ✨ Here's a quick summary:\n\n1 xCLusive Point = ₹1\n\n🏆 EARN on every prepaid purchase:\n• Studded jewellery: 3%–5% back (based on your tier)\n• Shaya jewellery: up to 20% back!\n• Complete your profile: ₹500 | Write a review: ₹200\n\n💰 REDEEM on the App or in-store (not on website)\n• Up to 20% of order value on studded jewellery\n\nPoints are credited 15 days after delivery.\n\nCheck balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can help you with? 😊`
+  }
+};
+
 // ── TOPIC ALIAS MAP — broad natural language coverage ─────────────────
 const TOPIC_ALIASES = {
-  store_return:      ['store refund','store return','refund store','return store','bought at store','purchased at store','in store','store purchase','store bought','take back store','give back store','not happy with purchase','store order','cash refund','return earring','return ring','return necklace','return bracelet','refund earring','refund ring','want to return','want refund'],
-  online_return:     ['online return','online refund','money back','money-back','moneyback','15 day','15-day','return online','refund online','app return','website return','home delivery return','cancel online order','within 15 days','15 days return','15 day return','15 days policy','15 day policy','get my money back','online order refund'],
-  late_exchange:     ['after 15 days','after 20 days','after 30 days','after a month','past 15 days','beyond 15 days','late exchange','too late to return','months later','old purchase','already worn','worn jewellery','used jewellery','exchange old jewellery','exchange after'],
-  lifetime_exchange: ['lifetime exchange','lifetime','lte','lifetime buyback','buyback','buy back','exchange value','upgrade jewellery','upgrade jewelry','how much will i get','exchange gold value','exchange diamond value','anytime exchange','no expiry exchange','exchange anytime','forever exchange'],
-  engraved:          ['engrav','personalised','personalized','customised','customized','name on ring','engraving','custom piece','monogram','name engraved','personalised item','custom jewellery'],
-  shaya:             ['shaya','silver jewellery','silver jewelry','925 silver','sterling silver','shaya return','shaya exchange','silver return','silver exchange'],
-  xclusive:          ['xclusive','xcl','x-clusive','loyalty points','reward points','earn points','redeem points','points balance','discount points','tier regal','tier imperial','tier crown','cashback points','xcl points','how points','points programme','xclusivepoints','use my points','spend points','xcl tier','xcl balance','how many points','points earn','points redeem','point value'],
-  oge:               ['old gold','oge','gold exchange','old jewellery exchange','karatmeter','karat meter','bring my gold','existing gold','scrap gold','gold upgrade','sell old gold','exchange old gold','melt gold','gold purity','oge deduction','deduction oge','old gold deduction','gold exchange deduction','how much for my gold','what will i get for gold','gold value exchange'],
-  treasure_chest:    ['treasure chest','plan of purchase','pop scheme','pop plan','gold scheme','gold savings scheme','instalment plan','installment plan','monthly plan','icon plan','edge plan','9 months plan','10th month free','savings scheme','monthly gold savings','cancel pop','cancel treasure','cancel scheme','refund pop','refund treasure','pop refund','edge scheme','icon scheme','if i pay monthly','pay monthly jewellery','monthly jewellery savings','pop calculation','edge calculation','edge plan calculation','edge benefit','icon benefit','treasure chest calculation'],
-  digital_gold:      ['digital gold','egold','e-gold','24k gold online','buy gold online','online gold purchase','gold investment online','gold vault','99.99 gold','pure gold online','digital gold gift','gold gift card','egold price','sell price digital','buy price digital','price difference digital gold','digital gold sell','digital gold buy','spread gold','digital gold spread','why price different'],
-  postcards:         ['postcard','postcards','video message ring','personalised video','ring video','scan ring video','video gift','message with ring','video with ring','postcards feature','send video with ring'],
-  tah:               ['try at home','tah service','home trial jewellery','try-at-home','home visit jewellery','try before buy','home appointment jewellery','home service jewellery','trial at home','try at home service','jewellery at home','free home trial'],
-  shipping:          ['shipping policy','delivery policy','free shipping','courier service','dispatch','blue dart delivery','speed post delivery','track my order','order tracking','delivery time india','package tracking','delivery charges','shipping charges','when will order arrive','how long delivery'],
-  international:     ['international order','international shipping','ship outside india','ship abroad','deliver usa','deliver uk','deliver canada','deliver australia','deliver dubai','deliver singapore','foreign order','overseas order','nri purchase','international delivery','currency difference','dollar price','pound price','international return','international cancel'],
-  id_required:       ['pan card required','pan card needed','aadhaar required','aadhar needed','id proof','id required','identity proof jewellery','purchase above 50000','above 50k','id at store','document needed','kyc verification','government id','what id needed','documents needed'],
-  contact:           ['contact caratlane','call caratlane','caratlane phone','caratlane email','caratlane whatsapp','customer service number','helpline number','support number','escalate complaint','reach caratlane','speak to team','talk to agent','customer care','complaint number','email caratlane']
-};
+  store_return: [
+    'store refund','store return','refund store','return store',
+    'bought at store','purchased at store','in store','store purchase',
+    'store bought','take back','give back','not happy with purchase',
+    'store order','cash refund','return earring','return ring',
+    'return necklace','return bracelet','refund earring','refund ring',
+    'want to return','want refund','earrings purchased at','purchased at our store',
+    'bought from store','bought in store','offline purchase'
+  ],
+  online_return: [
+    'online return','online refund','money back','money-back','moneyback',
+    '15 day','15-day','15days','return online','refund online','app return',
+    'website return','home delivery return','cancel online','within 15 days',
+    '15 days return','15 day return','15 day policy','get my money back',
+    'online order refund','refund on online','online order after'
+  ],
+  late_exchange: [
+    'after 15 days','after 20 days','after 30 days','after a month',
+    'past 15','beyond 15','late exchange','too late','months later',
+    'old purchase','already worn','worn jewellery','exchange after 20',
+    'exchange after 15','exchange after 30','exchange old purchase'
+  ],
+  lifetime_exchange: [
+    'lifetime exchange','lifetime buyback','buyback','buy back',
+    'lte','exchange value','upgrade jewellery','upgrade jewelry',
+    'how much will i get','exchange gold value','anytime exchange',
+    'no expiry exchange','forever exchange','lifetime policy',
+    'exchange anytime','what is lifetime'
+  ],
+  engraved: [
+    'engrav','personalised','personalized','customised','customized',
+    'name on ring','engraving','custom piece','monogram','name engraved',
+    'personalised item','custom jewellery','custom order'
+  ],
+  shaya: [
+    'shaya','silver jewellery','silver jewelry','925 silver',
+    'sterling silver','shaya return','shaya exchange','silver return',
+    'silver exchange','shaya refund','silver refund'
+  ],
+  xclusive: [
+    'xclusive','xcl','x-clusive','loyalty points','reward points',
+    'earn points','redeem points','points balance','discount points',
+    'tier regal','tier imperial','tier crown','cashback points',
+    'xcl points','how points','points programme','xclusivepoints',
+    'use my points','spend points','xcl tier','xcl balance',
+    'how many points','points earn','points redeem','point value',
+    'xcl discount','xclusive programme','xcl programme'
+  ],
+  oge: [
+    'old gold','oge','gold exchange','old jewellery exchange',
+    'karatmeter','karat meter','bring my gold','existing gold',
+    'scrap gold','gold upgrade','sell old gold','exchange old gold',
+    'melt gold','gold purity','oge deduction','deduction oge',
+    'old gold deduction','gold exchange deduction',
+    'how much for my gold','what will i get for gold',
+    'gold value exchange','old gold exchange'
+  ],
+  treasure_chest: [
+    'treasure chest','plan of purchase','pop scheme','pop plan',
+    'gold scheme','gold savings scheme','instalment plan',
+    'installment plan','monthly plan','icon plan','edge plan',
+    '9 months plan','10th month free','savings scheme',
+    'monthly gold savings','cancel pop','cancel treasure',
+    'cancel scheme','refund pop','refund treasure','pop refund',
+    'edge scheme','icon scheme','if i pay monthly','pay monthly jewellery',
+    'monthly jewellery savings','pop calculation','edge calculation',
+    'edge plan calculation','edge benefit','icon benefit',
+    'treasure chest calculation','caratlane pop','caratlane treasure',
+    '10k a month','5k a month','pay to caratlane pop',
+    'benefit if i pay','what is pop','what is treasure chest'
+  ],
+  digital_gold: [
+    'digital gold','egold','e-gold','digi gold','digigold',
+    '24k gold online','buy gold online','online gold purchase',
+    'gold investment online','gold vault','99.99 gold','pure gold online',
+    'digital gold gift','gold gift card','egold price',
+    'sell price digital','buy price digital','price difference digital gold',
+    'digital gold sell','digital gold buy','spread gold',
+    'digital gold spread','why price different','what is digital gold',
+    'what is egold','how digital gold works','digital gold caratlane',
+    'buy 24k','purchase gold online','gold from caratlane'
+  ],
+  postcards: [
+    'postcard','postcards','video message ring','personalised video',
+    'ring video','scan ring video','video gift','message with ring',
+    'video with ring','postcards feature','send video with ring',
+    'video on ring','ring message'
+  ],
+  tah: [
+    'try at home','tah service','home trial jewellery','try-at-home',
+    'home visit jewellery','try before buy','home appointment jewellery',
+    'home service jewellery','trial at home','try at home service',
+    'jewellery at home','free home trial','home try jewellery'
+  ],
+  shipping: [
+    'shipping policy','delivery policy','free shipping','courier service',
+    'dispatch','blue dart delivery','speed post delivery',
+    'track my order','order tracking','delivery time india',
+    'package tracking','delivery charges','shipping charges',
+    'when will order arrive','how long delivery','shipping cost',
+    'delivery cost','how is it delivered','delivery method'
+  ],
+  international: [
+    'international order','international shipping','ship outside india',
+    'ship abroad','deliver usa','deliver uk','deliver canada',
+    'deliver australia','deliver dubai','deliver singapore',
+    'foreign order','overseas order','nri purchase',
+    'international delivery','currency difference','dollar price',
+    'pound price','international return','international cancel',
+    'outside india','outside of india','other country delivery'
+  ],
+  id_required: [
+    'pan card required','pan card needed','aadhaar required',
+    'aadhar needed','id proof','id required','identity proof jewellery',
+    'purchase above 50000','above 50k','id at store',
+    'document needed','kyc verification','government id',
+    'what id needed','documents needed','id for purchase',
+    'what id is needed','what documents','50000 purchase',
+    'purchase above 50','id needed for','pan needed','pan required',
+    'above 50,000','more than 50000','over 50000'
+  ],
+  contact: [
+    'contact caratlane','call caratlane','caratlane phone',
+    'caratlane email','caratlane whatsapp','customer service number',
+    'helpline number','support number','escalate complaint',
+    'reach caratlane','speak to team','talk to agent',
+    'customer care','complaint number','email caratlane',
+    'how to contact','caratlane contact','contact number'
+  ]
+}
 
 function findTopicByAlias(query) {
   const q = query.toLowerCase().trim();
@@ -1674,19 +1817,19 @@ function findTopicByAlias(query) {
   return bestScore > 0 ? KB.find(t => t.id === best) || null : null;
 }
 
-// ── INTENT DETECTION ──────────────────────────────────────────────────
+// ── INTENT DETECTION ─────────────────────────────────────────────────
 function detectIntent(query) {
   const q = query.toLowerCase();
-  if (/\b(cancel|cancell|stop|exit|withdraw|opt.?out|close|end|terminate|want to stop)\b/.test(q)) return 'cancel';
-  if (/\b(refund|money.?back|cash.?back|get.*money back|give.*money back|cash return)\b/.test(q)) return 'refund';
-  if (/\b(return|send.?back|take.?back|give.?back|don.?t want|unhappy|dissatisfied|not satisfied|not happy)\b/.test(q)) return 'return';
-  if (/\b(exchange|swap|replace|switch|upgrade|change.*jewellery|new piece|new design)\b/.test(q)) return 'exchange';
-  if (/\b(complain|complaint|damaged|defect|broken|wrong item|missing|not working|faulty|upset|angry|frustrated)\b/.test(q)) return 'complaint';
-  if (/\b(redeem|use.*points|apply.*points|claim.*points|spend.*points)\b/.test(q)) return 'redeem';
-  if (/\b(track|where.*order|order.*status|when.*deliver|where.*package)\b/.test(q)) return 'track';
-  if (/\b(calculate|how much|what.*amount|what.*value|if i pay|pay.*monthly|monthly.*pay|get.*reward|reward|benefit|returns)\b/.test(q)) return 'calculate';
-  if (/\b(deduction|deduct|charge|fee|cut|percentage|how much.*deduct|what.*cut|de-alloy)\b/.test(q)) return 'deduction';
-  if (/\b(eligible|qualify|can i|am i eligible|do i qualify|valid for|applicable to me)\b/.test(q)) return 'eligibility';
+  if (/cancel|cancell|stop paying|exit|withdraw|opt out|want to stop|close scheme|end scheme|terminate/.test(q)) return 'cancel';
+  if (/refund|money back|moneyback|cash back|get my money|want my money|give back money|cash return/.test(q)) return 'refund';
+  if (/return|send back|take back|give back|dont want|don't want|unhappy|dissatisfied|not satisfied|not happy/.test(q)) return 'return';
+  if (/exchange|swap|replace|switch|upgrade|change my jewellery|new design|new piece/.test(q)) return 'exchange';
+  if (/complain|complaint|damaged|defect|broken|wrong item|missing|not working|faulty|upset|angry|frustrated/.test(q)) return 'complaint';
+  if (/redeem|use.*points|apply.*points|claim.*points|spend.*points|use my points/.test(q)) return 'redeem';
+  if (/track|where.*order|order.*status|when.*deliver|where.*package/.test(q)) return 'track';
+  if (/calculate|how much|what.*amount|what.*value|if i pay|pay.*monthly|monthly.*pay|get.*reward|my benefit|what.*benefit|what.*interest/.test(q)) return 'calculate';
+  if (/deduction|deduct|charge|fee|cut percentage|how much.*cut|what.*cut|de.alloy/.test(q)) return 'deduction';
+  if (/eligible|qualify|can i|am i eligible|do i qualify|valid for|applicable/.test(q)) return 'eligibility';
   return 'enquire';
 }
 
