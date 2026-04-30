@@ -1853,7 +1853,7 @@ function findTopicByAlias(query) {
     treasure_chest: {
       phrases: ['treasure chest','plan of purchase','pop scheme','pop plan','gold savings scheme','instalment plan','installment plan','icon plan','edge plan','10th month free','monthly gold savings','cancel pop','cancel treasure','cancel scheme','refund pop','pop refund','edge scheme','icon scheme','if i pay monthly','pop calculation','edge calculation','caratlane pop','pay to caratlane pop','benefit if i pay','what is pop','what is treasure chest','cancel the pop','cancel my pop','pop cancel','treasure cancel','cancel my treasure','cancel my scheme','pop scheme cancel','monthly scheme'],
       keywords: ['pop','treasure','instalment','installment'],
-      require_any: ['pop','treasure chest','instalment','installment','icon plan','edge plan','monthly scheme','gold saving','cancel scheme','cancel my scheme','cancel the scheme','scheme cancel','pop scheme','gold scheme']
+      require_any: ['pop','treasure chest','instalment','installment','icon plan','edge plan','monthly scheme','gold saving','cancel scheme','cancel my scheme','cancel the scheme','scheme cancel','pop scheme','gold scheme','maturity','redemption','enrolled','when can i redeem','when will','scheme complete']
     },
     digital_gold: {
       phrases: ['digital gold','egold','e-gold','digi gold','digigold','24k gold online','buy gold online','online gold purchase','gold investment online','gold vault','pure gold online','digital gold gift','gold gift card','sell price digital','buy price digital','price difference digital gold','digital gold sell','digital gold buy','spread gold','digital gold spread','why price different','what is digital gold','what is egold','how digital gold works','digital gold caratlane','buy 24k','purchase gold online'],
@@ -1925,6 +1925,7 @@ function detectIntent(query) {
   if (/complain|complaint|damaged|defect|broken|wrong item|missing|not working|faulty|upset|angry|frustrated/.test(q)) return 'complaint';
   if (/redeem|use.*points|apply.*points|claim.*points|spend.*points|use my points/.test(q)) return 'redeem';
   if (/track|where.*order|order.*status|when.*deliver|where.*package/.test(q)) return 'track';
+  if (/maturity|when.*redeem|when.*redemption|when can i redeem|when.*mature|when.*complete|redemption date|maturity date|when will.*ready|scheme.*complete|complete.*scheme|enrolled.*when|when.*start.*redeem|when.*start.*use|when.*eligible.*redeem|when can i use|when.*can.*buy/.test(q)) return 'date_calc';
   if (/calculate|how much will|how many.*earn|how many.*get|how many points|how many xcl|earn.*points|points.*earn|points.*get|will i earn|will i get.*point|how much.*earn|what.*earn|points.*if i|earn if|earn on|earn for|how many.*will i|points will i|points do i|points would i|if i buy|if i purchase|i purchase.*point|i buy.*point|purchase.*how many|bought.*how many|how many.*purchase|how many.*buy|what.*point|point.*lakh|point.*thousand|point.*hundred|lakh.*point|thousand.*point/.test(q)) return 'calculate';
   if (/deduction|deduct|charge|fee|cut percentage|how much.*cut|what.*cut|de.alloy/.test(q)) return 'deduction';
   if (/eligible|qualify|can i|am i eligible|do i qualify|valid for|applicable/.test(q)) return 'eligibility';
@@ -1967,6 +1968,81 @@ function buildEdgeCalculation(query, topic) {
     chips: [{ label: topic.title, url: topic.url }]
   };
 }
+
+function buildDateCalc(query, topic) {
+  const q = query.toLowerCase();
+
+  // Month name to number mapping
+  const MONTH_MAP = {
+    'january':1,'jan':1,'february':2,'feb':2,'march':3,'mar':3,
+    'april':4,'apr':4,'may':5,'june':6,'jun':6,'july':7,'jul':7,
+    'august':8,'aug':8,'september':9,'sep':9,'sept':9,'october':10,
+    'oct':10,'november':11,'nov':11,'december':12,'dec':12
+  };
+
+  // Extract month and day from query
+  let enrollMonth = null, enrollDay = 1, enrollYear = new Date().getFullYear();
+
+  // Try "Jan 1", "1 Jan", "January 1", "1 January", "1st Jan" etc
+  const monthNames = Object.keys(MONTH_MAP).join('|');
+  const patterns = [
+    new RegExp('(' + monthNames + ')\\s*(\\d{1,2})', 'i'),
+    new RegExp('(\\d{1,2})(?:st|nd|rd|th)?\\s+(' + monthNames + ')', 'i'),
+    new RegExp('(\\d{1,2})[-/](\\d{1,2})', 'i'),
+  ];
+
+  for (const pat of patterns) {
+    const m = q.match(pat);
+    if (m) {
+      if (MONTH_MAP[m[1].toLowerCase()]) {
+        enrollMonth = MONTH_MAP[m[1].toLowerCase()];
+        enrollDay = parseInt(m[2]) || 1;
+      } else if (MONTH_MAP[m[2].toLowerCase()]) {
+        enrollMonth = MONTH_MAP[m[2].toLowerCase()];
+        enrollDay = parseInt(m[1]) || 1;
+      } else {
+        // numeric format like 1/3
+        enrollMonth = parseInt(m[1]);
+        enrollDay = parseInt(m[2]);
+      }
+      break;
+    }
+  }
+
+  // Check for year
+  const yearMatch = q.match(/20(\d{2})/);
+  if (yearMatch) enrollYear = parseInt('20' + yearMatch[1]);
+
+  if (!enrollMonth) {
+    return {
+      text: `Happy to help calculate your Treasure Chest maturity date! 😊\n\nThe scheme runs for 9 months. After paying your 9th instalment, you can redeem against jewellery.\n\nTo give you the exact date, could you share:\n• Which month and year you enrolled? (e.g. "I enrolled in January 2025")\n\nOr if you know your instalment dates, redemption opens after the 9th payment is complete.`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  // Calculate: 9 months after enrollment = maturity
+  // Enrollment date is month 1, so month 10 = redemption eligible
+  const enrollDate = new Date(enrollYear, enrollMonth - 1, enrollDay);
+  const maturityDate = new Date(enrollYear, enrollMonth - 1 + 9, enrollDay);
+  const redemptionDate = new Date(enrollYear, enrollMonth - 1 + 9, enrollDay);
+
+  const monthNames2 = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  const formatDate = (d) => d.getDate() + ' ' + monthNames2[d.getMonth()] + ' ' + d.getFullYear();
+
+  // Generate instalment schedule
+  let schedule = '';
+  for (let i = 1; i <= 9; i++) {
+    const instDate = new Date(enrollYear, enrollMonth - 1 + (i-1), enrollDay);
+    schedule += '\n  Month ' + i + ': ' + monthNames2[instDate.getMonth()] + ' ' + instDate.getFullYear();
+  }
+
+  return {
+    text: `Great question! Here's your Treasure Chest maturity timeline: 😊\n\n📅 ENROLMENT DATE: ${formatDate(enrollDate)}\n\n🗓️ INSTALMENT SCHEDULE (9 payments):${schedule}\n\n✅ MATURITY / REDEMPTION DATE: ${formatDate(redemptionDate)}\n\nAfter your 9th instalment in ${monthNames2[new Date(enrollYear, enrollMonth - 1 + 8, enrollDay).getMonth()]} ${new Date(enrollYear, enrollMonth - 1 + 8, enrollDay).getFullYear()}, you become eligible to redeem your accumulated amount against jewellery at any CaratLane store.\n\n💡 ICON Plan: Your jewellery credit = total instalments paid + 10th month FREE\n💡 EDGE Plan: Your jewellery credit = accumulated gold units × redemption day rate + 10th month FREE\n\n⚠️ Remember: Redemption is for jewellery only — no cash refund.\n\nIs there anything else I can help you with? 😊`,
+    chips: [{ label: topic.title, url: topic.url }]
+  };
+}
+
 
 function buildPointsCalculation(query, topic) {
   const q = query.toLowerCase();
@@ -2038,8 +2114,11 @@ function buildDeductionAnswer(topicId, topic) {
 function buildAnswer(topicId, intent, query, prefix) {
   const topic = KB.find(t => t.id === topicId);
   if (!topic) return null;
-  if (intent === 'calculate') {
-    if (topicId === 'treasure_chest') return buildEdgeCalculation(query, topic);
+  if (intent === 'date_calc' || intent === 'calculate') {
+    if (topicId === 'treasure_chest') {
+      if (intent === 'date_calc') return buildDateCalc(query, topic);
+      return buildEdgeCalculation(query, topic);
+    }
     if (topicId === 'xclusive') return buildPointsCalculation(query, topic);
   }
   if (intent === 'deduction') {
