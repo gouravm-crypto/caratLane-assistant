@@ -1807,13 +1807,111 @@ const TOPIC_ALIASES = {
 function findTopicByAlias(query) {
   const q = query.toLowerCase().trim();
   let best = null, bestScore = 0;
-  for (const [topicId, aliases] of Object.entries(TOPIC_ALIASES)) {
-    let score = 0;
-    for (const alias of aliases) {
-      if (q.includes(alias)) score += alias.split(' ').length * 4;
+
+  // Each topic has PHRASES (multi-word, high score) and KEYWORDS (single word, low score)
+  const TOPICS = {
+    store_return: {
+      phrases: ['store refund','store return','bought at store','purchased at store','store purchase','store bought','store order','return earring','return ring','return necklace','return bracelet','refund earring','refund ring','earrings purchased at','purchased at our store','bought from store','offline purchase','cash refund store','want to return','want refund','return from store','refund from store'],
+      keywords: ['store','refund','return'],
+      require_any: ['store','offline','in-store']
+    },
+    online_return: {
+      phrases: ['online return','online refund','money back','money-back','moneyback','15 day','15-day','15days','return online','refund online','within 15 days','15 days return','15 day return','15 day policy','get my money back','online order refund','refund on online','online order after','home delivery return'],
+      keywords: ['refund','return','online'],
+      require_any: ['online','15 day','15-day','money back','moneyback','website','app order']
+    },
+    late_exchange: {
+      phrases: ['after 15 days','after 20 days','after 30 days','after a month','past 15','beyond 15','exchange after 20','exchange after 15','exchange after 30','already expired','15 days passed','already 15'],
+      keywords: [],
+      require_any: ['after 15','after 20','after 30','past 15','beyond 15','after a month','months later']
+    },
+    lifetime_exchange: {
+      phrases: ['lifetime exchange','lifetime buyback','lte','exchange value','upgrade jewellery','upgrade jewelry','how much will i get','anytime exchange','no expiry exchange','forever exchange','lifetime policy','what is lifetime exchange','exchange anytime'],
+      keywords: ['lifetime','buyback'],
+      require_any: ['lifetime','buyback','lte']
+    },
+    engraved: {
+      phrases: ['engrav','personalised','personalized','customised','customized','name on ring','engraving','custom piece','monogram','name engraved','personalised item','custom jewellery','custom order'],
+      keywords: ['engraved','personalised','personalized','customised','monogram','engraving'],
+      require_any: ['engrav','personal','custom','monogram']
+    },
+    shaya: {
+      phrases: ['shaya return','shaya exchange','silver return','silver exchange','shaya refund','silver refund','shaya jewellery','silver jewellery','shaya diamond','shaya policy','925 silver','sterling silver'],
+      keywords: ['shaya','silver'],
+      require_any: ['shaya','silver','925','sterling']
+    },
+    xclusive: {
+      phrases: ['xclusive','xcl','x-clusive','loyalty points','reward points','earn points','redeem points','points balance','discount points','xcl points','use my points','spend points','xcl tier','xcl balance','how many points','xclusive programme','xcl programme','xcl discount','xclusivepoints'],
+      keywords: ['xclusive','xcl','loyalty','points','tier','regal','imperial','crown'],
+      require_any: ['xcl','xclusive','loyalty','point','tier','regal','imperial','crown']
+    },
+    oge: {
+      phrases: ['old gold exchange','old gold','oge','gold exchange','old jewellery exchange','karatmeter','karat meter','scrap gold','gold upgrade','sell old gold','exchange old gold','melt gold','gold purity check','oge deduction','deduction oge','old gold deduction','what will i get for gold','gold value exchange'],
+      keywords: ['oge','karatmeter'],
+      require_any: ['old gold','oge','karatmeter','scrap gold','gold exchange']
+    },
+    treasure_chest: {
+      phrases: ['treasure chest','plan of purchase','pop scheme','pop plan','gold savings scheme','instalment plan','installment plan','icon plan','edge plan','10th month free','monthly gold savings','cancel pop','cancel treasure','cancel scheme','refund pop','pop refund','edge scheme','icon scheme','if i pay monthly','pop calculation','edge calculation','caratlane pop','pay to caratlane pop','benefit if i pay','what is pop','what is treasure chest','cancel the pop','cancel my pop','pop cancel','treasure cancel','cancel my treasure','cancel my scheme','pop scheme cancel','monthly scheme'],
+      keywords: ['pop','treasure','instalment','installment'],
+      require_any: ['pop','treasure chest','instalment','installment','icon plan','edge plan','monthly scheme','gold saving','cancel scheme','cancel my scheme','cancel the scheme','scheme cancel','pop scheme','gold scheme']
+    },
+    digital_gold: {
+      phrases: ['digital gold','egold','e-gold','digi gold','digigold','24k gold online','buy gold online','online gold purchase','gold investment online','gold vault','pure gold online','digital gold gift','gold gift card','sell price digital','buy price digital','price difference digital gold','digital gold sell','digital gold buy','spread gold','digital gold spread','why price different','what is digital gold','what is egold','how digital gold works','digital gold caratlane','buy 24k','purchase gold online'],
+      keywords: ['egold','digigold'],
+      require_any: ['digital gold','egold','e-gold','digi gold','digigold','24k gold','gold vault','gold online']
+    },
+    postcards: {
+      phrases: ['postcard','postcards','video message ring','personalised video','ring video','scan ring video','video gift','message with ring','video with ring','postcards feature','send video with ring','video on ring'],
+      keywords: ['postcard','postcards'],
+      require_any: ['postcard','postcards','ring video','video message']
+    },
+    tah: {
+      phrases: ['try at home','tah service','home trial jewellery','try-at-home','home visit jewellery','try before buy','home appointment jewellery','trial at home','jewellery at home','free home trial','home try jewellery'],
+      keywords: ['tah'],
+      require_any: ['try at home','tah','home trial','try-at-home','home visit']
+    },
+    shipping: {
+      phrases: ['shipping policy','delivery policy','free shipping','courier service','blue dart delivery','speed post delivery','track my order','order tracking','delivery time india','delivery charges','shipping charges','when will order arrive','how long delivery','shipping cost','delivery cost'],
+      keywords: ['shipping','delivery','courier'],
+      require_any: ['shipping','delivery','courier','dispatch','blue dart','speed post']
+    },
+    international: {
+      phrases: ['international order','international shipping','ship outside india','ship abroad','deliver usa','deliver uk','deliver canada','deliver australia','deliver dubai','deliver singapore','foreign order','overseas order','nri purchase','international delivery','outside india','other country delivery'],
+      keywords: ['international','overseas','nri','abroad'],
+      require_any: ['international','overseas','nri','abroad','outside india','usa','uk','canada','australia','dubai','singapore']
+    },
+    id_required: {
+      phrases: ['pan card required','pan card needed','aadhaar required','aadhar needed','id proof','id required','identity proof jewellery','purchase above 50000','above 50k','id at store','document needed','what id needed','id for purchase','what id is needed','what documents','50000 purchase','id needed for','pan needed','pan required','above 50,000','more than 50000','over 50000','purchases above 50','above 50'],
+      keywords: ['pan','aadhaar','aadhar'],
+      require_any: ['pan card','aadhaar','aadhar','id proof','id required','50000','50k','50,000','above 50','document needed','what id','id at store']
+    },
+    contact: {
+      phrases: ['contact caratlane','call caratlane','caratlane phone','caratlane email','caratlane whatsapp','customer service number','helpline number','support number','escalate complaint','reach caratlane','speak to team','talk to agent','customer care','complaint number','email caratlane','how to contact','caratlane contact'],
+      keywords: ['helpline','escalate'],
+      require_any: ['contact','helpline','call caratlane','email caratlane','whatsapp','customer care','escalate','speak to','talk to agent']
     }
+  };
+
+  for (const [topicId, def] of Object.entries(TOPICS)) {
+    let score = 0;
+
+    // Check require_any — if none match, skip this topic entirely
+    const hasRequired = def.require_any.some(r => q.includes(r));
+    if (!hasRequired) continue;
+
+    // Score phrases (high value — longer = more specific)
+    for (const phrase of def.phrases) {
+      if (q.includes(phrase)) score += phrase.split(' ').length * 6;
+    }
+
+    // Score keywords (low value)
+    for (const kw of def.keywords) {
+      if (q.includes(kw)) score += 3;
+    }
+
     if (score > bestScore) { bestScore = score; best = topicId; }
   }
+
   return bestScore > 0 ? KB.find(t => t.id === best) || null : null;
 }
 
