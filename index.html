@@ -1936,21 +1936,8 @@ function detectIntent(query) {
 function buildEdgeCalculation(query, topic) {
   const q = query.toLowerCase();
 
-  // Extract amount - handles lakh, lac, k, commas, plain numbers
-  let amt = 0;
-  const lakhMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/);
-  const kMatch = q.match(/(\d+(?:\.\d+)?)\s*k\b/);
-  const plainMatch = q.match(/₹?\s*(\d[\d,]*)/);
-
-  if (lakhMatch) {
-    amt = parseFloat(lakhMatch[1]) * 100000;
-  } else if (kMatch) {
-    amt = parseFloat(kMatch[1]) * 1000;
-  } else if (plainMatch) {
-    amt = parseInt(plainMatch[1].replace(/,/g, ''));
-    if (amt < 100) amt = 0; // ignore tiny numbers like "9 months"
-  }
-
+  let amt = extractAmount(q);
+  if (amt < 100) amt = 0; // ignore tiny numbers like "9 months"
   const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
 
   if (amt > 0) {
@@ -2047,57 +2034,152 @@ function buildDateCalc(query, topic) {
 function buildPointsCalculation(query, topic) {
   const q = query.toLowerCase();
 
-  // Extract amount - handles lakh, lac, k, commas, plain numbers
-  let amt = 0;
-  const lakhMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/);
-  const kMatch = q.match(/(\d+(?:\.\d+)?)\s*k\b/);
-  const plainMatch = q.match(/₹?\s*(\d[\d,]*)/);
+  // ── PRODUCT TYPE DETECTION ─────────────────────────────────────────
+  // Detect if user mentioned a specific product type
+  const isGoldCoin   = /gold coin|coin/.test(q);
+  const is22kt       = /22\s*k|22kt|22\s*karat|22 carat/.test(q);
+  const is24kt       = /24\s*k|24kt|24\s*karat|24 carat/.test(q);
+  const isPlainGold  = /plain gold/.test(q);
+  const isSilverCoin = /silver coin/.test(q);
+  const isMount      = /mount/.test(q);
+  const isGiftCard   = /gift card/.test(q);
+  const isArticle    = /article|artifacts/.test(q);
+  const isShaya      = /shaya/.test(q);
 
-  if (lakhMatch) {
-    amt = parseFloat(lakhMatch[1]) * 100000;
-  } else if (kMatch) {
-    amt = parseFloat(kMatch[1]) * 1000;
-  } else if (plainMatch) {
-    amt = parseInt(plainMatch[1].replace(/,/g, ''));
+  // Unstudded indicators — jewellery types that are clearly not studded
+  const UNSTUDDED_TYPES = ['chain','bangle','bracelet','ring','necklace','kada','anklet','earring','jhumka','hoop','nose pin','mangalsutra','gold jewellery','plain jewellery','unstudded','without diamond','without stone','no diamond','no stone'];
+  const STUDDED_TYPES   = ['diamond','solitaire','studded','gemstone','stone','polki','kundan','ruby','emerald','pendant set','necklace set'];
+
+  const mentionsUnstudded = UNSTUDDED_TYPES.some(t => q.includes(t));
+  const mentionsStudded   = STUDDED_TYPES.some(t => q.includes(t));
+
+  // Explicitly said "unstudded"
+  const explicitUnstudded = /unstudded/.test(q);
+
+  // ── INELIGIBLE PRODUCTS — no points at all ─────────────────────────
+  if (isGoldCoin || is22kt || is24kt || isPlainGold || isSilverCoin || isMount || isGiftCard || isArticle) {
+    let reason = '';
+    if (isGoldCoin)   reason = 'gold coins';
+    else if (isSilverCoin) reason = 'silver coins';
+    else if (is22kt || is24kt || isPlainGold) reason = '22KT / plain gold jewellery';
+    else if (isMount) reason = 'mounts';
+    else if (isGiftCard) reason = 'gift cards';
+    else if (isArticle) reason = 'articles / accessories';
+    return {
+      text: `I'm sorry, but xCLusive Points cannot be earned or redeemed on ${reason}. 🙏\n\nPoints are NOT applicable on:\n• Gold coins\n• Silver coins\n• 22KT plain gold jewellery\n• 24KT gold (Digital Gold)\n• Mounts\n• Gift Cards\n• Articles / Accessories\n\nIf you're purchasing a different type of jewellery, I'd be happy to help calculate your points! 😊`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
   }
 
-  // Detect tier from query
-  let tier = null;
-  if (/crown/.test(q)) tier = 'crown';
-  else if (/imperial/.test(q)) tier = 'imperial';
-  else if (/regal/.test(q)) tier = 'regal';
-
-  const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
-
-  if (amt > 0) {
-    const studded_rates = { regal: 0.03, imperial: 0.04, crown: 0.05 };
-    const shaya_rates   = { regal: 0.10, imperial: 0.15, crown: 0.20 };
-
-    if (tier) {
-      // Specific tier calculation
-      const sr = studded_rates[tier];
-      const shr = shaya_rates[tier];
-      const studdedPts = Math.floor(amt * sr);
-      const shayaPts   = Math.floor(amt * shr);
+  // ── SHAYA JEWELLERY ────────────────────────────────────────────────
+  if (isShaya) {
+    const tier = detectTier(q);
+    const rate = tier === 'crown' ? 0.20 : tier === 'imperial' ? 0.15 : 0.10;
+    const tierLabel = tier ? tier.charAt(0).toUpperCase()+tier.slice(1) : null;
+    const amt = extractAmount(q);
+    if (amt > 0 && tierLabel) {
+      const pts = Math.floor(amt * rate);
+      const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
       return {
-        text: `Here's exactly how many xCLusive Points you'd earn as an ${tier.charAt(0).toUpperCase()+tier.slice(1)} member on a ${fmt(amt)} order:\n\n💎 STUDDED JEWELLERY (prepaid):\n• ${studdedPts.toLocaleString('en-IN')} points = ${fmt(studdedPts)} value (${(sr*100)}% back)\n\n✨ SHAYA JEWELLERY (prepaid):\n• ${shayaPts.toLocaleString('en-IN')} points = ${fmt(shayaPts)} value (${(shr*100)}% back)\n\n📌 1 xCLusive Point = ₹1\nPoints are credited 15 days after delivery.\nRedeemable on the CaratLane App or in-store only.\n\nIs there anything else I can help you with? 😊`,
+        text: `For a Shaya jewellery purchase of ${fmt(amt)} as a ${tierLabel} member:\n\n✨ xCLusive Points earned: ${pts.toLocaleString('en-IN')} points = ${fmt(pts)} value (${rate*100}% back)\n\n📌 1 Point = ₹1 | Credited 15 days after delivery\nRedeemable on App or in-store only.\n\nIs there anything else I can help you with? 😊`,
         chips: [{ label: topic.title, url: topic.url }]
       };
-    } else {
-      // All tiers
+    }
+    return {
+      text: `For Shaya Jewellery, xCLusive earn rates are:\n• Regal: 10% back\n• Imperial: 15% back\n• Crown: 20% back\n\nShare your purchase amount and tier for an exact calculation! 😊`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  // ── AMBIGUOUS PRODUCT (e.g. "gold chain", "bangle", "ring") ────────
+  // If it looks unstudded but no karat mentioned — ask follow-up
+  if (mentionsUnstudded && !mentionsStudded && !explicitUnstudded) {
+    const item = UNSTUDDED_TYPES.find(t => q.includes(t)) || 'this design';
+    const tier  = detectTier(q);
+    const amt   = extractAmount(q);
+    // Ask what karat it is — because 22KT = no points, others = making charge basis
+    return {
+      text: `Great question! A ${item} is typically an unstudded jewellery piece. For unstudded jewellery, xCLusive Points are earned on the making charges (not the full invoice value), and the rate depends on the karat.\n\nCould you tell me the karat of the ${item}? 🙏\n\n• 9KT / 14KT / 18KT → Points earned on making charges (Regal 3%, Imperial 4%, Crown 5%)\n• 22KT → ❌ No xCLusive Points (22KT plain gold is excluded)\n\nOnce you share the karat, I can guide you on exactly how to calculate your points! 😊`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  // ── UNSTUDDED JEWELLERY (explicitly stated or detected) ────────────
+  if (explicitUnstudded || (mentionsUnstudded && !mentionsStudded)) {
+    // Check if karat is mentioned
+    if (is22kt) {
       return {
-        text: `xCLusive Points you'd earn on a ${fmt(amt)} prepaid order:\n\n💎 STUDDED JEWELLERY:\n• Regal tier   → ${Math.floor(amt*0.03).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.03))})\n• Imperial tier → ${Math.floor(amt*0.04).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.04))})\n• Crown tier    → ${Math.floor(amt*0.05).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.05))})\n\n✨ SHAYA JEWELLERY:\n• Regal tier   → ${Math.floor(amt*0.10).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.10))})\n• Imperial tier → ${Math.floor(amt*0.15).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.15))})\n• Crown tier    → ${Math.floor(amt*0.20).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.20))})\n\n📌 1 Point = ₹1 | Credited 15 days after delivery\n\nIs there anything else I can help you with? 😊`,
+        text: `I'm sorry, but xCLusive Points cannot be earned on 22KT plain gold jewellery. 🙏\n\nPoints are applicable on 9KT, 14KT, and 18KT unstudded designs only — based on making charges.\n\nIs there anything else I can help you with? 😊`,
+        chips: [{ label: topic.title, url: topic.url }]
+      };
+    }
+    // Karat is fine (9/14/18kt) or not mentioned — explain making charges basis
+    const tier = detectTier(q);
+    const tierLabel = tier ? tier.charAt(0).toUpperCase()+tier.slice(1) : null;
+    const rate = tier === 'crown' ? 0.05 : tier === 'imperial' ? 0.04 : 0.03;
+    return {
+      text: `For unstudded jewellery, xCLusive Points are earned on the making charges — not the full invoice value. 📋\n\nThis is because the gold rate changes daily, and points are only calculated on the craftsmanship component.\n\n${tierLabel ? `As a ${tierLabel} member, your earn rate is ${rate*100}%.` : 'Earn rates:\n• Regal: 3% of making charges\n• Imperial: 4% of making charges\n• Crown: 5% of making charges'}\n\n💡 HOW TO CALCULATE:\nCheck your invoice for the "Making Charges" line item, then multiply by your tier percentage.\n\nExample: If making charges = ₹5,000 and you're ${tierLabel || 'Regal'} → Points = ₹${tierLabel === 'Imperial' ? 200 : tierLabel === 'Crown' ? 250 : 150}\n\n⚠️ NOT eligible: 22KT plain gold jewellery\n✅ ELIGIBLE: 9KT, 14KT, 18KT unstudded designs\n\nIs there anything else I can help you with? 😊`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  // ── STUDDED JEWELLERY ──────────────────────────────────────────────
+  if (mentionsStudded) {
+    const tier = detectTier(q);
+    const tierLabel = tier ? tier.charAt(0).toUpperCase()+tier.slice(1) : null;
+    const amt  = extractAmount(q);
+    if (amt > 0 && tier) {
+      const rate = tier === 'crown' ? 0.05 : tier === 'imperial' ? 0.04 : 0.03;
+      const pts  = Math.floor(amt * rate);
+      const fmt  = n => '₹' + Math.round(n).toLocaleString('en-IN');
+      return {
+        text: `For a studded jewellery purchase of ${fmt(amt)} as a ${tierLabel} member:\n\n💎 xCLusive Points earned: ${pts.toLocaleString('en-IN')} points = ${fmt(pts)} value (${rate*100}% back)\n\n📌 1 Point = ₹1 | Credited 15 days after delivery\nRedeemable on App or in-store only.\n\nIs there anything else I can help you with? 😊`,
         chips: [{ label: topic.title, url: topic.url }]
       };
     }
   }
 
-  // No amount found — ask for it
+  // ── GENERIC — no product type mentioned ───────────────────────────
+  const tier = detectTier(q);
+  const amt  = extractAmount(q);
+  const tierLabel = tier ? tier.charAt(0).toUpperCase()+tier.slice(1) : null;
+
+  if (amt > 0 && tier) {
+    // We have amount and tier but no product type — need to ask
+    return {
+      text: `To calculate your exact xCLusive Points as a ${tierLabel} member on ₹${amt.toLocaleString('en-IN')}, I need to know the product type: 🙏\n\n1. 💎 STUDDED (diamond/gemstone jewellery) → ${tier==='crown'?'5%':tier==='imperial'?'4%':'3%'} of invoice value = ${Math.floor(amt*(tier==='crown'?0.05:tier==='imperial'?0.04:0.03)).toLocaleString('en-IN')} points\n\n2. 🔘 UNSTUDDED (9KT/14KT/18KT, no stones) → ${tier==='crown'?'5%':tier==='imperial'?'4%':'3%'} of MAKING CHARGES only (check invoice)\n\n3. ✨ SHAYA jewellery → ${tier==='crown'?'20%':tier==='imperial'?'15%':'10%'} of invoice value = ${Math.floor(amt*(tier==='crown'?0.20:tier==='imperial'?0.15:0.10)).toLocaleString('en-IN')} points\n\n4. ❌ 22KT plain gold / gold coins / mounts → No points\n\nWhich type is it? 😊`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  // No amount, no tier — show full guide
   return {
-    text: `I'd be happy to calculate your xCLusive Points! Just tell me:\n\n1. Your purchase amount (e.g. ₹50,000 or 1 lakh)\n2. Your tier (Regal / Imperial / Crown) — optional\n3. Product type (Studded jewellery or Shaya)\n\nFor example: "How many points on ₹50,000 as Imperial member?"\n\nCurrent earn rates (prepaid orders only):\n💎 Studded: Regal 3% · Imperial 4% · Crown 5%\n✨ Shaya: Regal 10% · Imperial 15% · Crown 20%\n\n1 Point = ₹1 | Redeemable on App or in-store 😊`,
+    text: `Here's how xCLusive Points work by product type:\n\n💎 STUDDED JEWELLERY (diamond/gemstone):\n• Regal: 3% | Imperial: 4% | Crown: 5% of invoice value\n\n🔘 UNSTUDDED JEWELLERY (9KT/14KT/18KT):\n• Regal: 3% | Imperial: 4% | Crown: 5%\n• ⚠️ Calculated on MAKING CHARGES only (not full invoice)\n• Check invoice for the making charges amount, then multiply by your %\n\n✨ SHAYA JEWELLERY:\n• Regal: 10% | Imperial: 15% | Crown: 20% of invoice value\n\n❌ NO POINTS ON: 22KT plain gold, gold coins, silver coins, mounts, gift cards, articles\n\nTell me your product type, tier, and amount for an exact calculation! 😊`,
     chips: [{ label: topic.title, url: topic.url }]
   };
 }
+
+// ── HELPER FUNCTIONS ──────────────────────────────────────────────────
+function detectTier(q) {
+  if (/\bcrown\b/.test(q)) return 'crown';
+  if (/\bimperial\b/.test(q)) return 'imperial';
+  if (/\bregal\b/.test(q)) return 'regal';
+  return null;
+}
+
+function extractAmount(q) {
+  const lakhMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/);
+  const kMatch    = q.match(/(\d+(?:\.\d+)?)\s*k\b/);
+  const plainMatch = q.match(/[₹rs\.\s]?(\d[\d,]{3,})/);
+  const anyNum    = q.match(/\b(\d{4,})\b/);
+
+  if (lakhMatch)   return parseFloat(lakhMatch[1]) * 100000;
+  if (kMatch)      return parseFloat(kMatch[1]) * 1000;
+  if (plainMatch)  return parseInt(plainMatch[1].replace(/,/g,''));
+  if (anyNum)      return parseInt(anyNum[1].replace(/,/g,''));
+  return 0;
+}
+
 
 // ── DEDUCTION ANSWERS ─────────────────────────────────────────────────
 function buildDeductionAnswer(topicId, topic) {
