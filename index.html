@@ -1667,7 +1667,7 @@ const INTENT_REPLIES = {
   },
   xclusive: {
     redeem: `Great — let's get your xCLusive Points redeemed! 😊\n\nPoints can be redeemed in two ways:\n• 📱 On the CaratLane App: At checkout, select "xCLusive Points" as payment and enter the PIN from your SMS or email\n• 🏪 In-store: Our store team will help you apply the points — just have your CaratLane App open on your phone\n\nPlease note: Points cannot be redeemed on the website (only app or in-store), and cannot be combined with a coupon code on the same order.\n\nTo check your balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can assist you with? 🙏`,
-    enquire: `Welcome to the xCLusive programme! ✨ Here's a quick summary:\n\n1 xCLusive Point = ₹1\n\n🏆 EARN on every prepaid purchase:\n• Studded jewellery: 3%–5% back (based on your tier)\n• Shaya jewellery: up to 20% back!\n• Complete your profile: ₹500 | Write a review: ₹200\n\n💰 REDEEM on the App or in-store (not on website)\n• Up to 20% of order value on studded jewellery\n\nPoints are credited 15 days after delivery.\n\nCheck balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can help you with? 😊`
+    enquire: `Here's everything about the xCLusive Loyalty Programme! ✨\n\n💛 1 xCLusive Point = ₹1\n\n🏆 THREE TIERS & EARN RATES (prepaid orders only):\n\n⭐ REGAL (entry level) — Points valid 6 months\n• Studded Jewellery: 3% back\n• Shaya Jewellery: 10% back\n• Benefits: Partner Brand Offers\n\n💎 IMPERIAL — Points valid 9 months\n• Studded Jewellery: 4% back\n• Shaya Jewellery: 15% back\n• Benefits: Partner Offers + Collection Previews & Events + Offer Previews\n\n👑 CROWN (highest) — Points valid 12 months\n• Studded Jewellery: 5% back\n• Shaya Jewellery: 20% back\n• Benefits: All Imperial benefits + Priority Customer Service + Jewellery Styling via CLive + Designer on Call\n\n💰 HOW TO REDEEM (App or in-store ONLY — not on website):\n• Studded: up to 20% of order value\n• Preset: up to 10%\n• Unstudded/Shaya: up to 20% or 500 pts (whichever higher)\n\n📌 Points credited 15 days after delivery. Cannot combine with coupon codes.\n\nCheck balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can help you with? 😊`
   }
 };
 
@@ -1811,7 +1811,7 @@ function findTopicByAlias(query) {
   // Each topic has PHRASES (multi-word, high score) and KEYWORDS (single word, low score)
   const TOPICS = {
     store_return: {
-      phrases: ['store refund','store return','bought at store','purchased at store','store purchase','store bought','store order','return earring','return ring','return necklace','return bracelet','refund earring','refund ring','earrings purchased at','purchased at our store','bought from store','offline purchase','cash refund store','want to return','want refund','return from store','refund from store'],
+      phrases: ['store refund','store return','bought at store','purchased at store','store purchase','store bought','store order','return earring','return ring','return necklace','return bracelet','refund earring','refund ring','earring return','ring return','bracelet return','necklace return','earrings purchased at','purchased at our store','bought from store','offline purchase','cash refund store','want to return','want refund','return from store','refund from store'],
       keywords: ['store','refund','return'],
       require_any: ['store','offline','in-store']
     },
@@ -1843,7 +1843,7 @@ function findTopicByAlias(query) {
     xclusive: {
       phrases: ['xclusive','xcl','x-clusive','loyalty points','reward points','earn points','redeem points','points balance','discount points','xcl points','use my points','spend points','xcl tier','xcl balance','how many points','xclusive programme','xcl programme','xcl discount','xclusivepoints'],
       keywords: ['xclusive','xcl','loyalty','points','tier','regal','imperial','crown'],
-      require_any: ['xcl','xclusive','loyalty','point','tier','regal','imperial','crown']
+      require_any: ['xcl','xclusive','loyalty','point','tier','regal','imperial','crown','how many points','earn points','points earn','points on','points if']
     },
     oge: {
       phrases: ['old gold exchange','old gold','oge','gold exchange','old jewellery exchange','karatmeter','karat meter','scrap gold','gold upgrade','sell old gold','exchange old gold','melt gold','gold purity check','oge deduction','deduction oge','old gold deduction','what will i get for gold','gold value exchange'],
@@ -1921,11 +1921,11 @@ function detectIntent(query) {
   if (/cancel|cancell|stop paying|exit|withdraw|opt out|want to stop|close scheme|end scheme|terminate/.test(q)) return 'cancel';
   if (/refund|money back|moneyback|cash back|get my money|want my money|give back money|cash return/.test(q)) return 'refund';
   if (/return|send back|take back|give back|dont want|don't want|unhappy|dissatisfied|not satisfied|not happy/.test(q)) return 'return';
-  if (/exchange|swap|replace|switch|upgrade|change my jewellery|new design|new piece/.test(q)) return 'exchange';
+  if (/\bexchange\b|\bswap\b|\breplace\b|\bswitch\b|\bupgrade\b|change my jewellery|want new design|want a new piece|get new piece/.test(q)) return 'exchange';
   if (/complain|complaint|damaged|defect|broken|wrong item|missing|not working|faulty|upset|angry|frustrated/.test(q)) return 'complaint';
   if (/redeem|use.*points|apply.*points|claim.*points|spend.*points|use my points/.test(q)) return 'redeem';
   if (/track|where.*order|order.*status|when.*deliver|where.*package/.test(q)) return 'track';
-  if (/calculate|how much|what.*amount|what.*value|if i pay|pay.*monthly|monthly.*pay|get.*reward|my benefit|what.*benefit|what.*interest/.test(q)) return 'calculate';
+  if (/calculate|how much will|how many.*earn|how many.*get|how many points|how many xcl|earn.*points|points.*earn|points.*get|will i earn|will i get.*point|how much.*earn|what.*earn|points.*if i|earn if|earn on|earn for|how many.*will i|points will i|points do i|points would i|if i buy|if i purchase|i purchase.*point|i buy.*point|purchase.*how many|bought.*how many|how many.*purchase|how many.*buy|what.*point|point.*lakh|point.*thousand|point.*hundred|lakh.*point|thousand.*point/.test(q)) return 'calculate';
   if (/deduction|deduct|charge|fee|cut percentage|how much.*cut|what.*cut|de.alloy/.test(q)) return 'deduction';
   if (/eligible|qualify|can i|am i eligible|do i qualify|valid for|applicable/.test(q)) return 'eligibility';
   return 'enquire';
@@ -1934,27 +1934,93 @@ function detectIntent(query) {
 // ── CALCULATORS ───────────────────────────────────────────────────────
 function buildEdgeCalculation(query, topic) {
   const q = query.toLowerCase();
-  const m = q.match(/(\d[\d,]*)\s*k?/);
+
+  // Extract amount - handles lakh, lac, k, commas, plain numbers
   let amt = 0;
-  if (m) { amt = parseInt(m[1].replace(/,/g,'')); if (q.includes('k') && amt < 1000) amt *= 1000; }
-  if (amt > 0) {
-    const fmt = n => n.toLocaleString('en-IN');
-    const total9 = amt*9, bonus = amt, total = total9+bonus;
-    return { text: `Here's exactly how the Treasure Chest EDGE Plan works with ₹${fmt(amt)}/month:\n\n💰 YOUR CONTRIBUTION:\n• 9 months × ₹${fmt(amt)} = ₹${fmt(total9)}\n• 10th month FREE = +₹${fmt(bonus)}\n• Minimum jewellery credit = ₹${fmt(total)}\n\n📈 THE EDGE BENEFIT:\nEach instalment is converted to gold units at that day's 24KT rate. If gold prices rise over 9 months, your final budget will be HIGHER than ₹${fmt(total)}.\n\n📉 THE RISK:\nIf gold prices fall, your budget will be lower. Rate fluctuation is borne by the customer.\n\n⚠️ IMPORTANT:\n• Cannot cancel — jewellery credit only, no cash refund\n• Must complete all 9 months to get the benefit\n• Partial completion = zero benefit\n\nIs there anything else I can help with? 😊`, chips: [{ label: topic.title, url: topic.url }] };
+  const lakhMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/);
+  const kMatch = q.match(/(\d+(?:\.\d+)?)\s*k\b/);
+  const plainMatch = q.match(/₹?\s*(\d[\d,]*)/);
+
+  if (lakhMatch) {
+    amt = parseFloat(lakhMatch[1]) * 100000;
+  } else if (kMatch) {
+    amt = parseFloat(kMatch[1]) * 1000;
+  } else if (plainMatch) {
+    amt = parseInt(plainMatch[1].replace(/,/g, ''));
+    if (amt < 100) amt = 0; // ignore tiny numbers like "9 months"
   }
-  return { text: `Here's how the Treasure Chest EDGE Plan works:\n\n📊 FORMULA:\n• Pay 9 monthly instalments of your chosen amount\n• Each instalment converted to gold units at that day's 24KT gold rate\n• 10th month value added FREE\n• Redemption: Total gold units × current rate = jewellery budget\n\n💡 EXAMPLE (₹10,000/month):\n• 9 × ₹10,000 = ₹90,000 contributed + ₹10,000 free = ₹1,00,000 base\n• If gold rises 10% over 9 months → budget ≈ ₹1,10,000 ✅\n• If gold falls 10% → budget ≈ ₹90,000 ⚠️\n\n📌 No cash refund. Jewellery credit only. Must complete all 9 months.\n\nTell me your monthly amount and I'll calculate your exact numbers! 😊`, chips: [{ label: topic.title, url: topic.url }] };
+
+  const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+
+  if (amt > 0) {
+    const total9 = amt * 9;
+    const bonus = amt;
+    const total = total9 + bonus;
+    return {
+      text: `Here's exactly how the Treasure Chest EDGE Plan works with ${fmt(amt)}/month:\n\n💰 YOUR CONTRIBUTION:\n• 9 months × ${fmt(amt)} = ${fmt(total9)}\n• 10th month FREE = +${fmt(bonus)}\n• Minimum jewellery credit = ${fmt(total)}\n\n📈 THE EDGE BENEFIT:\nEach instalment is converted to gold units at that day's 24KT rate. If gold prices rise over 9 months, your final budget will be HIGHER than ${fmt(total)}.\n\n📉 THE RISK:\nIf gold prices fall, your budget will be lower. Rate fluctuation is borne by the customer.\n\n⚠️ IMPORTANT:\n• Cannot cancel — jewellery credit only, no cash refund\n• Must complete all 9 months to get the benefit\n• Partial completion = zero benefit\n\nIs there anything else I can help you with? 😊`,
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  return {
+    text: `Here's how the Treasure Chest EDGE Plan works:\n\n📊 FORMULA:\n• Pay 9 monthly instalments of your chosen amount\n• Each instalment converted to gold units at that day's 24KT gold rate\n• 10th month value added FREE\n• On redemption: Total gold units × current rate = jewellery budget\n\n💡 EXAMPLE (₹10,000/month):\n• 9 × ₹10,000 = ₹90,000 + ₹10,000 free = ₹1,00,000 base\n• If gold rises 10% → budget ≈ ₹1,10,000 ✅\n• If gold falls 10% → budget ≈ ₹90,000 ⚠️\n\n📌 No cash refund. Jewellery credit only. Must complete all 9 months.\n\nTell me your monthly amount and I'll calculate exact numbers! 😊`,
+    chips: [{ label: topic.title, url: topic.url }]
+  };
 }
 
 function buildPointsCalculation(query, topic) {
   const q = query.toLowerCase();
-  const m = q.match(/(\d[\d,]*)\s*k?/);
+
+  // Extract amount - handles lakh, lac, k, commas, plain numbers
   let amt = 0;
-  if (m) { amt = parseInt(m[1].replace(/,/g,'')); if (q.includes('k') && amt < 1000) amt *= 1000; }
-  if (amt > 0) {
-    const fmt = n => n.toLocaleString('en-IN');
-    return { text: `xCLusive Points you'd earn on a ₹${fmt(amt)} order:\n\n💎 STUDDED JEWELLERY (prepaid):\n• Regal tier → ${fmt(Math.floor(amt*0.03))} points (worth ₹${fmt(Math.floor(amt*0.03))})\n• Imperial tier → ${fmt(Math.floor(amt*0.04))} points\n• Crown tier → ${fmt(Math.floor(amt*0.05))} points\n\n✨ SHAYA JEWELLERY (prepaid):\n• Regal tier → ${fmt(Math.floor(amt*0.10))} points\n• Crown tier → ${fmt(Math.floor(amt*0.20))} points\n\n1 Point = ₹1 | Points credited 15 days after delivery\n\nIs there anything else I can help with? 😊`, chips: [{ label: topic.title, url: topic.url }] };
+  const lakhMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/);
+  const kMatch = q.match(/(\d+(?:\.\d+)?)\s*k\b/);
+  const plainMatch = q.match(/₹?\s*(\d[\d,]*)/);
+
+  if (lakhMatch) {
+    amt = parseFloat(lakhMatch[1]) * 100000;
+  } else if (kMatch) {
+    amt = parseFloat(kMatch[1]) * 1000;
+  } else if (plainMatch) {
+    amt = parseInt(plainMatch[1].replace(/,/g, ''));
   }
-  return { text: topic.customer, chips: [{ label: topic.title, url: topic.url }] };
+
+  // Detect tier from query
+  let tier = null;
+  if (/crown/.test(q)) tier = 'crown';
+  else if (/imperial/.test(q)) tier = 'imperial';
+  else if (/regal/.test(q)) tier = 'regal';
+
+  const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+
+  if (amt > 0) {
+    const studded_rates = { regal: 0.03, imperial: 0.04, crown: 0.05 };
+    const shaya_rates   = { regal: 0.10, imperial: 0.15, crown: 0.20 };
+
+    if (tier) {
+      // Specific tier calculation
+      const sr = studded_rates[tier];
+      const shr = shaya_rates[tier];
+      const studdedPts = Math.floor(amt * sr);
+      const shayaPts   = Math.floor(amt * shr);
+      return {
+        text: `Here's exactly how many xCLusive Points you'd earn as an ${tier.charAt(0).toUpperCase()+tier.slice(1)} member on a ${fmt(amt)} order:\n\n💎 STUDDED JEWELLERY (prepaid):\n• ${studdedPts.toLocaleString('en-IN')} points = ${fmt(studdedPts)} value (${(sr*100)}% back)\n\n✨ SHAYA JEWELLERY (prepaid):\n• ${shayaPts.toLocaleString('en-IN')} points = ${fmt(shayaPts)} value (${(shr*100)}% back)\n\n📌 1 xCLusive Point = ₹1\nPoints are credited 15 days after delivery.\nRedeemable on the CaratLane App or in-store only.\n\nIs there anything else I can help you with? 😊`,
+        chips: [{ label: topic.title, url: topic.url }]
+      };
+    } else {
+      // All tiers
+      return {
+        text: `xCLusive Points you'd earn on a ${fmt(amt)} prepaid order:\n\n💎 STUDDED JEWELLERY:\n• Regal tier   → ${Math.floor(amt*0.03).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.03))})\n• Imperial tier → ${Math.floor(amt*0.04).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.04))})\n• Crown tier    → ${Math.floor(amt*0.05).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.05))})\n\n✨ SHAYA JEWELLERY:\n• Regal tier   → ${Math.floor(amt*0.10).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.10))})\n• Imperial tier → ${Math.floor(amt*0.15).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.15))})\n• Crown tier    → ${Math.floor(amt*0.20).toLocaleString('en-IN')} pts (${fmt(Math.floor(amt*0.20))})\n\n📌 1 Point = ₹1 | Credited 15 days after delivery\n\nIs there anything else I can help you with? 😊`,
+        chips: [{ label: topic.title, url: topic.url }]
+      };
+    }
+  }
+
+  // No amount found — ask for it
+  return {
+    text: `I'd be happy to calculate your xCLusive Points! Just tell me:\n\n1. Your purchase amount (e.g. ₹50,000 or 1 lakh)\n2. Your tier (Regal / Imperial / Crown) — optional\n3. Product type (Studded jewellery or Shaya)\n\nFor example: "How many points on ₹50,000 as Imperial member?"\n\nCurrent earn rates (prepaid orders only):\n💎 Studded: Regal 3% · Imperial 4% · Crown 5%\n✨ Shaya: Regal 10% · Imperial 15% · Crown 20%\n\n1 Point = ₹1 | Redeemable on App or in-store 😊`,
+    chips: [{ label: topic.title, url: topic.url }]
+  };
 }
 
 // ── DEDUCTION ANSWERS ─────────────────────────────────────────────────
