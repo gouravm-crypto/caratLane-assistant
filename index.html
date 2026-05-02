@@ -1351,7 +1351,7 @@ CIN: U52393TN2007PTC064830`
     weight: 10,
     customer: `If you received a free Gold Coin with your original purchase, you must return it when bringing the jewellery for Lifetime Exchange (LTE) or Lifetime Buyback (LTB).\n\nIf the coin is NOT returned, CaratLane will deduct either the coin's equivalent value or 10% of your original invoice value from your LTE/LTB amount. Please bring the coin when visiting the store for exchange or buyback. 😊`,
     policy: `FREE GOLD COIN — LTE/LTB POLICY\n\n• Customers who received a free Gold Coin MUST return it during LTE or LTB\n• If NOT returned: deduction = coin's equivalent value OR 10% of invoice\n• Applies to: LTE and LTB ONLY\n• Does NOT apply to: 15-Day Exchange\n\n📎 Source: https://www.caratlane.com/returns-exchanges`
-  }
+  },
 ];
 
 // ══════════════════════════════════════════════════════════════════════
@@ -1635,7 +1635,7 @@ Is there anything else I can help you with? 😊`
 Online purchases → Both return (money-back) AND exchange available within 15 days.
 
 Is there anything else I can help you with? 😊`
-  },
+  }
   // ── LTE vs LTB ─────────────────────────────────────────────────────
   {
     triggers: ['difference between lte and ltb','lte and ltb','ltb and lte','lte vs ltb','ltb vs lte','what is lte','what is ltb','lifetime exchange vs buyback','exchange vs buyback','buyback vs exchange','difference between exchange and buyback','compare lte ltb'],
@@ -2009,7 +2009,7 @@ function findTopicByAlias(query) {
       phrases: ['contact caratlane','call caratlane','caratlane phone','caratlane email','caratlane whatsapp','customer service number','helpline number','support number','escalate complaint','reach caratlane','speak to team','talk to agent','customer care','complaint number','email caratlane','how to contact','caratlane contact'],
       keywords: ['helpline','escalate'],
       require_any: ['contact','helpline','call caratlane','email caratlane','whatsapp','customer care','escalate','speak to','talk to agent']
-    }
+    },
   };
 
   for (const [topicId, def] of Object.entries(TOPICS)) {
@@ -2351,18 +2351,37 @@ function detectTier(q) {
 }
 
 function extractAmount(q) {
-  const lakhMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/);
-  const kMatch    = q.match(/(\d+(?:\.\d+)?)\s*k\b/);
-  const plainMatch = q.match(/[₹rs\.\s]?(\d[\d,]{3,})/);
-  const anyNum    = q.match(/\b(\d{4,})\b/);
+  // Priority 1: lakh/lac
+  var lakhM = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/i);
+  if (lakhM) return parseFloat(lakhM[1]) * 100000;
 
-  if (lakhMatch)   return parseFloat(lakhMatch[1]) * 100000;
-  if (kMatch)      return parseFloat(kMatch[1]) * 1000;
-  if (plainMatch)  return parseInt(plainMatch[1].replace(/,/g,''));
-  if (anyNum)      return parseInt(anyNum[1].replace(/,/g,''));
+  // Priority 2: k suffix (10k, 5k)
+  var kM = q.match(/(\d+(?:\.\d+)?)\s*k\b/i);
+  if (kM) return parseFloat(kM[1]) * 1000;
+
+  // Priority 3: rupee prefix
+  var rsM = q.match(/(?:rs\.?|rupees?)\s*(\d[\d,]*)/i);
+  if (rsM) return parseInt(rsM[1].replace(/,/g,''));
+  var rupM = q.match(/[₹]\s*(\d[\d,]*)/);
+  if (rupM) return parseInt(rupM[1].replace(/,/g,''));
+
+  // Priority 4: amount after context keywords (for, of, pay, enroll for, monthly etc)
+  var ctxM = q.match(/(?:for|of|at|monthly|instalment|installment|amount|paying|enrolling|enroling|starting|joining)\s+(?:rs\.?|[₹])?\s*(\d[\d,]+)/i);
+  if (!ctxM) ctxM = q.match(/(?:pay|enroll|enrol|start|join)\s+(?:for\s+)?(?:rs\.?|[₹])?\s*(\d[\d,]+)/i);
+  if (ctxM) return parseInt(ctxM[1].replace(/,/g,''));
+
+  // Priority 5: all 4+ digit numbers, skip years 2025-2100
+  var nums = [];
+  var rx = /\b(\d{4,})\b/g;
+  var m;
+  while ((m = rx.exec(q)) !== null) {
+    var n = parseInt(m[1]);
+    if (!(n >= 2025 && n <= 2100)) nums.push(n);
+  }
+  if (nums.length > 0) return Math.max.apply(null, nums);
+
   return 0;
 }
-
 
 // ── DEDUCTION ANSWERS ─────────────────────────────────────────────────
 function buildDeductionAnswer(topicId, topic) {
