@@ -1351,7 +1351,7 @@ CIN: U52393TN2007PTC064830`
     weight: 10,
     customer: `If you received a free Gold Coin with your original purchase, you must return it when bringing the jewellery for Lifetime Exchange (LTE) or Lifetime Buyback (LTB).\n\nIf the coin is NOT returned, CaratLane will deduct either the coin's equivalent value or 10% of your original invoice value from your LTE/LTB amount. Please bring the coin when visiting the store for exchange or buyback. 😊`,
     policy: `FREE GOLD COIN — LTE/LTB POLICY\n\n• Customers who received a free Gold Coin MUST return it during LTE or LTB\n• If NOT returned: deduction = coin's equivalent value OR 10% of invoice\n• Applies to: LTE and LTB ONLY\n• Does NOT apply to: 15-Day Exchange\n\n📎 Source: https://www.caratlane.com/returns-exchanges`
-  },
+  }
 ];
 
 // ══════════════════════════════════════════════════════════════════════
@@ -1635,7 +1635,7 @@ Is there anything else I can help you with? 😊`
 Online purchases → Both return (money-back) AND exchange available within 15 days.
 
 Is there anything else I can help you with? 😊`
-  },
+  }
   // ── LTE vs LTB ─────────────────────────────────────────────────────
   {
     triggers: ['difference between lte and ltb','lte and ltb','ltb and lte','lte vs ltb','ltb vs lte','what is lte','what is ltb','lifetime exchange vs buyback','exchange vs buyback','buyback vs exchange','difference between exchange and buyback','compare lte ltb'],
@@ -1760,8 +1760,8 @@ function isFollowUp(query) {
 // ── INTENT-SPECIFIC CUSTOMER REPLIES ─────────────────────────────────
 const INTENT_REPLIES = {
   treasure_chest: {
-    cancel: `Thank you for reaching out to us, and we're sorry to hear you'd like to cancel your Treasure Chest / POP scheme. 🙏\n\nWe completely understand that circumstances change, and we appreciate you letting us know.\n\nHowever, we'd like to gently inform you that as acknowledged at the time of enrolment, the Treasure Chest scheme is non-cancellable once enrolled. This applies to both the Icon and Edge plans.\n\nYour accumulated amount remains safe and can be redeemed in full against any jewellery purchase at any CaratLane store — there's no expiry on this benefit! 💛\n\nIf there's anything else we can assist you with, please call us at +91-44-42935000 (24x7). Is there anything else I can help you with today?`,
-    refund: `Thank you for getting in touch. We sincerely understand your concern. 🙏\n\nWe'd like to be transparent — as per the terms acknowledged at enrolment, the Treasure Chest scheme does not offer a cash refund. The amount you've contributed is securely held and can only be redeemed against a jewellery purchase at CaratLane.\n\nWe truly hope you'll find something you love from our collection! 💛\n\nIf you'd like to speak with a senior team member, please call +91-44-42935000 (24x7) or email cs@caratlane.com. Is there anything else I can help with?`,
+    cancel: `Thank you for reaching out to us, and we're sorry to hear you'd like to cancel your Treasure Chest / POP scheme. 🙏\n\nWe completely understand that circumstances change, and we appreciate you letting us know.\n\nHowever, we'd like to gently inform you that as acknowledged at the time of enrolment, the Treasure Chest scheme is non-cancellable once enrolled. This applies to both the Icon and Edge plans.\n\nYour accumulated instalments remain safe and can be redeemed against jewellery at any CaratLane store — but only during the Redemption Window (Day 271 to Day 330 from your enrolment date). \n\n⚠️ IMPORTANT: If not redeemed within the window, the accumulated amount will be automatically converted to Digital Gold in your CaratLane account — and the bonus discount will be forfeited.\n\n✅ What CAN be purchased with your balance:\n• All studded jewellery (diamonds, platinum, gemstones)\n• Shaya / silver jewellery\n• 22KT & plain gold (for enrolments after 1 Sep 2025, discount capped at 30% of one instalment)\n❌ Cannot be used on: gold coins, gift cards, repair services\n\nIf there's anything else we can assist you with, please call us at +91-44-42935000 (24×7). Is there anything else I can help you with today?`,
+    refund: `Thank you for getting in touch. We sincerely understand your concern. 🙏\n\nWe'd like to be transparent — as per the terms acknowledged at enrolment, the Treasure Chest scheme does not offer a cash refund. The amount you've contributed is securely held and can be redeemed against eligible jewellery at CaratLane — within the Redemption Window (Day 271–330 from enrolment). If not redeemed in time, the balance automatically converts to Digital Gold and the bonus is forfeited.\n\n✅ Can use on: studded jewellery, Shaya, 22KT/plain gold (enrolments after 1 Sep 2025, capped at 30% of one instalment)\n❌ Cannot use on: gold coins, gift cards, repair services\n\nWe truly hope you'll find something you love from our collection! 💛\n\nIf you'd like to speak with a senior team member, please call +91-44-42935000 (24x7) or email cs@caratlane.com. Is there anything else I can help with?`,
     enquire: `Thank you for your interest in our Treasure Chest Gold Savings Scheme! 💛 It's one of our most popular ways to save towards jewellery.\n\nHere's a quick overview:\n\n🔹 ICON Plan (Most Popular):\nPay 9 monthly instalments and get the 10th month's value FREE as a discount on your jewellery purchase!\n\n🔸 EDGE Plan:\nSame 9+1 structure, with each instalment converted to gold units at that day's rate — so you benefit if gold prices rise!\n\nA few important things to know:\n• Once enrolled, the scheme cannot be cancelled for a cash refund\n• Your amount is redeemable only against jewellery purchase\n• Partial completion means no bonus applies\n\nCheck your balance anytime: CaratLane App → My Account 📱\n\nWould you like to know more? Visit caratlane.com/treasure-chest-gold-scheme or pop into any store! 🙏`
   },
   store_return: {
@@ -2009,7 +2009,7 @@ function findTopicByAlias(query) {
       phrases: ['contact caratlane','call caratlane','caratlane phone','caratlane email','caratlane whatsapp','customer service number','helpline number','support number','escalate complaint','reach caratlane','speak to team','talk to agent','customer care','complaint number','email caratlane','how to contact','caratlane contact'],
       keywords: ['helpline','escalate'],
       require_any: ['contact','helpline','call caratlane','email caratlane','whatsapp','customer care','escalate','speak to','talk to agent']
-    },
+    }
   };
 
   for (const [topicId, def] of Object.entries(TOPICS)) {
