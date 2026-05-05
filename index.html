@@ -1739,7 +1739,7 @@ Is there anything else I can help you with? 😊`
     title: 'Repair & Resizing Policy',
     url: 'https://www.caratlane.com/returns-exchanges',
     answer: `Here's the complete CaratLane Repair & Resizing policy:\n\n🔧 REPAIR:\n• CaratLane will repair or replace your product as needed\n• Standard cost for out-of-warranty products: ₹840\n• Additional metal or raw materials used → charged separately\n• Charges are determined on a case-by-case basis\n• Some products may not be repairable — our team will evaluate and suggest alternatives\n\n💍 RING RESIZING:\n• Resized ring costs MORE than original → customer pays the difference\n• Resized ring costs LESS than original → balance refunded to customer\n• Refunds processed via online bank transfer within 10 days after dispatch\n\n❌ NOT ELIGIBLE FOR REPAIR:\n• International orders (products shipped outside India)\n• Platinum products\n\n📎 Source: https://www.caratlane.com/returns-exchanges (Resizing & Repair section)\n\nIs there anything else I can help you with? 😊`
-  },,
+  },
 
 ];
 
@@ -1793,7 +1793,7 @@ const INTENT_REPLIES = {
   xclusive: {
     redeem: `Great — let's get your xCLusive Points redeemed! 😊\n\nPoints can be redeemed in two ways:\n• 📱 On the CaratLane App: At checkout, select "xCLusive Points" as payment and enter the PIN from your SMS or email\n• 🏪 In-store: Our store team will help you apply the points — just have your CaratLane App open on your phone\n\nPlease note: Points cannot be redeemed on the website (only app or in-store), and cannot be combined with a coupon code on the same order.\n\nTo check your balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can assist you with? 🙏`,
     enquire: `Here's everything about the xCLusive Loyalty Programme! ✨\n\n💛 1 xCLusive Point = ₹1\n\n🏆 THREE TIERS & EARN RATES (prepaid orders only):\n\n⭐ REGAL (entry level) — Points valid 6 months\n• Studded Jewellery: 3% back\n• Shaya Jewellery: 10% back\n• Benefits: Partner Brand Offers\n\n💎 IMPERIAL — Points valid 9 months\n• Studded Jewellery: 4% back\n• Shaya Jewellery: 15% back\n• Benefits: Partner Offers + Collection Previews & Events + Offer Previews\n\n👑 CROWN (highest) — Points valid 12 months\n• Studded Jewellery: 5% back\n• Shaya Jewellery: 20% back\n• Benefits: All Imperial benefits + Priority Customer Service + Jewellery Styling via CLive + Designer on Call\n\n💰 HOW TO REDEEM (App or in-store ONLY — not on website):\n• Studded: up to 20% of order value\n• Preset: up to 10%\n• Unstudded/Shaya: up to 20% or 500 pts (whichever higher)\n\n📌 Points credited 15 days after delivery. Cannot combine with coupon codes.\n\nCheck balance: App → More → My Account → My Offers 📱\n\nIs there anything else I can help you with? 😊`
-  },
+  }
 };
 
 // ── TOPIC ALIAS MAP — broad natural language coverage ─────────────────
@@ -1926,8 +1926,8 @@ const TOPIC_ALIASES = {
     'reach caratlane','speak to team','talk to agent',
     'customer care','complaint number','email caratlane',
     'how to contact','caratlane contact','contact number'
-  ],
-},
+  ]
+}
 
 function findTopicByAlias(query) {
   const q = query.toLowerCase().trim();
