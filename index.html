@@ -1350,6 +1350,16 @@ CIN: U52393TN2007PTC064830`
     policy: `FREE GOLD COIN — LTE/LTB POLICY\n\n• Customers who received a free Gold Coin MUST return it during LTE or LTB\n• If NOT returned: deduction = coin's equivalent value OR 10% of invoice\n• Applies to: LTE and LTB ONLY\n• Does NOT apply to: 15-Day Exchange\n\n📎 Source: https://www.caratlane.com/returns-exchanges`
   },
   {
+    id: 'exchange_order_refund',
+    title: 'Refund on Exchange Orders (15-Day / LTE / OGE)',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    tags: ['exchange order refund','refund exchange order','cancel exchange order','placed via exchange','order via exchange','exchange order cancel','lte order refund','oge order refund','old gold exchange order refund','lifetime exchange order cancel','refund on lte order','refund on oge order'],
+    weight: 10,
+    customer: `Thank you for reaching out! Let me clarify the refund policy based on how your order was placed:\n\n🔁 Order placed via 15-Day Exchange:\nIf your new order was placed using a 15-day exchange, a full refund can be initiated — but only as an exceptional case. This will be handled by our team on a case-by-case basis. Please reach out to cs@caratlane.com or call +91-44-42935000 (24x7) to raise this request.\n\n💎 Order placed via Lifetime Exchange (LTE):\nIf your order was placed using the Lifetime Exchange (LTE) value, a full cash refund is NOT available. However, you are eligible for a Lifetime Buyback — which returns the value with a small additional deduction (3–10% depending on product type) from the LTE value.\n\n🪙 Order placed via Old Gold Exchange (OGE):\nIf the order was placed using Old Gold Exchange, only a Lifetime Buyback is applicable — not a full refund. The buyback value will be calculated at the prevailing gold/stone rate with applicable deductions.\n\nFor all of these, please visit any CaratLane store with your invoice, or contact us at +91-44-42935000 (24x7). 🙏`,
+    policy: `REFUND POLICY — EXCHANGE ORDER TYPES\n\n15-DAY EXCHANGE ORDER:\n• Full refund: Possible only as an EXCEPTIONAL case\n• Must be raised with Customer Service (cs@caratlane.com / +91-44-42935000)\n• Approved case-by-case basis\n\nLIFETIME EXCHANGE (LTE) ORDER:\n• ❌ Full cash refund NOT available\n• ✅ Lifetime Buyback only — prevailing value with deduction:\n  - Diamond jewellery: extra 10% deducted from LTE value\n  - Gold/Platinum/Gemstone: extra 3% deducted from LTE value\n\nOLD GOLD EXCHANGE (OGE) ORDER:\n• ❌ Full refund NOT available\n• ✅ Lifetime Buyback only — at prevailing gold rate with standard deductions\n• PAN card mandatory for all OGE buyback transactions\n\n📎 Source: https://www.caratlane.com/returns-exchanges`
+  },
+
+  {
     id: 'repair',
     title: 'Repair & Resizing Policy',
     url: 'https://www.caratlane.com/returns-exchanges',
@@ -1366,6 +1376,12 @@ CIN: U52393TN2007PTC064830`
 //  before the topic matching engine runs. Prevents generic topic dumps.
 // ══════════════════════════════════════════════════════════════════════
 const SPECIFIC_QA = [
+  {
+    triggers: ['why is caratlane gold rate different','caratlane gold rate different','why different from google','gold rate different from google','different from live rate','different from market rate','why gold rate higher caratlane','why caratlane rate higher','gold rate not matching','gold rate mismatch','why price different from','rate differ','gold rate vary','why does caratlane charge different','gold rate difference caratlane','caratlane gold price different','how is caratlane gold rate calculated','caratlane gold vs market','caratlane gold vs local jeweller','why is gold rate different','gold rate than other brands','gold rate other jewellers','gold price different caratlane','rate different from bank rate','price different from mcx','rate different from mcx','gold rate mcx','rate not same as google','our gold rate different','why rate different','gold higher than market','gold different from bullion','bullion rate different','how caratlane fixes gold rate','gold rate explanation','explain gold rate','gold price explanation','gold rate transparent'],
+    title: 'Why CaratLane Gold Rate Differs from Google / Market Rate',
+    url: 'https://www.caratlane.com/gold-rate',
+    answer: `Great question — and we appreciate you asking! At CaratLane, we aim for complete transparency in how we price our jewellery. Here's why our rate may look slightly different from what you see on Google or from a local jeweller:\n\n1️⃣ PAN-India Standardised Pricing\nMost local jewellers follow rates set by their specific city's Jewellers' Association, which vary based on local demand and state-level logistics. CaratLane operates on a national pricing model — so a customer in Mumbai and a customer in Guwahati see the exact same transparent price online.\n\n2️⃣ Retail Gold vs. Bullion (Live) Rates\nGoogle and financial apps show the Bullion Rate — the price of raw 24K gold bars in the commodities market. Our rate includes the cost of sourcing, refining, and hallmarking physical gold for jewellery, plus the logistics of moving it securely across 270+ stores nationwide. These are real costs that raw bullion rates don't reflect.\n\n3️⃣ Purity-Specific Rates (14K, 18K, 22K)\nCaratLane specialises in modern jewellery typically crafted in 14K or 18K gold for durability. Live market rates are usually quoted for 24K (99.9% pure). Since 18K contains 75% pure gold and 14K contains 58.5%, our per-gram rate will naturally differ from the 24K rate on Google — but we use high-quality alloys for strength and finish.\n\n4️⃣ Transparent Billing — No Hidden "Wastage"\nMany traditional jewellers quote a lower gold rate, then add hefty "wastage" charges (6–15%) at the end. CaratLane provides a clear breakdown: Gold Weight + Making Charges + GST. No hidden costs, no last-minute surprises.\n\nYou can always check our live gold rate at: caratlane.com/gold-rate 📊\n\nIs there anything else I can help clarify? 😊`
+  },
   {
     triggers: ['sell and buy price different','buy and sell price different','sell price different','buy price different','why different price','price difference digital gold','digital gold price difference','why is the price','spread digital gold','gold buying selling different'],
     title: 'Digital Gold Price Spread',
@@ -1402,6 +1418,18 @@ Is there anything else I can help you with?`
 This is standard across all digital gold platforms. The price shown before you confirm is the final price — no hidden charges. 😊
 
 Check live rates: caratlane.com/gold-rate`
+  },
+  {
+    triggers: ['buy gold coin with treasure','gold coin treasure chest','gold coin with pop','redeem treasure chest for gold coin','use pop for gold coin','use treasure chest for gold coin','can i buy gold coin with','treasure chest redemption gold coin','pop redemption gold coin','use scheme for gold coin','scheme amount gold coin','instalment gold coin','pop balance gold coin','treasure balance gold coin','redeem for gold coin','purchase gold coin with pop','purchase gold coin with treasure'],
+    title: 'Treasure Chest — Gold Coin Redemption',
+    url: 'https://www.caratlane.com/treasure-chest-gold-scheme',
+    answer: `Great question! Unfortunately, Gold Coins are NOT included in the list of items eligible for Treasure Chest / POP redemption. 🚫\n\nHere's what you CAN redeem your Treasure Chest balance against:\n✅ Studded jewellery (diamonds, gemstones)\n✅ Shaya (Silver) jewellery\n✅ 22KT / Plain Gold jewellery (for enrolments after 1 Sep 2025 — discount capped at 30% of one instalment)\n\nNOT eligible for redemption:\n❌ Gold Coins\n❌ Gift Cards\n❌ Repair services\n\nYour Treasure Chest balance must be used during the Redemption Window (Day 271–330 from your enrolment date). If not used in time, the balance automatically converts to Digital Gold and the bonus is forfeited.\n\nIs there anything else I can help you with? 😊`
+  },
+  {
+    triggers: ['what can i not return','what cannot be returned','not eligible for return','not eligible for refund','not eligible for money back','what is not covered','what is excluded','exclusions 15 day','15 day exclusions','what cant i return','what cant be returned','not return under 15','cannot return under 15','not return in 15','items not eligible','products not eligible','not covered under 15','not covered by 15','not included in 15','15 day not applicable','money back not applicable','15 day money back exclusion','what is not eligible','what cant i claim','not returnable','non returnable','non-returnable','ineligible for return','ineligible for refund','which items cannot','which products cannot','what items are excluded','what products are excluded','what orders are not eligible','not eligible under 15','return not possible','refund not possible'],
+    title: 'Online Order — Return / Money Back',
+    url: 'https://www.caratlane.com/returns-exchanges',
+    answer: `Great question! While our 15-Day Money-Back policy covers most online India orders, here's what is NOT eligible:\n\n❌ NOT ELIGIBLE for 15-Day Money-Back:\n• Orders above ₹2,00,000 (eligible for exchange only, not money-back)\n• Engraved / Personalised products — crafted exclusively for you\n• International orders (outside India, Australia, UK, Singapore, Dubai, etc.)\n• Loose diamonds above ₹2 lakh (Lifetime Exchange or Buyback only)\n• Items not in original, unworn condition or missing original packaging/certificate\n• Store / Try-At-Home (TAH) purchases — these get 15-Day Full Value Exchange, not money-back\n• Shaya (Silver) jewellery: money-back available, but Lifetime Exchange is not (only 15-day window counts)\n\n✅ WHAT IS eligible:\n• Online India orders up to ₹2,00,000\n• USA & Canada orders up to $1,500\n• Items in original condition with packaging intact\n\n💡 If your item isn't eligible for money-back, it's likely still covered under our Lifetime Exchange Programme — no expiry, ever!\n\nAny questions? Call us at +91-44-42935000 (24x7) 🙏`
   },
   {
     triggers: ['how many days to get refund','refund days','how long refund','refund timeline','when will i get my refund','refund processing time','days for refund'],
@@ -1919,6 +1947,17 @@ const TOPIC_ALIASES = {
     'purchase above 50','id needed for','pan needed','pan required',
     'above 50,000','more than 50000','over 50000'
   ],
+  exchange_order_refund: [
+    'exchange order refund','refund exchange order','cancel exchange order',
+    'placed via exchange','order via exchange','order placed via exchange',
+    'exchange order cancel','lte order refund','oge order refund',
+    'old gold exchange order refund','lifetime exchange order cancel',
+    'refund on lte order','refund on oge order','cancel lte order',
+    'can i refund exchange order','refund if placed via exchange',
+    'exchange order and refund','placed via lte refund',
+    'placed via oge refund','exchange and wants refund',
+    'exchange order and wants full refund'
+  ],
   contact: [
     'contact caratlane','call caratlane','caratlane phone',
     'caratlane email','caratlane whatsapp','customer service number',
@@ -2004,6 +2043,11 @@ function findTopicByAlias(query) {
       phrases: ['international order','international shipping','ship outside india','ship abroad','deliver usa','deliver uk','deliver canada','deliver australia','deliver dubai','deliver singapore','foreign order','overseas order','nri purchase','international delivery','outside india','other country delivery'],
       keywords: ['international','overseas','nri','abroad'],
       require_any: ['international','overseas','nri','abroad','outside india','usa','uk','canada','australia','dubai','singapore']
+    },
+    exchange_order_refund: {
+      phrases: ['exchange order refund','refund exchange order','cancel exchange order','placed via exchange','order via exchange','order placed via exchange','lte order refund','oge order refund','old gold exchange order refund','refund on lte order','refund on oge order','cancel lte order','refund if placed via exchange','placed via lte refund','placed via oge refund','exchange and wants refund','exchange order and wants full refund','can i refund exchange order'],
+      keywords: ['exchange','refund','cancel'],
+      require_any: ['exchange order','via exchange','lte order','oge order','placed via exchange','placed via lte','placed via oge','exchange and wants refund','via exchange order','exchange order refund']
     },
     id_required: {
       phrases: ['pan card required','pan card needed','aadhaar required','aadhar needed','id proof','id required','identity proof jewellery','purchase above 50000','above 50k','id at store','document needed','what id needed','id for purchase','what id is needed','what documents','50000 purchase','id needed for','pan needed','pan required','above 50,000','more than 50000','over 50000','purchases above 50','above 50'],
