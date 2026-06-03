@@ -234,6 +234,17 @@ textarea::placeholder{color:var(--txt3);font-weight:400}
 .input-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:0 4px;}
 .hint{font-size:10px;color:var(--txt3);letter-spacing:.2px;opacity:.7}
 .hint-right{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--txt3);opacity:.5}
+.stop-btn{
+  display:none;align-items:center;gap:6px;
+  background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.25);
+  color:rgba(220,38,38,.8);padding:6px 14px;border-radius:20px;
+  font-size:10px;font-weight:600;letter-spacing:.5px;cursor:pointer;
+  transition:all .2s;font-family:inherit;flex-shrink:0;
+}
+.stop-btn:hover{background:rgba(220,38,38,.15);border-color:rgba(220,38,38,.5);color:#dc2626;}
+.stop-btn.active{display:flex;}
+.stop-dot{width:7px;height:7px;border-radius:50%;background:rgba(220,38,38,.8);animation:pulse-stop 1s infinite;}
+@keyframes pulse-stop{0%,100%{opacity:1}50%{opacity:.4}}
 
 @media(max-width:680px){
   .sidebar{display:none}
@@ -375,7 +386,10 @@ textarea::placeholder{color:var(--txt3);font-weight:400}
       </div>
       <div class="input-footer">
         <span class="hint">Based on official CaratLane policies · Always verify critical decisions with your team lead</span>
-        <span class="hint-right">↵ to send</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="stop-btn" id="stopBtn" onclick="stopGeneration()"><span class="stop-dot"></span>Stop</button>
+          <span class="hint-right">↵ to send</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1192,7 +1206,7 @@ Please bring the coin along when visiting the store. 😊`,
 // ══════════════════════════════════════════════════════════════════════
 const SPECIFIC_QA = [
   {
-    triggers:['why is caratlane gold rate different','caratlane gold rate different','why different from google','gold rate different from google','different from live rate','different from market rate','why gold rate higher caratlane','rate differ','gold rate vary','gold rate mismatch','gold rate explanation','explain gold rate'],
+    triggers:['why is caratlane gold rate different','caratlane gold rate different','why different from google','gold rate different from google','different from live rate','different from market rate','why gold rate higher caratlane','rate differ','gold rate vary','gold rate mismatch','gold rate explanation','explain gold rate','why is the gold rate higher','why is gold rate higher','why is caratlane gold rate higher','gold rate higher','why gold rate high','why is gold higher','gold rate so high','gold rate too high','why gold higher','gold price higher','gold rate expensive','why is gold rate','gold price different','why gold price','gold rate why','why is rate higher','why higher gold','gold rate difference','caratlane gold higher','gold rate at caratlane','gold at caratlane higher','how is gold rate calculated','how gold rate','why does caratlane charge more','why more for gold'],
     title:'Why CaratLane Gold Rate Differs',
     url:'https://www.caratlane.com/gold-rate',
     answer:`Great question! Here's why our gold rate may differ from Google or other jewellers:
@@ -1985,13 +1999,48 @@ function nowTime(){
   return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
 
+// ── STOP GENERATION ─────────────────────────────────────────────────
+let _typewriterStop = false;
+let _typewriterActive = false;
+
+function stopGeneration() {
+  if (_typewriterActive) {
+    _typewriterStop = true;
+    setStopBtn(false);
+  }
+}
+
+function setStopBtn(active) {
+  const btn = document.getElementById('stopBtn');
+  if (btn) {
+    if (active) btn.classList.add('active');
+    else btn.classList.remove('active');
+  }
+}
+
 function typewriterEffect(el, text) {
   el.textContent = '';
   const lines = text.split('\n');
   let lineIdx = 0, charIdx = 0, fullText = '';
   const speed = text.length > 600 ? 5 : text.length > 300 ? 8 : 12;
+  _typewriterStop = false;
+  _typewriterActive = true;
+  setStopBtn(true);
   function type() {
-    if (lineIdx >= lines.length) { msgsEl.scrollTop = msgsEl.scrollHeight; return; }
+    if (_typewriterStop) {
+      // Stopped — show full remaining text instantly
+      el.textContent = text;
+      _typewriterActive = false;
+      setStopBtn(false);
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+      return;
+    }
+    if (lineIdx >= lines.length) {
+      _typewriterActive = false;
+      setStopBtn(false);
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+      return;
+    }
     const line = lines[lineIdx];
     if (charIdx < line.length) {
       fullText += line[charIdx++];
