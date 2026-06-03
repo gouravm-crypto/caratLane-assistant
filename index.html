@@ -1195,21 +1195,24 @@ const SPECIFIC_QA = [
     triggers:['why is caratlane gold rate different','caratlane gold rate different','why different from google','gold rate different from google','different from live rate','different from market rate','why gold rate higher caratlane','rate differ','gold rate vary','gold rate mismatch','gold rate explanation','explain gold rate'],
     title:'Why CaratLane Gold Rate Differs',
     url:'https://www.caratlane.com/gold-rate',
-    answer:`Great question — and we appreciate you asking! At CaratLane, we aim for complete transparency. Here's why our rate may look slightly different from Google or a local jeweller:
+    answer:`Great question! Here's why our gold rate may differ from Google or other jewellers:
 
 1️⃣ PAN-India Standardised Pricing
-Most local jewellers follow rates set by their city's Jewellers' Association, which vary by location. CaratLane operates on a national pricing model — the same transparent price across all 270+ stores nationwide.
+Local jewellers follow city-specific rates set by their Jewellers' Association. CaratLane uses one national price — the same across all 270+ stores.
 
-2️⃣ Retail Gold vs. Bullion (Live) Rates
-Google and financial apps show the Bullion Rate — the price of raw 24K gold bars in the commodities market. Our rate includes sourcing, refining, hallmarking physical gold for jewellery, plus logistics across stores. These are real costs that raw bullion rates don't reflect.
+2️⃣ Retail vs. Bullion (Live) Rate
+Google shows raw 24K bullion rates. Ours includes sourcing, refining, hallmarking, and logistics — real costs not reflected in commodity rates.
 
-3️⃣ Purity-Specific Rates (14K, 18K, 22K)
-CaratLane specialises in 14KT and 18KT gold for durability. Since 18KT contains 75% pure gold and 14KT contains 58.5%, the per-gram rate will naturally differ from the 24KT rate on Google.
+3️⃣ Purity-Specific Rates
+We specialise in 14KT (58.5% gold) and 18KT (75% gold) — so the per-gram rate will naturally differ from the 24KT rate on Google.
 
-4️⃣ Transparent Billing — No Hidden "Wastage"
-Traditional jewellers often quote a lower gold rate, then add hefty "wastage" charges (6–15%) at the end. CaratLane shows a clear breakdown upfront: Gold Weight + Making Charges + GST. No surprises.
+4️⃣ No Hidden "Wastage" Charges
+Traditional jewellers quote lower rates but add 6–15% "wastage" at billing. CaratLane shows everything upfront: Gold Weight + Making Charges + GST. No surprises.
 
-Check our live gold rate: caratlane.com/gold-rate 📊`
+5️⃣ Purchase Price of Gold (Most Important)
+The most critical factor is the price at which the jeweller originally bought the gold. Jewellers who purchased gold in bulk at lower prices can sell at lower rates. The source of gold — whether imported, recycled, or locally procured — also significantly impacts the final rate. This is why rates can vary widely across jewellers even on the same day.
+
+Check live rates: caratlane.com/gold-rate 📊`
   },
   {
     triggers:['sell and buy price different','buy and sell price different','price difference digital gold','digital gold price different','spread digital gold','why is digital gold different','buy price and sell price','different when buying','different when selling'],
@@ -1360,9 +1363,9 @@ If tracking hasn't updated in 48 hours, contact us:
 📅 COMPLETE TIMELINE (from Enrolment Date):
 • Days 1–240 — Instalment Term: Pay 9 monthly instalments
 • Days 241–270 — Cool Off Period (30 days): Cannot redeem yet
-• Days 271–330 — ✅ REDEMPTION WINDOW (60 days): Redeem at any store, website, or TAH
+• Days 271–350 — ✅ REDEMPTION WINDOW (80 days): Redeem at any store, website, or TAH
 
-After Day 330: Window closes, bonus forfeited, balance auto-converts to Digital Gold.
+After Day 350: Window closes, bonus forfeited, balance auto-converts to Digital Gold.
 
 ⚠️ Must redeem FULL balance in ONE bill — partial redemption not allowed. 😊`
   },
@@ -1372,7 +1375,7 @@ After Day 330: Window closes, bonus forfeited, balance auto-converts to Digital 
     url:'https://www.caratlane.com/treasure-chest-gold-scheme',
     answer:`Here's exactly what happens if you don't redeem your Treasure Chest / POP within the window:
 
-❌ IF YOU MISS THE WINDOW (after Day 330):
+❌ IF YOU MISS THE WINDOW (after Day 350):
 • The bonus discount (1 month's instalment free) is FORFEITED
 • No cash refund — not by any method
 
@@ -1381,7 +1384,7 @@ After Day 330: Window closes, bonus forfeited, balance auto-converts to Digital 
 • Digital Gold units credited to your CaratLane account (accessible on login)
 • You can hold it, sell it via app (to bank account), or redeem against jewellery at any store
 
-⚠️ Always try to redeem within Day 271–330 to keep the bonus! 😊`
+⚠️ Always try to redeem within Day 271–350 to keep the bonus! 😊`
   },
   {
     triggers:['shaya lifetime exchange','can i exchange shaya','shaya exchange policy','silver lifetime exchange'],
@@ -1467,7 +1470,7 @@ Example: LTE value ₹50,000, not used in 180 days → Refund = ₹45,000 😊`
 
 ❌ CANNOT redeem on: Gold Coins, Gift Cards, Repair services
 
-Your Treasure Chest balance must be used during the Redemption Window (Day 271–330). If not used, balance automatically converts to Digital Gold. 😊`
+Your Treasure Chest balance must be used during the Redemption Window (Day 271–350). If not used, balance automatically converts to Digital Gold. 😊`
   },
 ];
 
@@ -1608,7 +1611,7 @@ We completely understand that circumstances change.
 
 However, as acknowledged at the time of enrolment, the Treasure Chest scheme is non-cancellable once enrolled. This applies to both the Icon and Edge plans.
 
-Your accumulated instalments remain safe and can be redeemed against eligible jewellery at any CaratLane store — ONLY during the Redemption Window (Day 271–330 from your enrolment date).
+Your accumulated instalments remain safe and can be redeemed against eligible jewellery at any CaratLane store — ONLY during the Redemption Window (Day 271–350 from your enrolment date).
 
 ⚠️ If not redeemed within the window, your balance automatically converts to Digital Gold.
 
@@ -1697,6 +1700,110 @@ Is there anything else I can assist you with? 🙏`
   }
 };
 
+// ══════════════════════════════════════════════════════════════════════
+//  DATE CALCULATOR — Treasure Chest maturity / redemption
+// ══════════════════════════════════════════════════════════════════════
+function buildDateCalc(query, topic) {
+  const q = query.toLowerCase();
+  const MONTH_MAP = {
+    'january':1,'jan':1,'february':2,'feb':2,'march':3,'mar':3,
+    'april':4,'apr':4,'may':5,'june':6,'jun':6,'july':7,'jul':7,
+    'august':8,'aug':8,'september':9,'sep':9,'sept':9,'october':10,
+    'oct':10,'november':11,'nov':11,'december':12,'dec':12
+  };
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const formatDate = d => d.getDate() + ' ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+
+  // Extract enrolment date — try DD-MM-YYYY first, then natural language
+  let enrollMonth = null, enrollDay = 1, enrollYear = new Date().getFullYear();
+
+  // Pattern 1: DD-MM-YYYY or DD/MM/YYYY
+  const dmyMatch = q.match(/(\d{1,2})[-\/](\d{1,2})[-\/](\d{2,4})/);
+  if (dmyMatch) {
+    enrollDay   = parseInt(dmyMatch[1]);
+    enrollMonth = parseInt(dmyMatch[2]);
+    enrollYear  = parseInt(dmyMatch[3]);
+    if (enrollYear < 100) enrollYear += 2000;
+  }
+
+  // Pattern 2: natural language month name
+  if (!enrollMonth) {
+    const monthKeys = Object.keys(MONTH_MAP).join('|');
+    const pats = [
+      new RegExp('(\\d{1,2})(?:st|nd|rd|th)?\\s+(' + monthKeys + ')\\s*(\\d{4})', 'i'),
+      new RegExp('(' + monthKeys + ')\\s*(\\d{1,2})(?:st|nd|rd|th)?\\s*(\\d{4})', 'i'),
+      new RegExp('(\\d{1,2})(?:st|nd|rd|th)?\\s+(' + monthKeys + ')', 'i'),
+      new RegExp('(' + monthKeys + ')\\s*(\\d{1,2})(?:st|nd|rd|th)?', 'i'),
+    ];
+    for (const pat of pats) {
+      const m = q.match(pat);
+      if (!m) continue;
+      const m1l = m[1] ? m[1].toLowerCase() : '';
+      const m2l = m[2] ? m[2].toLowerCase() : '';
+      if (MONTH_MAP[m1l]) {
+        enrollMonth = MONTH_MAP[m1l];
+        enrollDay   = parseInt(m[2]) || 1;
+        if (m[3]) enrollYear = parseInt(m[3]);
+      } else if (MONTH_MAP[m2l]) {
+        enrollMonth = MONTH_MAP[m2l];
+        enrollDay   = parseInt(m[1]) || 1;
+        if (m[3]) enrollYear = parseInt(m[3]);
+      }
+      if (enrollMonth) break;
+    }
+  }
+
+  // Explicit 4-digit year
+  const yearMatch = q.match(/\b(20\d{2})\b/);
+  if (yearMatch) enrollYear = parseInt(yearMatch[1]);
+
+  if (!enrollMonth) {
+    return {
+      text: "Happy to calculate your Treasure Chest maturity! 😊\n\nCould you share your enrolment date? For example:\n• \"I enrolled on 30-04-2025\"\n• \"I enrolled in April 2025\"\n\nI\'ll give you the exact maturity date and redemption window!",
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  // Calculate key dates using day offsets from enrolment
+  // Day 1 = enrolment, Day 241 = cool off, Day 271 = window opens, Day 350 = window closes
+  const base        = new Date(enrollYear, enrollMonth - 1, enrollDay);
+  const coolOffDate = new Date(enrollYear, enrollMonth - 1, enrollDay + 240);
+  const redeemOpen  = new Date(enrollYear, enrollMonth - 1, enrollDay + 270);
+  const redeemClose = new Date(enrollYear, enrollMonth - 1, enrollDay + 349);
+
+  // Build instalment schedule (monthly, same day each month)
+  let schedule = '';
+  for (let i = 1; i <= 9; i++) {
+    const d = new Date(enrollYear, enrollMonth - 1 + (i - 1), enrollDay);
+    schedule += '\n  Month ' + i + ': ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  // Value calculation
+  const amt = extractAmount(q);
+  const isEdge = /\bedge\b/.test(q);
+  const isIcon = /\bicon\b/.test(q);
+  const fmt = n => '\u20b9' + Math.round(n).toLocaleString('en-IN');
+
+  let valueSection = '';
+  if (amt > 0) {
+    const total9 = amt * 9, bonus = amt, iconTotal = total9 + bonus;
+    if (isEdge && !isIcon) {
+      valueSection = "\n\n\ud83d\udcb0 EDGE Plan \u2014 minimum base: " + fmt(iconTotal) + "\n(Actual value depends on gold rate at redemption)";
+    } else if (isIcon && !isEdge) {
+      valueSection = "\n\n\ud83d\udcb0 ICON Plan \u2014 fixed jewellery credit: " + fmt(iconTotal) + "\n(9 \u00d7 " + fmt(amt) + " = " + fmt(total9) + " + 10th month FREE " + fmt(bonus) + ")";
+    } else {
+      valueSection = "\n\n\ud83d\udcb0 With " + fmt(amt) + "/month:\n\ud83d\udd39 ICON: Fixed credit = " + fmt(iconTotal) + "\n\ud83d\udd38 EDGE: Minimum " + fmt(iconTotal) + " + gold rate benefit";
+    }
+  } else {
+    valueSection = "\n\n\ud83d\udca1 Share your monthly instalment amount and I\'ll calculate your exact redemption value too!";
+  }
+
+  return {
+    text: "Here\'s your complete Treasure Chest summary: \ud83d\ude0a\n\n\ud83d\udcc5 ENROLMENT DATE: " + formatDate(base) + "\n\n\ud83d\uddd3\ufe0f INSTALMENT SCHEDULE (9 payments):" + schedule + "\n\n\u23f8\ufe0f COOL OFF PERIOD STARTS: " + formatDate(coolOffDate) + " (30 days \u2014 no redemption yet)\n\n\u2705 REDEMPTION WINDOW OPENS: " + formatDate(redeemOpen) + "\n\ud83d\udd12 REDEMPTION WINDOW CLOSES: " + formatDate(redeemClose) + "\n\nYou have 80 days to redeem at any CaratLane store, website, or Try-at-Home." + valueSection + "\n\n\u26a0\ufe0f If not redeemed by " + formatDate(redeemClose) + ", bonus is forfeited and balance auto-converts to Digital Gold.\n\nIs there anything else I can help you with? \ud83d\ude0a",
+    chips: [{ label: topic.title, url: topic.url }]
+  };
+}
+
 function extractAmount(q) {
   var lakhM = q.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac|l\b)/i);
   if (lakhM) return parseFloat(lakhM[1]) * 100000;
@@ -1729,6 +1836,11 @@ function detectTier(q) {
 function buildAnswer(topicId, intent, query, prefix) {
   const topic = KB.find(t => t.id === topicId);
   if (!topic) return null;
+  // Date calc — only for treasure chest with a date in the query
+  if ((intent === 'date_calc' || intent === 'calculate') && topicId === 'treasure_chest') {
+    const hasDate = /\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/i.test(query);
+    if (hasDate || intent === 'date_calc') return buildDateCalc(query, topic);
+  }
   if (prefix === 'policy') return { text: topic.policy, chips: [{ label: topic.title, url: topic.url }] };
   const ir = INTENT_REPLIES[topicId];
   if (ir && ir[intent]) return { text: ir[intent], chips: [{ label: topic.title, url: topic.url }] };
