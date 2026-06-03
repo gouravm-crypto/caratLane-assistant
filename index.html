@@ -1503,7 +1503,8 @@ function detectIntent(query) {
   if (/\bexchange\b|\bswap\b|\breplace\b|\bupgrade\b|change my jewellery|want new design/.test(q)) return 'exchange';
   if (/complain|damaged|defect|broken|wrong item|missing|faulty|upset|angry|frustrated/.test(q)) return 'complaint';
   if (/maturity|redemption date|maturity date|after maturity|when.*start.*redeem/.test(q)) return 'date_calc';
-  if (/when can i redeem|when.*redeem/.test(q) && /\d/.test(q)) return 'date_calc';
+  if (/when can i redeem|when.*redeem|when can i use|when to redeem|enrolled.*when|when.*enrolled|redemption window|when does.*pop|when does.*scheme|when will.*mature|when will.*redeem/.test(q)) return 'date_calc';
+  if (/enrolled|enroll|enrol/.test(q) && /\d/.test(q)) return 'date_calc';
   if (/redeem|use.*points|apply.*points|claim.*points|spend.*points/.test(q) && !/maturity|after matur|do not use/.test(q)) return 'redeem';
   if (/track|where.*order|order.*status|when.*deliver/.test(q)) return 'track';
   if (/calculate|how much will|how many.*earn|how many.*get|will i earn|will i get.*point|earn.*points|points.*earn|earn on|earn for|how many.*will i|what.*will i get|start.*pop.*how much|how much.*start.*pop/.test(q)) return 'calculate';
@@ -1553,8 +1554,8 @@ function findTopicByAlias(query) {
       require_any:['old gold','oge','karatmeter','scrap gold','gold exchange']
     },
     treasure_chest: {
-      phrases:['treasure chest','plan of purchase','pop scheme','pop plan','gold savings scheme','instalment plan','icon plan','edge plan','10th month free','cancel pop','cancel treasure','cancel scheme','refund pop','pop refund','what is pop','what is treasure chest','cancel the pop','cancel my pop','pop cancel','monthly scheme'],
-      require_any:['pop','treasure chest','instalment','installment','icon plan','edge plan','monthly scheme','gold saving','cancel scheme','scheme cancel']
+      phrases:['treasure chest','plan of purchase','pop scheme','pop plan','gold savings scheme','instalment plan','icon plan','edge plan','10th month free','cancel pop','cancel treasure','cancel scheme','refund pop','pop refund','what is pop','what is treasure chest','cancel the pop','cancel my pop','pop cancel','monthly scheme','enrolled pop','enrolled on','enrolled in','i enrolled','when can i redeem','when can i use pop','when to redeem','maturity date','when will my scheme','redemption date','when does my pop','when does my scheme'],
+      require_any:['pop','treasure chest','instalment','installment','icon plan','edge plan','monthly scheme','gold saving','cancel scheme','scheme cancel','enrolled','enroll','enrol','when can i redeem','when can i use','when to redeem','redeem my pop','redeem my scheme','redeem my treasure','use my pop','use my scheme','maturity','when will my','when does my']
     },
     digital_gold: {
       phrases:['digital gold','egold','e-gold','digi gold','24k gold online','buy gold online','gold vault','digital gold sell','digital gold buy','what is digital gold','what is egold'],
@@ -1701,6 +1702,32 @@ Is there anything else I can assist you with? 🙏`
 };
 
 // ══════════════════════════════════════════════════════════════════════
+//  ENROLMENT BENEFIT CALCULATOR — "I want to start POP for X/month"
+// ══════════════════════════════════════════════════════════════════════
+function buildEnrolmentBenefit(query, topic) {
+  const q = query.toLowerCase();
+  const amt = extractAmount(q);
+  const fmt = n => '\u20b9' + Math.round(n).toLocaleString('en-IN');
+
+  if (!amt || amt < 1000 || amt % 1000 !== 0) {
+    return {
+      text: "That's wonderful — we'd love to help you get started with the Treasure Chest Gold Savings Scheme! \ud83d\udc9b\n\nCould you share your preferred monthly instalment amount?\n(Minimum \u20b91,000/month, in multiples of \u20b91,000)\n\nOnce I have that, I'll show you exactly what you'll earn with both the ICON and EDGE plans! \ud83d\ude0a",
+      chips: [{ label: topic.title, url: topic.url }]
+    };
+  }
+
+  const total9    = amt * 9;
+  const bonus     = amt;
+  const iconTotal = total9 + bonus;
+  const plainCap  = Math.round(bonus * 0.30);
+
+  return {
+    text: "That's a wonderful decision — starting a Treasure Chest scheme is a great way to save towards beautiful jewellery! \ud83d\udc9b\n\nHere's exactly what you'll get with a " + fmt(amt) + "/month enrolment:\n\n\ud83d\udd39 ICON PLAN (Fixed, Most Popular):\n\u2022 9 instalments \u00d7 " + fmt(amt) + " = " + fmt(total9) + "\n\u2022 10th month FREE = +" + fmt(bonus) + "\n\u2022 \u2705 Total jewellery credit: " + fmt(iconTotal) + " (guaranteed, fixed amount)\n\nSimple and predictable — your benefit does not change with market conditions.\n\n\ud83d\udd38 EDGE PLAN (Gold-linked):\n\u2022 Same 9 instalments \u00d7 " + fmt(amt) + " = " + fmt(total9) + "\n\u2022 Each instalment is converted to gold units at that day\u2019s live 24KT rate\n\u2022 10th month FREE gold units added on top\n\u2022 On redemption day: accumulated gold units \u00d7 live gold rate = your jewellery budget\n\n\u26a0\ufe0f EDGE DISCLAIMER:\nSince each instalment buys gold units at the live rate on that specific day, your final value is NOT fixed:\n\u2022 If gold prices rise over 9 months \u2192 your budget will be MORE than " + fmt(iconTotal) + " \ud83d\udcc8\n\u2022 If gold prices fall \u2192 your budget will be LESS than " + fmt(iconTotal) + " \ud83d\udcc9\n\u2022 CaratLane is not liable for gold rate fluctuations\n\nMinimum base for EDGE is the same " + fmt(iconTotal) + ", but actual value depends entirely on gold rate movement.\n\n\ud83d\udccc WHAT CAN YOU BUY WITH IT:\n\u2022 \u2705 All studded jewellery (diamonds, gemstones, platinum) \u2192 full value\n\u2022 \u2705 Shaya / Silver jewellery \u2192 full value\n\u2022 \u2705 Plain gold/22KT (enrolments after 1 Sep 2025) \u2192 discount capped at " + fmt(plainCap) + " (30% of one instalment)\n\u2022 \u274c Cannot use on: Gold Coins, Gift Cards, Repair services\n\n\u26a0\ufe0f KEY RULES:\n\u2022 Cannot cancel for cash \u2014 jewellery credit only\n\u2022 Must complete all 9 instalments to receive the bonus\n\u2022 Redemption window: Day 271\u2013350 only (80 days)\n\u2022 Must be Indian resident, 18+ years\n\nWould you like me to also calculate your redemption date? Just share your planned start date! \ud83d\ude0a",
+    chips: [{ label: topic.title, url: topic.url }]
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════════
 //  DATE CALCULATOR — Treasure Chest maturity / redemption
 // ══════════════════════════════════════════════════════════════════════
 function buildDateCalc(query, topic) {
@@ -1778,8 +1805,9 @@ function buildDateCalc(query, topic) {
     schedule += '\n  Month ' + i + ': ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
   }
 
-  // Value calculation
-  const amt = extractAmount(q);
+  // Value calculation — must be ≥1000 and multiple of 1000 to be a valid POP amount
+  const rawAmt = extractAmount(q);
+  const amt = (rawAmt >= 1000 && rawAmt % 1000 === 0) ? rawAmt : 0;
   const isEdge = /\bedge\b/.test(q);
   const isIcon = /\bicon\b/.test(q);
   const fmt = n => '\u20b9' + Math.round(n).toLocaleString('en-IN');
@@ -1820,7 +1848,7 @@ function extractAmount(q) {
   var rx = /\b(\d{4,})\b/g, m;
   while ((m = rx.exec(q)) !== null) {
     var n = parseInt(m[1]);
-    if (!(n >= 2025 && n <= 2100)) nums.push(n);
+    if (!(n >= 1900 && n <= 2100)) nums.push(n);  // exclude all years
   }
   if (nums.length > 0) return Math.max.apply(null, nums);
   return 0;
@@ -1862,6 +1890,29 @@ function resolveFollowUp(query, prefix) {
 function think(rawQuery, prefix) {
   const query = rawQuery.trim();
   const q = query.toLowerCase();
+
+  // Layer 0a: Date calc — only if query contains an ACTUAL DATE (DD-MM-YYYY or named month + year)
+  const hasActualDate = /\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}/.test(q) ||
+    /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{4}\b/i.test(q) ||
+    /\b\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i.test(q);
+  if (hasActualDate && /pop|treasure|scheme|instalment|installment|enroll|enrol|enrolled|redeem|maturity|when|use/.test(q)) {
+    const tcTopic = KB.find(t => t.id === 'treasure_chest');
+    if (tcTopic) {
+      rememberTurn(query, 'treasure_chest', prefix);
+      return buildDateCalc(query, tcTopic);
+    }
+  }
+
+  // Layer 0b: Enrolment benefit calc — if query has amount + intent to start/join POP
+  const hasAmount = extractAmount(q) >= 1000 && extractAmount(q) % 1000 === 0;
+  const isStartIntent = /start|join|enroll|enrol|begin|open|sign up|want to|would like|can i.*enroll|can i.*start|can i.*join|enrol for|start.*pop|join.*pop|start.*treasure|join.*treasure|pop.*per month|per month.*pop|monthly.*pop|pop.*monthly/.test(q);
+  if (hasAmount && isStartIntent && /pop|treasure|scheme|instalment|installment/.test(q)) {
+    const tcTopic = KB.find(t => t.id === 'treasure_chest');
+    if (tcTopic) {
+      rememberTurn(query, 'treasure_chest', prefix);
+      return buildEnrolmentBenefit(query, tcTopic);
+    }
+  }
 
   // Layer 1: Specific Q&A
   for (const qa of SPECIFIC_QA) {
